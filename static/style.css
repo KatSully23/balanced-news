@@ -1,0 +1,23 @@
+nav {
+  background-color: black;
+}
+
+.nav-link {
+  color: white;
+}
+
+#siteLogo {
+  margin-left: 50px;
+}
+
+#usNav {
+  margin-left: 12px;
+}
+
+#worldNav {
+ margin-left: 13px;
+}
+
+#businessNav {
+ margin-left: 12px;
+}
