@@ -8,6 +8,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
         <script src="static/functions.js"></script>
+        <link rel="icon" href="static/logo3.png">
     </head>
 
     <body>
@@ -39,9 +40,6 @@
       </nav>
 
 
-
-
-
     </body>
 
     {% block body %}{% endblock %}
@@ -50,7 +48,41 @@
 
     <!--Footer Starts Here-->
 
-    <footer></footer>
+    <footer id="footer" class="pt-4 my-md-5 pt-md-5 border-top">
+      <div class="container-fluid">
+       <div class="row">
+         <div class="col-12 col-md">
+           <img id="footerLogo" class="mb-2" src="static/logo3.png" alt="" width="50" height="50">
+           <small id="footerCopyright" class="d-block mb-3 footerSubtitle">&copy; February 2021</small>
+         </div>
+         <div class="col-6 col-md">
+           <h5 class="footerTitle">Learn More</h5>
+           <ul class="list-unstyled text-small">
+             <li><a class="footerSubtitle" href="/about">About Us</a></li>
+             <li><a class="footerSubtitle" href="/instructions">How to Use Our Site</a></li>
+             <li><a class="footerSubtitle" href="/contact">Get in Touch</a></li>
+           </ul>
+         </div>
+         <div class="col-6 col-md">
+           <h5 class="footerTitle">News</h5>
+           <ul class="list-unstyled text-small">
+             <li><a class="footerSubtitle" href="/us">US</a></li>
+             <li><a class="footerSubtitle" href="/world">World</a></li>
+             <li><a class="footerSubtitle" href="/business">Business</a></li>
+           </ul>
+         </div>
+         <div class="col-6 col-md">
+           <h5 class="footerTitle">Search Our Site</h5>
+           <ul class="list-unstyled text-small">
+             <form class="form-inline mt-2 mt-md-0">
+               <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+               <button id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+             </form>
+           </ul>
+         </div>
+       </div>
+     </div>
+     </footer>
 
     {% endblock %}
 

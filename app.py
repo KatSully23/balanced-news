@@ -27,5 +27,23 @@ def secretSpeakers():
 @app.route('/business', methods=["GET", "POST"])
 
 #function that renders contact.html
-def contact(methods=["POST"]):
+def business(methods=["POST"]):
     return render_template('business.html')
+
+@app.route('/about', methods=["GET", "POST"])
+
+#function that renders contact.html
+def about(methods=["POST"]):
+    return render_template('about.html')
+
+@app.route('/instructions', methods=["GET", "POST"])
+
+#function that renders contact.html
+def instructions(methods=["POST"]):
+    return render_template('instructions.html')
+
+@app.route('/contact', methods=["GET", "POST"])
+
+#function that renders contact.html
+def contact(methods=["POST"]):
+    return render_template('contact.html')
