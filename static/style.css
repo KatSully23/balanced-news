@@ -1,0 +1,50 @@
+nav {
+  background-color: black;
+}
+
+.nav-link {
+  color: white;
+}
+
+.footerSubtitle{
+  /*color: #A0A0A0;*/
+  color: white;
+}
+
+.footerTitle {
+  color: white;
+}
+
+#siteLogo {
+  margin-left: 50px;
+}
+
+#footerLogo {
+  margin-left: 50px;
+}
+
+#footerCopyright {
+  margin-top: 10px;
+  margin-left: 50px;
+}
+
+#usNav {
+  margin-left: 12px;
+}
+
+#worldNav {
+ margin-left: 13px;
+}
+
+#businessNav {
+ margin-left: 12px;
+}
+
+#footer {
+  background-color: black;
+}
+
+#search {
+  border-color: white;
+  color: white;
+}
