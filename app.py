@@ -1,10 +1,7 @@
 #configuring Flask
 import flask
-from flask_mysqldb import MySQL
-from flask_htpasswd import HtPasswdAuth
 from flask import Flask, render_template, request
 app = Flask(__name__)
-
 
 @app.route('/', methods=["GET", "POST"])
 
