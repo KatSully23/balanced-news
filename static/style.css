@@ -15,6 +15,15 @@ nav {
   color: white;
 }
 
+.navbar-fixed-bottom {
+  height: 200px;
+}
+
+.articleImage {
+  /*width: 350px;*/
+  height: 400px;
+}
+
 #siteLogo {
   margin-left: 50px;
 }
@@ -42,6 +51,10 @@ nav {
 
 #footer {
   background-color: black;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  height: 250px;
 }
 
 #search {
