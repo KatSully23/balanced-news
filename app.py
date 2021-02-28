@@ -3,6 +3,8 @@ import flask
 from flask import Flask, render_template, request
 from newsapi import NewsApiClient
 import requests
+
+
 app = Flask(__name__)
 
 @app.route('/', methods=["GET", "POST"])
@@ -15,85 +17,22 @@ def index(methods=["GET"]):
 
 #function that renders speakers.html
 def us(methods=["GET"]):
-    # Init
-    #newsapi = NewsApiClient(api_key='50b2c8ff5033428fb2ee50645ced43c9')
-
-    # /v2/top-headlines
-    #top_headlines = newsapi.get_top_headlines(q='bitcoin',
-                                              #sources='bbc-news,the-verge, fox',
-                                              #category='business',
-                                              #language='en')
-    #print(top_headlines);
-
-
-    #tutorial: https://www.youtube.com/watch?v=iFHE-0gZuZE
-
-    main_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=50b2c8ff5033428fb2ee50645ced43c9"
-    #main_url = "https://newsapi.org/v2/sources?apiKey=50b2c8ff5033428fb2ee50645ced43c9"
-    #main_url = "https://newsapi.org/v2/sources?category=businessapiKey=50b2c8ff5033428fb2ee50645ced43c9"
-
-    open_bbc_page = requests.get(main_url).json()
-    articles = open_bbc_page["articles"]
-    results = []
-
-    dataSet = get_articles(articles);
-
-    #for i in articles:
-        #for i in articles:
-            #print(results.append(i["title"]));
-            #print(f''' author: {i['author']}
-                       #title: {i['title']}
-                       #description: {i['description']}
-                       #url: {i['url']} ''')
-
-
-    for i in range(len(dataSet)):
-        print("")
-        print("***********************")
-        print(i + 1, dataSet[i])
-
-        #print("url: " + articles[i]['url']);
-        #print("author: " + articles[i]['author']);
-        #print("description: " + articles[i]['description']);
-
-    #print("")
-    #print("****************HELLO*************")
-    #print("title: " + articles[0]['title']);
-    #print("author: " + articles[0]['author']);
-    #print("description: " + articles[0]['description']);
-    #print("")
-
-    #dataSet = get_articles(results);
-    #dataSet = 1;
-
-    imgURL = dataSet[15]['photo_url'];
-    articleName = dataSet[15]['title'];
-    articleAuthor = dataSet[15]['author'];
-    articleContent = dataSet[15]['content'];
-    articleURL = dataSet[15]['url'];
-
-    # imgURL = "https://pypi.org/static/images/twitter.90915068.jpg"
-    return render_template('us.html', articles=dataSet);
-    #return render_template('index.html', img=imgURL, title=articleName, author=articleAuthor, content=articleContent, link=articleURL)
-    #, news=articles[1].items())
-
-
-@app.route('/machineTutorial')
-
-def machineTutorial():
-    return render_template('machineTutorial.html')
+    url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
+    return render_template('us.html', articles=getArticles(url));
 
 @app.route('/world', methods=["GET", "POST"])
 #function that renders secretSpeakers.html
-def secretSpeakers():
-    return render_template('world.html');
-
+def world():
+    url = "http://newsapi.org/v2/top-headlines?apiKey=50b2c8ff5033428fb2ee50645ced43c9"
+    return render_template('world.html', articles=getArticles(url));
 
 @app.route('/business', methods=["GET", "POST"])
 
 #function that renders contact.html
-def business(methods=["POST"]):
-    return render_template('business.html')
+def business(methods=["GET"]):
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('business.html', articles=getArticles(url));
+
 
 @app.route('/about', methods=["GET", "POST"])
 
@@ -113,7 +52,26 @@ def instructions(methods=["POST"]):
 def contact(methods=["POST"]):
     return render_template('contact.html')
 
-#function to get all the results for articles
+def getArticles(url):
+    open_bbc_page = requests.get(url).json()
+    articles = open_bbc_page["articles"]
+    results = []
+
+    dataSet = get_articles(articles);
+
+    for i in range(len(dataSet)):
+        print("")
+        print("***********************")
+        print(i + 1, dataSet[i])
+
+    imgURL = dataSet[15]['photo_url'];
+    articleName = dataSet[15]['title'];
+    articleAuthor = dataSet[15]['author'];
+    articleContent = dataSet[15]['content'];
+    articleURL = dataSet[15]['url'];
+
+    return dataSet;
+
 def get_articles(file):
 
     article_results = [];
