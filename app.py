@@ -1,8 +1,9 @@
 #configuring Flask
 import flask
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from newsapi import NewsApiClient
 import requests
+import joblib
 
 
 app = Flask(__name__)
@@ -32,6 +33,20 @@ def world():
 def business(methods=["GET"]):
     url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
     return render_template('business.html', articles=getArticles(url));
+
+@app.route('/mldemo', methods=["GET", "POST"])
+
+#temporary
+def mldemo():
+    if request.method == 'GET':
+        prediction = request.args.get('prediction')
+        return render_template('machinelearningdemo.html', prediction=prediction)
+    else:
+        title = request.values.get("title")
+        model = joblib.load('demo_model.joblib')
+        target_names = ['CNN', 'Breitbart', 'New York Times']
+        prediction = target_names[model.predict([title])[0]]
+        return redirect(url_for('mldemo', prediction=prediction))
 
 
 @app.route('/about', methods=["GET", "POST"])
