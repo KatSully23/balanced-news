@@ -11,21 +11,30 @@ app = Flask(__name__)
 @app.route('/', methods=["GET", "POST"])
 
 #function that renders index.html
-def index(methods=["GET"]):
-    return render_template('index.html');
-
-@app.route('/us', methods=["GET", "POST"])
-
-#function that renders speakers.html
-def us(methods=["GET"]):
+def index(methods=["GET", "POST"]):
     url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
-    return render_template('us.html', articles=getArticles(url));
+    return render_template('index.html', articles=getArticles(url));
 
-@app.route('/world', methods=["GET", "POST"])
-#function that renders secretSpeakers.html
-def world():
-    url = "http://newsapi.org/v2/top-headlines?apiKey=50b2c8ff5033428fb2ee50645ced43c9"
-    return render_template('world.html', articles=getArticles(url));
+@app.route('/entertainment', methods=["GET", "POST"])
+
+#function that renders entertainment.html
+def entertainment(methods=["GET"]):
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('entertainment.html', articles=getArticles(url));
+
+@app.route('/sports', methods=["GET", "POST"])
+
+#function that renders sports.html
+def sports(methods=["GET"]):
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('sports.html', articles=getArticles(url));
+
+@app.route('/science', methods=["GET", "POST"])
+
+#function that renders science.html
+def science(methods=["GET"]):
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('science.html', articles=getArticles(url));
 
 @app.route('/business', methods=["GET", "POST"])
 
@@ -33,6 +42,13 @@ def world():
 def business(methods=["GET"]):
     url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
     return render_template('business.html', articles=getArticles(url));
+
+@app.route('/health', methods=["GET", "POST"])
+
+#function that renders contact.html
+def health(methods=["GET"]):
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('health.html', articles=getArticles(url));
 
 @app.route('/mldemo', methods=["GET", "POST"])
 
