@@ -90,10 +90,10 @@ def getArticles(url):
 
     dataSet = get_articles(articles);
 
-    for i in range(len(dataSet)):
-        print("")
-        print("***********************")
-        print(i + 1, dataSet[i])
+    #for i in range(len(dataSet)):
+        #print("")
+        #print("***********************")
+        #print(i + 1, dataSet[i])
 
     imgURL = dataSet[15]['photo_url'];
     articleName = dataSet[15]['title'];

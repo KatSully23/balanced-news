@@ -2,6 +2,38 @@ nav {
   background-color: black;
 }
 
+p {
+  color: black;
+}
+
+.card {
+  border-color: white;
+}
+
+.card-title {
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.container-fluid {
+  margin-left: 70px;
+  margin-right: 70px;
+}
+
 .nav-link {
   color: white;
 }
@@ -20,12 +52,12 @@ nav {
 }
 
 .articleImage {
-  /*width: 350px;*/
-  height: 400px;
+  width: 395px;
+  height: 230px;
 }
 
 #siteLogo {
-  margin-left: 50px;
+  margin-left: 5px;
 }
 
 #footerLogo {
@@ -54,6 +86,8 @@ nav {
   bottom: 0px;
   right: 0px;
   left: 0px;
+  margin-left: 0px;
+  padding-left: 0px;
   height: 250px;
 }
 
