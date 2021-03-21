@@ -3,12 +3,13 @@
     <head>
         <!--initial setup/linking-->
         <title>Balanced News</title>
-        <link rel="stylesheet" href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href= "static/style.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
         <!--<script src="static/functions.js"></script>-->
         <link rel="icon" href="static/logo3.png">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
 
     <body>
@@ -43,9 +44,9 @@
               <a id="businessNav" class="nav-link" href="/health">Health</a>
             </li>
 
-            <li class="nav-item">
+            <!--<li class="nav-item">
               <a id="worldNav" class="nav-link" href="/mldemo">Machine Learning Demo</a>
-            </li>
+            </li>-->
 
           </ul>
           <form class="form-inline mt-2 mt-md-0">
@@ -58,12 +59,15 @@
 
     </body>
 
-    {% block body %}{% endblock %}
+    {% block body %}
+
+    {% endblock %}
+
 
     {% block footer %}
 
     <!--Footer Starts Here-->
-
+    <!--fix footer so that it extends all the way!!-->
     <footer id="footer" class="pt-4 pt-md-5 border-top">
       <div class="container-fluid">
        <div class="row">

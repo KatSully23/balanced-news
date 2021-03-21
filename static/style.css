@@ -2,11 +2,44 @@ nav {
   background-color: black;
 }
 
+p {
+  color: black;
+}
+
+.card {
+  border-color: white;
+  margin-right: 20px;
+}
+
+.card-title {
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.container-fluid {
+  margin-left: 70px;
+  margin-right: 70px;
+}
+
 .nav-link {
   color: white;
 }
 
-.footerSubtitle{
+.footerSubtitle {
   /*color: #A0A0A0;*/
   color: white;
 }
@@ -19,13 +52,26 @@ nav {
   height: 200px;
 }
 
+.card-columns {
+  column-count: 4;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+a {
+  color: #000000;
+}
+
+a:hover {
+  color: #777777;
+
 .articleImage {
-  /*width: 350px;*/
-  height: 400px;
+  width: 395px;
+  height: 230px;
 }
 
 #siteLogo {
-  margin-left: 50px;
+  margin-left: 5px;
 }
 
 #footerLogo {
@@ -42,11 +88,11 @@ nav {
 }
 
 #worldNav {
- margin-left: 13px;
+  margin-left: 13px;
 }
 
 #businessNav {
- margin-left: 12px;
+  margin-left: 12px;
 }
 
 #footer {
@@ -54,6 +100,8 @@ nav {
   bottom: 0px;
   right: 0px;
   left: 0px;
+  margin-left: 0px;
+  padding-left: 0px;
   height: 250px;
 }
 

@@ -16,8 +16,8 @@
 <!--body of web page-->
 {% block body %}
 
-<div class="container-fluid">
 
+<div class="card-columns">
 {% for article in articles %}
 
 {% set imgURL = article['photo_url'] %}
@@ -27,35 +27,22 @@
 {% set articleURL = article['url'] %}
 
 {% if imgURL is not none %}
-<img class="articleImage" src= {{imgURL}}>
-<br><br>
-<a href="{{articleURL}}">{{articleName}}</a>
-<br><br>
 
-{% else %}
+<a href={{articleURL}}>
+  <div class="card">
+    <img class="card-img-top" src={{imgURL}}>
+    <div class="card-body">
+      <h5 class="card-title">{{articleName}}</h5>
+    </div>
+  </div>
+</a>
 
-<p>{{title}}</p>
-<p>Author: {{author}}</p>
-<p>Content Preview: {{content}}</p>
-<p>This article does not include an image :)</p>
-<a href="{{articleURL}}">{{articleName}}</a>
-<br><br>
 
 {% endif %}
 
 {% endfor %}
-
-<p> Global News goes here! </p>
-<!--<form class="search" action="">
-  <input class="input" type = "text" />
-  <input type="submit" />
-</form>
-
-<div class="container">
-  <ul class="class-list"></ul>
 </div>
 
-</div>-->
 
 <script>
 console.log({{news}})
