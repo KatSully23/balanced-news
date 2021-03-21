@@ -39,7 +39,7 @@ p {
   color: white;
 }
 
-.footerSubtitle{
+.footerSubtitle {
   /*color: #A0A0A0;*/
   color: white;
 }
@@ -51,6 +51,19 @@ p {
 .navbar-fixed-bottom {
   height: 200px;
 }
+
+.card-columns {
+  column-count: 4;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+a {
+  color: #000000;
+}
+
+a:hover {
+  color: #777777;
 
 .articleImage {
   width: 395px;
@@ -75,11 +88,11 @@ p {
 }
 
 #worldNav {
- margin-left: 13px;
+  margin-left: 13px;
 }
 
 #businessNav {
- margin-left: 12px;
+  margin-left: 12px;
 }
 
 #footer {

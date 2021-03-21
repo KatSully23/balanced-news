@@ -19,14 +19,10 @@
 <div class="container-fluid">
 
 <!--comment out everything but mainRow to space things out-->
-<!--<section id="gallery">
-   <div class="container">-->
 
-        <div id="mainRow" class="row">
+<div id="mainRow" class="row">
 
-        </div>
-    <!--</div>
-</section>-->
+</div>
 
 <script>
 
@@ -50,8 +46,6 @@
 
 <script>
 
-console.log("{{imgURL}}")
-
 function getCardCode(imageURL, newsArticleURL, newsArticleName) {
 
   let cardCode = "<div class='col-lg-3 mb-3'>" +
@@ -67,6 +61,9 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName) {
   let cardParameter1 = cardCode.replace("url", imageURL);
   let cardParameter2 = cardParameter1.replace("linkToArticle", newsArticleURL);
   let cardParameter3 = cardParameter2.replace("nameOfArticle", newsArticleName);
+  console.log(cardParameter1)
+  console.log(cardParameter2)
+  console.log(cardParameter3)
 
   /*console.log(cardParameter3);
   console.log = newsArticleName;*/
@@ -80,8 +77,8 @@ var element = document.getElementById("mainRow");
 /*console.log(element);*/
 element.innerHTML += "<br>";
 element.innerHTML += card;
-/*console.log(element.innerHTML);
-console.log(card);*/
+console.log(element.innerHTML);
+console.log(card);
 
 </script>
 
