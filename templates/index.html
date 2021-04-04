@@ -8,6 +8,9 @@
   <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
   <!--<script src="static/functions.js"></script>-->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@1,700&display=swap" rel="stylesheet">
 </head>
 
 <!--end of head-->
@@ -16,13 +19,16 @@
 <!--body of web page-->
 {% block body %}
 
+<h2 id="trendingTitle" class="titles"> TRENDING IN THE USA </h2>
+
 <div class="container-fluid">
 
-<!--comment out everything but mainRow to space things out-->
+  <!--comment out everything but mainRow to space things out-->
 
-<div id="mainRow" class="row">
+  <div id="mainRow" class="row">
 
-</div>
+  </div>
+
 
 <script>
 
@@ -82,15 +88,9 @@ console.log(card);
 
 </script>
 
-<!--<div class="card" style="width: 20rem;">
-  <img class="card-img-top" src={{imgURL}}>
-  <div class="card-body">
-    <h5 class="card-title"><a href="{{articleURL}}">{{articleName}}</a></h5>
-  </div>
-</div>-->
-
 {% else %}
 
+{% set noImageArticles = true %}
 <!-- add card to the More in US Headlines card-->
 <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
 <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
@@ -109,7 +109,9 @@ console.log(card);
 {% endfor %}
 
 
-<!--card with headliens that don't have images-->
+<!--card with headlines that don't have images-->
+
+{% if noImageArticles == true %}
 
 <script>
 let otherArticles = "<div class='col-lg-3 mb-3'>" +
@@ -124,11 +126,16 @@ let otherArticles = "<div class='col-lg-3 mb-3'>" +
                     "<br><br>"
 
 var element = document.getElementById("mainRow");
-/*console.log(element);*/
 element.innerHTML += "<br>";
 element.innerHTML += otherArticles;
 
+/*var element = document.getElementById("sideColumn");
+element.innerHTML += "<br>";
+element.innerHTML += otherArticles;*/
+
 </script>
+
+{% endif %}
 
 <!--end of body-->
 {% endblock %}
