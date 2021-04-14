@@ -27,6 +27,10 @@
 
   <div id="mainRow" class="row">
 
+    <!--<div class='tooltip'>Hover over me
+    <span class='tooltiptext'>Tooltip text</span>
+    </div>-->
+
   </div>
 
 
@@ -45,6 +49,8 @@
 {% set articleAuthor = article['author'] %}
 {% set articleContent = article['content'] %}
 {% set articleURL = article['url'] %}
+<!-- will need another variable for political spectrum -->
+
 
 {% if imgURL is not none and imgURL != "" %}
 
@@ -52,14 +58,28 @@
 
 <script>
 
+/* pass in political spectrum as parameter later */
 function getCardCode(imageURL, newsArticleURL, newsArticleName) {
 
   let cardCode = "<div class='col-lg-3 mb-3'>" +
                     "<div class='card h-100'>" +
+
                       "<img class='card-img-top' src='url' >" +
+
                       "<div class='card-body'>" +
-                      "<h5 class='card-title'><a href='linkToArticle'>nameOfArticle</a></h5>" +
+
+                      "<div class='tooltip-wrap'>" +
+                      "<h5 class='card-title'>" +
+                      "<a href='linkToArticle'>nameOfArticle</a></h5>" +
+                      "<div class='tooltip-content'>" +
+                        "<img class='spectrumImage' src='static/spectrumIcons/farRight.png' alt='spectrum' />" +
+                      "</div>" +
+                    "</div>" +
+
+                      "</div>" +
+
                       "</div>"  +
+
                     "</div>" +
                   "</div>"
 
@@ -136,6 +156,7 @@ element.innerHTML += otherArticles;*/
 </script>
 
 {% endif %}
+
 
 <!--end of body-->
 {% endblock %}
