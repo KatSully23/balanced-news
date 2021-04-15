@@ -100,6 +100,54 @@ p {
   height: 50px;
 }
 
+/* filter icon dropdown */
+
+.dropbtn {
+  background-color: black;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a:hover {background-color: white;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: black;}
+
+.dropdown-content p {
+  color: black;
+  padding-left: 5px;
+  padding-right: 14px;
+  padding-top: 8px;
+  padding-bottom: 0px;
+  text-decoration: none;
+  display: block;
+}
+
+#filterCheckboxes {
+  padding-left: 15px;
+}
+
+#filterIcon {
+  margin-right: 0px;
+}
+
 #trendingTitle {
   /*float: left;*/
   font-family: 'Asap', sans-serif;
