@@ -150,11 +150,31 @@ p {
 
 #trendingTitle {
   /*float: left;*/
+  padding-left: 10px;
+  padding-bottom: 10px;
   font-family: 'Asap', sans-serif;
   font-style: italic;
   font-weight: bold;
   font-size: 50px;
   color: #ff1414;
+  -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+}
+
+.subpageTitle {
+  /*float: left;*/
+  position: relative;
+  /*padding-left: 10px;*/
+  padding-bottom: 20px;
+  font-family: 'Asap', sans-serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 50px;
+  color: #ff1414;
+  /*color: #014bad;*/
   -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
