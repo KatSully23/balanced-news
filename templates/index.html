@@ -49,17 +49,24 @@
 {% set articleAuthor = article['author'] %}
 {% set articleContent = article['content'] %}
 {% set articleURL = article['url'] %}
-<!-- will need another variable for political spectrum -->
 
+<!--WEB SCRAPE ARTICLE CONTENT USING PYTHON FUNCTION-->
+<!--put article content into machine learning model-->
+<!--set variable with dem/rep part of machine learning result-->
+<!--set variable with confidence score part of machine learning result-->
+
+<!-- MAKE THIS CODE MORE EFFICIENT WITH PYTHON FUNCTION LATER -->
+<!-- IN YOUR codeForLater.html RIGHT NOW -->
+
+{% set spectrumImagePath = "static/spectrumIcons/moderateRight.png" %}
 
 {% if imgURL is not none and imgURL != "" %}
 
-<!--create code for specific card and store it in array using javascript function-->
-
 <script>
 
-/* pass in political spectrum as parameter later */
-function getCardCode(imageURL, newsArticleURL, newsArticleName) {
+/* creates code for specific card and store it in array using javascript function */
+/* pass in spectrumImagePath as a parameter  */
+function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePath) {
 
   let cardCode = "<div class='col-lg-3 mb-3'>" +
                     "<div class='card h-100'>" +
@@ -72,7 +79,7 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName) {
                       "<h5 class='card-title'>" +
                       "<a href='linkToArticle'>nameOfArticle</a></h5>" +
                       "<div class='tooltip-content'>" +
-                        "<img class='spectrumImage' src='static/spectrumIcons/farRight.png' alt='spectrum' />" +
+                        "<img class='spectrumImage' src='path' alt='spectrum' />" +
                       "</div>" +
                     "</div>" +
 
@@ -87,18 +94,19 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName) {
   let cardParameter1 = cardCode.replace("url", imageURL);
   let cardParameter2 = cardParameter1.replace("linkToArticle", newsArticleURL);
   let cardParameter3 = cardParameter2.replace("nameOfArticle", newsArticleName);
-  console.log(cardParameter1)
+  let cardParameter4 = cardParameter3.replace("path", spectrumImagePath);
+  /*console.log(cardParameter1)
   console.log(cardParameter2)
-  console.log(cardParameter3)
+  console.log(cardParameter3)*/
 
   /*console.log(cardParameter3);
   console.log = newsArticleName;*/
 
-  return cardParameter3;
+  return cardParameter4;
 
 }
 
-var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}")
+var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
 var element = document.getElementById("mainRow");
 /*console.log(element);*/
 element.innerHTML += "<br>";
@@ -128,12 +136,12 @@ console.log(card);
 
 {% endfor %}
 
-
-<!--card with headlines that don't have images-->
-
+<!-- make sure this is actually working! -->
 {% if noImageArticles == true %}
 
 <script>
+
+/*card with headlines that don't have images*/
 let otherArticles = "<div class='col-lg-3 mb-3'>" +
                       "<div class='card h-100'>" +
                       "<div class='card-header'>" +
@@ -148,10 +156,6 @@ let otherArticles = "<div class='col-lg-3 mb-3'>" +
 var element = document.getElementById("mainRow");
 element.innerHTML += "<br>";
 element.innerHTML += otherArticles;
-
-/*var element = document.getElementById("sideColumn");
-element.innerHTML += "<br>";
-element.innerHTML += otherArticles;*/
 
 </script>
 
