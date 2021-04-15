@@ -49,15 +49,14 @@
 {% set articleAuthor = article['author'] %}
 {% set articleContent = article['content'] %}
 {% set articleURL = article['url'] %}
+{% set articlePoliticalAssignment = article['politicalAssignment']}
+{% set articleConfidenceScore = article['confidenceScore']}
 
-<!--WEB SCRAPE ARTICLE CONTENT USING PYTHON FUNCTION-->
-<!--put article content into machine learning model-->
-<!--set variable with dem/rep part of machine learning result-->
-<!--set variable with confidence score part of machine learning result-->
-
+<!-- CODE TO ASSIGN ARTICLE WITH IMAGE BASED ON ITS MACHINE LEARNING ASSIGNMENT-->
 <!-- MAKE THIS CODE MORE EFFICIENT WITH PYTHON FUNCTION LATER -->
 <!-- IN YOUR codeForLater.html RIGHT NOW -->
 
+<!--hard coded image here for now-->
 {% set spectrumImagePath = "static/spectrumIcons/moderateRight.png" %}
 
 {% if imgURL is not none and imgURL != "" %}
