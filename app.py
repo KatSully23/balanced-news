@@ -132,36 +132,34 @@ def get_articles(file):
 
 def sortArticle(articleURL):
 
-        for article in articles:
+        #getting HTML content
+        r1 = requests.get(articleURL)
 
-            #getting HTML content
-            r1 = requests.get(articleURL)
+        #saving HTML content to variable
+        content = r1.content
 
-            #saving HTML content to variable
-            content = r1.content
+        #set up soup variable to keep executing
+        soup1 = BeautifulSoup(content, 'html5lib')
 
-            #set up soup variable to keep executing
-            soup1 = BeautifulSoup(content, 'html5lib')
+        #find all occurrences of paragraph tag
+        articleParagraphs = soup1.find_all('p')
+        #print("repLength: " + str(len(republicanParagraphs)))
+        #print(republicanParagraphs)
 
-            #find all occurrences of paragraph tag
-            articleParagraphs = soup1.find_all('p')
-            #print("repLength: " + str(len(republicanParagraphs)))
-            #print(republicanParagraphs)
+        articleText = "";
 
-            articleText = "";
+        #add the filtered text to a republicanText string
+        for p in articleParagraphs:
+            articleText += p.get_text();
 
-            #add the filtered text to a republicanText string
-            for p in articleParagraphs:
-                articleText += p.get_text();
+        #pass text into machine learning model
+        #print(m.sentiment(articleText))
 
-            #pass text into machine learning model
-            #print(m.sentiment(articleText))
+        #fix this syntax later!
 
-            #fix this syntax later!
-
-            demOrRep = "neutral"
-            confidenceScore = "0.0"
-            #demOrRep = m.sentiment[0]
-            #confidenceScore = m.sentiment[1]
+        demOrRep = "neutral"
+        confidenceScore = "0.0"
+        #demOrRep = m.sentiment[0]
+        #confidenceScore = m.sentiment[1]
 
         return [demOrRep, confidenceScore]
