@@ -19,13 +19,17 @@
 <!--body of web page-->
 {% block body %}
 
-<h2 id="trendingTitle" class="titles"> TRENDING IN THE USA </h2>
+<h2 id="trendingTitle"> TRENDING IN THE USA </h2>
 
 <div class="container-fluid">
 
   <!--comment out everything but mainRow to space things out-->
 
   <div id="mainRow" class="row">
+
+    <!--<div class='tooltip'>Hover over me
+    <span class='tooltiptext'>Tooltip text</span>
+    </div>-->
 
   </div>
 
@@ -45,21 +49,43 @@
 {% set articleAuthor = article['author'] %}
 {% set articleContent = article['content'] %}
 {% set articleURL = article['url'] %}
+{% set articlePoliticalAssignment = article['politicalAssignment'] %}
+{% set articleConfidenceScore = article['confidenceScore'] %}
+
+<!-- CODE TO ASSIGN ARTICLE WITH IMAGE BASED ON ITS MACHINE LEARNING ASSIGNMENT-->
+<!-- MAKE THIS CODE MORE EFFICIENT WITH PYTHON FUNCTION LATER -->
+<!-- IN YOUR codeForLater.html RIGHT NOW -->
+
+<!--hard coded image here for now-->
+{% set spectrumImagePath = "static/spectrumIcons/moderateRight.png" %}
 
 {% if imgURL is not none and imgURL != "" %}
 
-<!--create code for specific card and store it in array using javascript function-->
-
 <script>
 
-function getCardCode(imageURL, newsArticleURL, newsArticleName) {
+/* creates code for specific card and store it in array using javascript function */
+/* pass in spectrumImagePath as a parameter  */
+function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePath) {
 
   let cardCode = "<div class='col-lg-3 mb-3'>" +
                     "<div class='card h-100'>" +
+
                       "<img class='card-img-top' src='url' >" +
+
                       "<div class='card-body'>" +
-                      "<h5 class='card-title'><a href='linkToArticle'>nameOfArticle</a></h5>" +
+
+                      "<div class='tooltip-wrap'>" +
+                      "<h5 class='card-title'>" +
+                      "<a href='linkToArticle'>nameOfArticle</a></h5>" +
+                      "<div class='tooltip-content'>" +
+                        "<img class='spectrumImage' src='path' alt='spectrum' />" +
+                      "</div>" +
+                    "</div>" +
+
+                      "</div>" +
+
                       "</div>"  +
+
                     "</div>" +
                   "</div>"
 
@@ -67,18 +93,19 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName) {
   let cardParameter1 = cardCode.replace("url", imageURL);
   let cardParameter2 = cardParameter1.replace("linkToArticle", newsArticleURL);
   let cardParameter3 = cardParameter2.replace("nameOfArticle", newsArticleName);
-  console.log(cardParameter1)
+  let cardParameter4 = cardParameter3.replace("path", spectrumImagePath);
+  /*console.log(cardParameter1)
   console.log(cardParameter2)
-  console.log(cardParameter3)
+  console.log(cardParameter3)*/
 
   /*console.log(cardParameter3);
   console.log = newsArticleName;*/
 
-  return cardParameter3;
+  return cardParameter4;
 
 }
 
-var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}")
+var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
 var element = document.getElementById("mainRow");
 /*console.log(element);*/
 element.innerHTML += "<br>";
@@ -108,12 +135,12 @@ console.log(card);
 
 {% endfor %}
 
-
-<!--card with headlines that don't have images-->
-
+<!-- make sure this is actually working! -->
 {% if noImageArticles == true %}
 
 <script>
+
+/*card with headlines that don't have images*/
 let otherArticles = "<div class='col-lg-3 mb-3'>" +
                       "<div class='card h-100'>" +
                       "<div class='card-header'>" +
@@ -129,13 +156,10 @@ var element = document.getElementById("mainRow");
 element.innerHTML += "<br>";
 element.innerHTML += otherArticles;
 
-/*var element = document.getElementById("sideColumn");
-element.innerHTML += "<br>";
-element.innerHTML += otherArticles;*/
-
 </script>
 
 {% endif %}
+
 
 <!--end of body-->
 {% endblock %}

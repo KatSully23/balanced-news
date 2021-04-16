@@ -49,6 +49,25 @@
             </li>-->
 
           </ul>
+
+          <div class="dropdown" style="float:right;">
+          <button class="dropbtn">
+
+            <div class="float-right">
+              <img id="filterIcon" src="static/filterIcon.png" width="65px" height="60px" alt="logo">
+            </div>
+
+          </button>
+            <div class="dropdown-content">
+              <form id="filterCheckboxes">
+              <p>Filter by:</p>
+              <p>Right-leaning <input type="checkbox" id="right-leaning" name="party" value="Right"></p>
+              <p>Left-leaning <input type="checkbox" id="left-leaning" name="party" value="Left"></p>
+              <p>Neutral <input type="checkbox" id="neutral" name="party" value="Neutral"></p>
+              </form>
+            </div>
+        </div>
+
           <form class="form-inline mt-2 mt-md-0">
             <!--<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
             <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
@@ -87,9 +106,11 @@
          <div class="col-6 col-md">
            <h5 class="footerTitle">News</h5>
            <ul class="list-unstyled text-small">
-             <li><a class="footerSubtitle" href="/us">US</a></li>
-             <li><a class="footerSubtitle" href="/world">World</a></li>
+             <li><a class="footerSubtitle" href="/entertainment">Entertainment</a></li>
+             <li><a class="footerSubtitle" href="/sports">Sports</a></li>
              <li><a class="footerSubtitle" href="/business">Business</a></li>
+             <li><a class="footerSubtitle" href="/science">Science</a></li>
+             <li><a class="footerSubtitle" href="/health">Health</a></li>
            </ul>
          </div>
          <div class="col-6 col-md">

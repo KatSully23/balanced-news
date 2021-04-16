@@ -62,13 +62,119 @@ p {
   padding-bottom: 10px;
 }
 
+.cardSpectrum {
+  width: 70%;
+  text-align: center;
+}
+
+/* new tool tip code */
+
+.tooltip-wrap {
+  position: relative;
+}
+
+.tooltip-wrap .tooltip-content {
+  display: none;
+  position: absolute;
+  /*bottom: 5%;
+  left: 5%;
+  right: 5%;*/
+  background-color: #fff;
+  width: 120px;
+  height: 65px;;
+  /*padding: .5em;*/
+  /*top: 80%;*/
+  bottom: 110%;
+  border: 1px solid black;
+  text-align: center;
+  align-items: center;
+  /*margin-left: 50px;*/
+}
+
+.tooltip-wrap:hover .tooltip-content {
+  display: block;
+}
+
+.spectrumImage {
+  width: 100px;
+  height: 50px;
+}
+
+/* filter icon dropdown */
+
+.dropbtn {
+  background-color: black;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a:hover {background-color: white;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: black;}
+
+.dropdown-content p {
+  color: black;
+  padding-left: 5px;
+  padding-right: 14px;
+  padding-top: 8px;
+  padding-bottom: 0px;
+  text-decoration: none;
+  display: block;
+}
+
+#filterCheckboxes {
+  padding-left: 15px;
+}
+
+#filterIcon {
+  margin-right: 0px;
+}
+
 #trendingTitle {
   /*float: left;*/
+  padding-left: 10px;
+  padding-bottom: 10px;
   font-family: 'Asap', sans-serif;
   font-style: italic;
   font-weight: bold;
   font-size: 50px;
   color: #ff1414;
+  -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+  transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+}
+
+.subpageTitle {
+  /*float: left;*/
+  position: relative;
+  /*padding-left: 10px;*/
+  padding-bottom: 20px;
+  font-family: 'Asap', sans-serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 50px;
+  color: #ff1414;
+  /*color: #014bad;*/
   -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
