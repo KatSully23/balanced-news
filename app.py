@@ -88,22 +88,29 @@ def contact(methods=["POST"]):
     return render_template('contact.html')
 
 def getArticles(url):
-    open_bbc_page = requests.get(url).json()
-    articles = open_bbc_page["articles"]
-    results = []
 
-    dataSet = get_articles(articles);
+    try:
+        open_bbc_page = requests.get(url).json()
+        articles = open_bbc_page["articles"]
+        results = []
 
-    #for i in range(len(dataSet)):
-        #print("")
-        #print("***********************")
-        #print(i + 1, dataSet[i])
+        dataSet = get_articles(articles);
 
-    imgURL = dataSet[15]['photo_url'];
-    articleName = dataSet[15]['title'];
-    articleAuthor = dataSet[15]['author'];
-    articleContent = dataSet[15]['content'];
-    articleURL = dataSet[15]['url'];
+        #for i in range(len(dataSet)):
+            #print("")
+            #print("***********************")
+            #print(i + 1, dataSet[i])
+
+        imgURL = dataSet[15]['photo_url'];
+        articleName = dataSet[15]['title'];
+        articleAuthor = dataSet[15]['author'];
+        articleContent = dataSet[15]['content'];
+        articleURL = dataSet[15]['url'];
+
+    except requests.exceptions.ConnectionError:
+        requests.status_code = "Connection refused";
+        dataSet = "error: unable to fetch dataset";
+        print(dataSet)
 
     return dataSet;
 
@@ -132,34 +139,40 @@ def get_articles(file):
 
 def sortArticle(articleURL):
 
-        #getting HTML content
-        r1 = requests.get(articleURL)
+        try:
 
-        #saving HTML content to variable
-        content = r1.content
+            #getting HTML content
+            r1 = requests.get(articleURL)
 
-        #set up soup variable to keep executing
-        soup1 = BeautifulSoup(content, 'html5lib')
+            #saving HTML content to variable
+            content = r1.content
 
-        #find all occurrences of paragraph tag
-        articleParagraphs = soup1.find_all('p')
-        #print("repLength: " + str(len(republicanParagraphs)))
-        #print(republicanParagraphs)
+            #set up soup variable to keep executing
+            soup1 = BeautifulSoup(content, 'html5lib')
 
-        articleText = "";
+            #find all occurrences of paragraph tag
+            articleParagraphs = soup1.find_all('p')
+            #print("repLength: " + str(len(republicanParagraphs)))
+            #print(republicanParagraphs)
 
-        #add the filtered text to a republicanText string
-        for p in articleParagraphs:
-            articleText += p.get_text();
+            articleText = "";
 
-        #pass text into machine learning model
-        #print(m.sentiment(articleText))
+            #add the filtered text to a republicanText string
+            for p in articleParagraphs:
+                articleText += p.get_text();
 
-        #fix this syntax later!
+            #pass text into machine learning model
+            #print(m.sentiment(articleText))
 
-        demOrRep = "neutral"
-        confidenceScore = "0.0"
-        #demOrRep = m.sentiment[0]
-        #confidenceScore = m.sentiment[1]
+            #fix this syntax later!
+
+            demOrRep = "neutral"
+            confidenceScore = "0.0"
+            #demOrRep = m.sentiment[0]
+            #confidenceScore = m.sentiment[1]
+
+        except requests.exceptions.ConnectionError:
+            requests.status_code = "Connection refused"
+            return['n/a', 'n/a']
 
         return [demOrRep, confidenceScore]
