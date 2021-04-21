@@ -16,8 +16,31 @@ app = Flask(__name__)
 
 #function that renders index.html
 def index(methods=["GET", "POST"]):
+
     url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
-    return render_template('index.html', articles=getArticles(url));
+
+    #get list of checked categories in filter menu
+    categories = request.form.getlist('party')
+    print('******************')
+    print(categories)
+
+    #if form hasn't been filled out yet
+    if len(categories) == 0:
+        right = True;
+        left = True;
+        neutral = True;
+
+    #if user has checked boxes and submitted form
+    if 'Right' in categories:
+        right = True;
+
+    if 'Left' in categories:
+        left = True;
+
+    if 'Neutral' in categories:
+        neutral = True;
+
+    return render_template('index.html', articles=getArticles(url), rightFilter = right, leftFilter = left, neutralFilter = neutral);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 
@@ -131,7 +154,7 @@ def get_articles(file):
 
         sortedByModel = sortArticle(file[i]['url'])
         article_dict['politicalAssignment'] = sortedByModel[0]
-        article_dict['confidenceScore'] = sortedByModel[1]
+        article_dict['onSpectrum'] = sortedByModel[1]
 
         article_results.append(article_dict)
 
@@ -166,8 +189,11 @@ def sortArticle(articleURL):
 
             #fix this syntax later!
 
-            demOrRep = "neutral"
-            confidenceScore = "0.0"
+            demOrRep = "rep";
+            confidenceScore = 0.0;
+
+            onSpectrum = getSpectrumString(demOrRep, confidenceScore);
+
             #demOrRep = m.sentiment[0]
             #confidenceScore = m.sentiment[1]
 
@@ -175,4 +201,29 @@ def sortArticle(articleURL):
             requests.status_code = "Connection refused"
             return['n/a', 'n/a']
 
-        return [demOrRep, confidenceScore]
+        return [demOrRep, onSpectrum]
+
+def getSpectrumString(demOrRep, confidenceScore):
+
+    if confidenceScore >= 0 and confidenceScore <= 0.33333333333:
+        rating = "least";
+
+    elif confidenceScore > 0.33333333333 and confidenceScore <= 0.66666666666:
+        rating = "moderate"
+
+    elif confidenceScore > 0.66666666666 and confidenceScore <= 1.0:
+        rating = "far"
+
+    elif confidenceScore == 0:
+        rating = "neutral";
+
+    else:
+        print("error: confidence score out of range");
+
+    if demOrRep == "rep":
+        return rating + "Left";
+
+    elif demOrRep == "dem":
+        return rating + "Right";
+
+    return "neutral";
