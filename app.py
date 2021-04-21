@@ -26,21 +26,18 @@ def index(methods=["GET", "POST"]):
 
     #if form hasn't been filled out yet
     if len(categories) == 0:
-        right = True;
-        left = True;
-        neutral = True;
+        right = "True";
+        left = "True";
+        neutral = "True";
+    #if form has been filled out by user
+    else:
+        containsRight = "Right" in categories;
+        containsLeft = "Left" in categories;
+        containsNeutral = "Neutral" in categories;
 
-    #if user has checked boxes and submitted form
-    if 'Right' in categories:
-        right = True;
+        checkedBooleans = assignCheckedBooleans(containsRight, containsLeft, containsNeutral);
 
-    if 'Left' in categories:
-        left = True;
-
-    if 'Neutral' in categories:
-        neutral = True;
-
-    return render_template('index.html', articles=getArticles(url), rightFilter = right, leftFilter = left, neutralFilter = neutral);
+    return render_template('index.html', articles=getArticles(url), rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2]);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 
@@ -199,6 +196,7 @@ def sortArticle(articleURL):
 
         except requests.exceptions.ConnectionError:
             requests.status_code = "Connection refused"
+            print("error: connection refused")
             return['n/a', 'n/a']
 
         return [demOrRep, onSpectrum]
@@ -227,3 +225,20 @@ def getSpectrumString(demOrRep, confidenceScore):
         return rating + "Right";
 
     return "neutral";
+
+def assignCheckedBooleans(containsRight, containsLeft, containsNeutral):
+
+    checkedBooleans = ["True", "True", "True"];
+
+    assignString(checkedBooleans, containsRight, 0)
+    assignString(checkedBooleans, containsLeft, 1)
+    assignString(checkedBooleans, containsNeutral, 2)
+
+    print("checked booleans array" + str(checkedBooleans));
+    return checkedBooleans;
+
+
+def assignString(boxesCheckedArray, containsBoolean, index):
+
+    if not containsBoolean:
+        boxesCheckedArray[index] = "False";
