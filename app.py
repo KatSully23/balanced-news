@@ -219,10 +219,10 @@ def getSpectrumString(demOrRep, confidenceScore):
         print("error: confidence score out of range");
 
     if demOrRep == "rep":
-        return rating + "Left";
+        return rating + "Right";
 
     elif demOrRep == "dem":
-        return rating + "Right";
+        return rating + "Left";
 
     return "neutral";
 
