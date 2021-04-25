@@ -182,19 +182,6 @@ p {
   transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
 }
 
-/*#moreTitle {
-  margin-left: 81%;
-  font-family: 'Asap', sans-serif;
-  font-style: italic;
-  font-weight: bold;
-  font-size: 40px;
-  -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-}*/
-
 #siteLogo {
   margin-left: 5px;
 }

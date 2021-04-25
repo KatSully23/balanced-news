@@ -16,8 +16,28 @@ app = Flask(__name__)
 
 #function that renders index.html
 def index(methods=["GET", "POST"]):
+
     url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
-    return render_template('index.html', articles=getArticles(url));
+
+    #get list of checked categories in filter menu
+    categories = request.form.getlist('party')
+    print('******************')
+    print(categories)
+
+    #if form hasn't been filled out yet
+    if len(categories) == 0:
+        right = "True";
+        left = "True";
+        neutral = "True";
+    #if form has been filled out by user
+    else:
+        containsRight = "Right" in categories;
+        containsLeft = "Left" in categories;
+        containsNeutral = "Neutral" in categories;
+
+        checkedBooleans = assignCheckedBooleans(containsRight, containsLeft, containsNeutral);
+
+    return render_template('index.html', articles=getArticles(url), rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2]);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 
@@ -88,22 +108,29 @@ def contact(methods=["POST"]):
     return render_template('contact.html')
 
 def getArticles(url):
-    open_bbc_page = requests.get(url).json()
-    articles = open_bbc_page["articles"]
-    results = []
 
-    dataSet = get_articles(articles);
+    try:
+        open_bbc_page = requests.get(url).json()
+        articles = open_bbc_page["articles"]
+        results = []
 
-    #for i in range(len(dataSet)):
-        #print("")
-        #print("***********************")
-        #print(i + 1, dataSet[i])
+        dataSet = get_articles(articles);
 
-    imgURL = dataSet[15]['photo_url'];
-    articleName = dataSet[15]['title'];
-    articleAuthor = dataSet[15]['author'];
-    articleContent = dataSet[15]['content'];
-    articleURL = dataSet[15]['url'];
+        #for i in range(len(dataSet)):
+            #print("")
+            #print("***********************")
+            #print(i + 1, dataSet[i])
+
+        imgURL = dataSet[15]['photo_url'];
+        articleName = dataSet[15]['title'];
+        articleAuthor = dataSet[15]['author'];
+        articleContent = dataSet[15]['content'];
+        articleURL = dataSet[15]['url'];
+
+    except requests.exceptions.ConnectionError:
+        requests.status_code = "Connection refused";
+        dataSet = "error: unable to fetch dataset";
+        print(dataSet)
 
     return dataSet;
 
@@ -124,7 +151,7 @@ def get_articles(file):
 
         sortedByModel = sortArticle(file[i]['url'])
         article_dict['politicalAssignment'] = sortedByModel[0]
-        article_dict['confidenceScore'] = sortedByModel[1]
+        article_dict['onSpectrum'] = sortedByModel[1]
 
         article_results.append(article_dict)
 
@@ -132,34 +159,86 @@ def get_articles(file):
 
 def sortArticle(articleURL):
 
-        #getting HTML content
-        r1 = requests.get(articleURL)
+        try:
 
-        #saving HTML content to variable
-        content = r1.content
+            #getting HTML content
+            r1 = requests.get(articleURL)
 
-        #set up soup variable to keep executing
-        soup1 = BeautifulSoup(content, 'html5lib')
+            #saving HTML content to variable
+            content = r1.content
 
-        #find all occurrences of paragraph tag
-        articleParagraphs = soup1.find_all('p')
-        #print("repLength: " + str(len(republicanParagraphs)))
-        #print(republicanParagraphs)
+            #set up soup variable to keep executing
+            soup1 = BeautifulSoup(content, 'html5lib')
 
-        articleText = "";
+            #find all occurrences of paragraph tag
+            articleParagraphs = soup1.find_all('p')
+            #print("repLength: " + str(len(republicanParagraphs)))
+            #print(republicanParagraphs)
 
-        #add the filtered text to a republicanText string
-        for p in articleParagraphs:
-            articleText += p.get_text();
+            articleText = "";
 
-        #pass text into machine learning model
-        #print(m.sentiment(articleText))
+            #add the filtered text to a republicanText string
+            for p in articleParagraphs:
+                articleText += p.get_text();
 
-        #fix this syntax later!
+            #pass text into machine learning model
+            #print(m.sentiment(articleText))
 
-        demOrRep = "neutral"
-        confidenceScore = "0.0"
-        #demOrRep = m.sentiment[0]
-        #confidenceScore = m.sentiment[1]
+            #fix this syntax later!
 
-        return [demOrRep, confidenceScore]
+            demOrRep = "rep";
+            confidenceScore = 0.0;
+
+            onSpectrum = getSpectrumString(demOrRep, confidenceScore);
+
+            #demOrRep = m.sentiment[0]
+            #confidenceScore = m.sentiment[1]
+
+        except requests.exceptions.ConnectionError:
+            requests.status_code = "Connection refused"
+            print("error: connection refused")
+            return['n/a', 'n/a']
+
+        return [demOrRep, onSpectrum]
+
+def getSpectrumString(demOrRep, confidenceScore):
+
+    if confidenceScore >= 0 and confidenceScore <= 0.33333333333:
+        rating = "least";
+
+    elif confidenceScore > 0.33333333333 and confidenceScore <= 0.66666666666:
+        rating = "moderate"
+
+    elif confidenceScore > 0.66666666666 and confidenceScore <= 1.0:
+        rating = "far"
+
+    elif confidenceScore == 0:
+        rating = "neutral";
+
+    else:
+        print("error: confidence score out of range");
+
+    if demOrRep == "rep":
+        return rating + "Right";
+
+    elif demOrRep == "dem":
+        return rating + "Left";
+
+    return "neutral";
+
+def assignCheckedBooleans(containsRight, containsLeft, containsNeutral):
+
+    checkedBooleans = ["True", "True", "True"];
+
+    assignString(checkedBooleans, containsRight, 0)
+    assignString(checkedBooleans, containsLeft, 1)
+    assignString(checkedBooleans, containsNeutral, 2)
+
+    print("checked booleans array" + str(checkedBooleans));
+    return checkedBooleans;
+
+
+def assignString(boxesCheckedArray, containsBoolean, index):
+
+    if not containsBoolean:
+        boxesCheckedArray[index] = "False";
