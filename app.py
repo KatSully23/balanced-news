@@ -7,8 +7,12 @@ import requests
 from bs4 import BeautifulSoup
 import requests
 import joblib
-#import classificationModel as m
-
+import nltkModel as m
+import numpy as np
+from newspaper import Article
+from newspaper import Config
+import string
+import re
 
 app = Flask(__name__)
 
@@ -20,24 +24,26 @@ def index(methods=["GET", "POST"]):
     url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
 
     #get list of checked categories in filter menu
+    #source: https://www.reddit.com/r/flask/comments/bz376w/how_do_i_get_checked_checkboxes_into_flask/
     categories = request.form.getlist('party')
     print('******************')
     print(categories)
 
     #if form hasn't been filled out yet
     if len(categories) == 0:
-        right = "True";
-        left = "True";
-        neutral = "True";
+        containsRight = "True";
+        containsLeft = "True";
+        containsNeutral = "True";
     #if form has been filled out by user
     else:
+        #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
         containsRight = "Right" in categories;
         containsLeft = "Left" in categories;
         containsNeutral = "Neutral" in categories;
 
-        checkedBooleans = assignCheckedBooleans(containsRight, containsLeft, containsNeutral);
+    checkedBooleans = assignCheckedBooleans(containsRight, containsLeft, containsNeutral);
 
-    return render_template('index.html', articles=getArticles(url), rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2]);
+    return render_template('index.html', articles=getArticles(url), rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 
@@ -127,6 +133,7 @@ def getArticles(url):
         articleContent = dataSet[15]['content'];
         articleURL = dataSet[15]['url'];
 
+    #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
     except requests.exceptions.ConnectionError:
         requests.status_code = "Connection refused";
         dataSet = "error: unable to fetch dataset";
@@ -161,39 +168,38 @@ def sortArticle(articleURL):
 
         try:
 
+            #BEAUTIFUL SOUP WEB SCRAPING CODE
             #getting HTML content
-            r1 = requests.get(articleURL)
-
+            #r1 = requests.get(articleURL)
             #saving HTML content to variable
-            content = r1.content
-
+            #content = r1.content
             #set up soup variable to keep executing
-            soup1 = BeautifulSoup(content, 'html5lib')
-
+            #soup1 = BeautifulSoup(content, 'html5lib')
             #find all occurrences of paragraph tag
-            articleParagraphs = soup1.find_all('p')
+            #articleParagraphs = soup1.find_all('p')
             #print("repLength: " + str(len(republicanParagraphs)))
             #print(republicanParagraphs)
-
-            articleText = "";
-
+            #articleText = "";
             #add the filtered text to a republicanText string
-            for p in articleParagraphs:
-                articleText += p.get_text();
+            #for p in articleParagraphs:
+                #articleText += p.get_text();
 
-            #pass text into machine learning model
-            #print(m.sentiment(articleText))
+            #pass article into machine learning model
+            articleResult = get_sentiment(articleURL)
 
-            #fix this syntax later!
+            #get party and confidence score
+            demOrRep = articleResult[0];
+            print("dem or rep: " + demOrRep)
 
-            demOrRep = "rep";
-            confidenceScore = 0.0;
+            confidenceScore = articleResult[1];
+            print("confidenceScore: " + str(confidenceScore))
+
+            #demOrRep = "rep";
+            #confidenceScore = 0.0;
 
             onSpectrum = getSpectrumString(demOrRep, confidenceScore);
 
-            #demOrRep = m.sentiment[0]
-            #confidenceScore = m.sentiment[1]
-
+        #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
         except requests.exceptions.ConnectionError:
             requests.status_code = "Connection refused"
             print("error: connection refused")
@@ -218,10 +224,10 @@ def getSpectrumString(demOrRep, confidenceScore):
     else:
         print("error: confidence score out of range");
 
-    if demOrRep == "rep":
+    if demOrRep == "right":
         return rating + "Right";
 
-    elif demOrRep == "dem":
+    elif demOrRep == "left":
         return rating + "Left";
 
     return "neutral";
@@ -242,3 +248,48 @@ def assignString(boxesCheckedArray, containsBoolean, index):
 
     if not containsBoolean:
         boxesCheckedArray[index] = "False";
+
+#web scraping code
+
+def get_sentiment(url):
+
+    try:
+        user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        config = Config()
+        config.browser_user_agent = user_agent
+        article = Article(url, config=config)
+        article.download()
+        article.parse()
+        article_text = article.text
+        return m.sentiment(article_text)
+
+    except requests.exceptions.ConnectionError:
+        requests.status_code = "Connection refused"
+        print("error: connection refused")
+        return['n/a', 'n/a']
+
+def clean(article):
+
+    cleaned_article = re.sub('[\n\t,]', ' ', article)
+    cleaned_article = cleaned_article.replace('Advertisement', ' ')
+    return cleaned_article
+
+def get_text(url):
+
+    article_text = ''
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36 Edg/89.0.774.77'
+    config = Config()
+    config.browser_user_agent = user_agent
+    article = Article(url, config=config)
+    article.download()
+    article.parse()
+    article_text = article.text
+
+    if article_text == '':
+        print("Could not locate article body")
+        #raise Exception("Could not locate article body")
+    else:
+        print("Got the article body!")
+
+    cleaned_article_text = clean(article_text)
+    return cleaned_article_text

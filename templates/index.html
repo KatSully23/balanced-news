@@ -40,18 +40,17 @@
 {% for article in articles %}
 
 <!--check if user wants to filter by each category-->
-{% set rightFilterActive = rightFilter %}
+{% set rightFilterActive = arrayBools[0] %}
 
 <script>console.log("Right filter active: " + "{{rightFilterActive}}")</script>
 
-{% set leftFilterActive = leftFilter %}
+{% set leftFilterActive = arrayBools[1] %}
 
-<script>console.log("Left filter active: " + "{{rightFilterActive}}")</script>
+<script>console.log("Left filter active: " + "{{leftFilterActive}}")</script>
 
-{% set neutralFilterActive = neutralFilter %}
+{% set neutralFilterActive = arrayBools[2] %}
 
-<script>console.log("Neutral filter active: " + "{{rightFilterActive}}")</script>
-
+<script>console.log("Neutral filter active: " + "{{neutralFilterActive}}")</script>
 
 {% set imgURL = article['photo_url'] %}
 {% set articleName = article['title'] %}
@@ -68,13 +67,14 @@
 <!--randomy shuffle articles later-->
 <!-- displaying republican / neutral articles if filters allow it -->
 <!-- MAKE THIS CODE MORE EFFICIENT WITH FUNCTIONS LATER -->
+<!--also make it so machine learning code doesn't have to run every time-->
 
-{% if rightFilterActive == "True" %}
+{% if rightFilterActive == 'True' %}
 
   <script>console.log("political assignment: {{articlePoliticalAssignment}}")</script>
   <script>console.log("articleOnSpectrum: {{articleOnSpectrum}}")</script>
 
-  {% if (articlePoliticalAssignment == 'rep' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'rep' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
+  {% if (articlePoliticalAssignment == 'right' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'right' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
       <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
       {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
@@ -152,9 +152,15 @@
 
 <!-- displaying democratic / neutral articles if filters allow it -->
 
-{% if leftFilterActive == "True" %}
+{% if leftFilterActive == 'True' %}
 
-  {% if (articlePoliticalAssignment == 'dem' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'dem' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
+<script>console.log("Left filter is active");</script>
+
+<script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
+
+<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>
+
+  {% if (articlePoliticalAssignment == 'left' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'left' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
       <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
       {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
