@@ -6,11 +6,11 @@
 
 <head>
   <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-  <!--<script src="static/functions.js"></script>-->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@1,700&display=swap" rel="stylesheet">
+  <!--<script type="text/javascript" src="/static/functions.js"></script>-->
 </head>
 
 <!--end of head-->
@@ -19,22 +19,48 @@
 <!--body of web page-->
 {% block body %}
 
-<h2 id="trendingTitle"> TRENDING IN THE USA </h2>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='functions.js') }}"></script>
+        
+<!--<script type="text/javascript" src="functions.js"></script>-->
+
+<!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
+<script type="text/javascript">
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+
+<!--check if it is user's first time visiting site-->
+<script type="text/javascript">
+
+function checkFirstVisit() {
+  if(document.cookie.indexOf('mycookie')==-1) {
+    // cookie doesn't exist, create it now
+    document.cookie = 'mycookie=1';
+  }
+  else {
+    // not first visit, so alert
+    alert('You refreshed!');
+  }
+}
+
+</script>
 
 <div class="container-fluid">
 
-  <!--comment out everything but mainRow to space things out-->
+  <div id="mainRow" class="row"></div>
 
-  <div id="mainRow" class="row">
-
-  </div>
-
-<script>
+<!--clear div with class row on page load-->
+<script type="text/javascript">
 
   var element = document.getElementsByClassName("row");
   element.innerHTML = '';
 
 </script>
+
+
+{% set noImageArticleCount = 0 %}
 
 <!--loop through articles; choose whether to display them & how to display them-->
 {% for article in articles %}
@@ -52,6 +78,7 @@
 
 <script>console.log("Neutral filter active: " + "{{neutralFilterActive}}")</script>
 
+<!--getting properties of article-->
 {% set imgURL = article['photo_url'] %}
 {% set articleName = article['title'] %}
 {% set articleAuthor = article['author'] %}
@@ -60,19 +87,20 @@
 {% set articlePoliticalAssignment = article['politicalAssignment'] %}
 {% set articleOnSpectrum = article['onSpectrum'] %}
 
-<!-- CODE TO ASSIGN ARTICLE WITH IMAGE BASED ON ITS MACHINE LEARNING ASSIGNMENT-->
-<!-- MAKE THIS CODE MORE EFFICIENT WITH PYTHON FUNCTIONS LATER -->
-<!-- IN YOUR codeForLater.html RIGHT NOW -->
+<!--TO-DO ITEMS FOR LATER-->
+<!--randomy shuffle articles-->
+<!--make it so machine learning code doesn't run every time-->
 
-<!--randomy shuffle articles later-->
+{% if articlePoliticalAssignment != 'n/a' %}
+
 <!-- displaying republican / neutral articles if filters allow it -->
-<!-- MAKE THIS CODE MORE EFFICIENT WITH FUNCTIONS LATER -->
-<!--also make it so machine learning code doesn't have to run every time-->
-
 {% if rightFilterActive == 'True' %}
 
-  <script>console.log("political assignment: {{articlePoliticalAssignment}}")</script>
-  <script>console.log("articleOnSpectrum: {{articleOnSpectrum}}")</script>
+<script>console.log("Right filter is active");</script>
+
+<script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
+
+<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>
 
   {% if (articlePoliticalAssignment == 'right' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'right' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
@@ -81,68 +109,26 @@
 
       {% if imgURL is not none and imgURL != "" %}
 
-      <script>
-
-      /* creates code for specific card and store it in array using javascript function */
-      /* pass in spectrumImagePath as a parameter  */
-      function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePath) {
-
-        let cardCode = "<div class='col-lg-3 mb-3'>" +
-                          "<div class='card h-100'>" +
-
-                            "<img class='card-img-top' src='url' >" +
-
-                            "<div class='card-body'>" +
-
-                            "<div class='tooltip-wrap'>" +
-                            "<h5 class='card-title'>" +
-                            "<a href='linkToArticle'>nameOfArticle</a></h5>" +
-                            "<div class='tooltip-content'>" +
-                              "<img class='spectrumImage' src='path' alt='spectrum' />" +
-                            "</div>" +
-                          "</div>" +
-
-                            "</div>" +
-
-                            "</div>"  +
-
-                          "</div>" +
-                        "</div>"
-
-        /* change variable names to something more informative */
-        let cardParameter1 = cardCode.replace("url", imageURL);
-        let cardParameter2 = cardParameter1.replace("linkToArticle", newsArticleURL);
-        let cardParameter3 = cardParameter2.replace("nameOfArticle", newsArticleName);
-        let cardParameter4 = cardParameter3.replace("path", spectrumImagePath);
-
-        return cardParameter4;
-
-      }
+      <script type="text/javascript">
 
       var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
       var element = document.getElementById("mainRow");
-      /*console.log(element);*/
       element.innerHTML += "<br>";
       element.innerHTML += card;
-      console.log(element.innerHTML);
-      console.log(card);
 
       </script>
 
       {% else %}
 
-      {% set noImageArticles = true %}
       <!-- add card to the More in US Headlines card-->
       <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
 
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-      <script>
-        $(document).ready(function(){
-          $("#list").append('<li class="list-group-item"><a href="{{articleURL}}">{{articleName}}</a></li>');
-        });
-      </script>
+      {% set noImageArticleCount = noImageArticleCount + 1 %}
+
+      <script type="text/javascript"> appendNoImageArticle("{{noImageArticleCount}}") </script>
 
       {% endif %}
 
@@ -167,68 +153,26 @@
 
       {% if imgURL is not none and imgURL != "" %}
 
-      <script>
-
-      /* creates code for specific card and store it in array using javascript function */
-      /* pass in spectrumImagePath as a parameter  */
-      function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePath) {
-
-        let cardCode = "<div class='col-lg-3 mb-3'>" +
-                          "<div class='card h-100'>" +
-
-                            "<img class='card-img-top' src='url' >" +
-
-                            "<div class='card-body'>" +
-
-                            "<div class='tooltip-wrap'>" +
-                            "<h5 class='card-title'>" +
-                            "<a href='linkToArticle'>nameOfArticle</a></h5>" +
-                            "<div class='tooltip-content'>" +
-                              "<img class='spectrumImage' src='path' alt='spectrum' />" +
-                            "</div>" +
-                          "</div>" +
-
-                            "</div>" +
-
-                            "</div>"  +
-
-                          "</div>" +
-                        "</div>"
-
-        /* change variable names to something more informative */
-        let cardParameter1 = cardCode.replace("url", imageURL);
-        let cardParameter2 = cardParameter1.replace("linkToArticle", newsArticleURL);
-        let cardParameter3 = cardParameter2.replace("nameOfArticle", newsArticleName);
-        let cardParameter4 = cardParameter3.replace("path", spectrumImagePath);
-
-        return cardParameter4;
-
-      }
+      <script type="text/javascript">
 
       var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
       var element = document.getElementById("mainRow");
-      /*console.log(element);*/
       element.innerHTML += "<br>";
       element.innerHTML += card;
-      console.log(element.innerHTML);
-      console.log(card);
 
       </script>
 
       {% else %}
 
-      {% set noImageArticles = "True" %}
       <!-- add card to the More in US Headlines card-->
       <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
 
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-      <script>
-        $(document).ready(function(){
-          $("#list").append('<li class="list-group-item"><a href="{{articleURL}}">{{articleName}}</a></li>');
-        });
-      </script>
+      {% set noImageArticleCount = noImageArticleCount + 1 %}
+
+      <script type="text/javascript"> appendNoImageArticle("{{noImageArticleCount}}") </script>
 
       {% endif %}
 
@@ -236,35 +180,15 @@
 
   {% endif %}
 
+  <!--end of if statement checking if article has been classified-->
+  {% endif %}
+
 {% endfor %}
 
-
-<!-- make sure this is actually working! -->
-{% if noImageArticles == "True" %}
-
-<script>
-
-/*card with headlines that don't have images*/
-let otherArticles = "<div class='col-lg-3 mb-3'>" +
-                      "<div class='card h-100'>" +
-                      "<div class='card-header'>" +
-                        "More from US Headlines" +
-                      "</div>" +
-                      "<ul id='list' class='list-group list-group-flush'>" +
-                      "</ul>" +
-                    "</div>" +
-                    "</div" +
-                    "<br><br>"
-
-var element = document.getElementById("mainRow");
-element.innerHTML += "<br>";
-element.innerHTML += otherArticles;
-
-</script>
-
-{% endif %}
-
-
+<!--<script type="text/javascript" src="functions.js"></script>-->
+<!--<script src="functionsc.js"></script>-->
+<!--<script type="text/javascript"
+        src="{{ url_for('static', filename='functions.js') }}"></script>-->
 
 <!--end of body-->
 {% endblock %}
