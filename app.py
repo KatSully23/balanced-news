@@ -16,122 +16,15 @@ import re
 
 app = Flask(__name__)
 
-@app.route('/', methods=["GET", "POST"])
-
-#function that renders index.html
-def index(methods=["GET", "POST"]):
-
-    url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
-
-    #get list of checked categories in filter menu
-    #source: https://www.reddit.com/r/flask/comments/bz376w/how_do_i_get_checked_checkboxes_into_flask/
-    categories = request.form.getlist('party')
-    print('******************')
-    print(categories)
-
-    #if form hasn't been filled out yet
-    if len(categories) == 0:
-        containsRight = "True";
-        containsLeft = "True";
-        containsNeutral = "True";
-    #if form has been filled out by user
-    else:
-        #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
-        containsRight = "Right" in categories;
-        containsLeft = "Left" in categories;
-        containsNeutral = "Neutral" in categories;
-
-    checkedBooleans = assignCheckedBooleans(containsRight, containsLeft, containsNeutral);
-
-    return render_template('index.html', articles=getArticles(url), rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
-
-@app.route('/entertainment', methods=["GET", "POST"])
-
-#function that renders entertainment.html
-def entertainment(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('entertainment.html', articles=getArticles(url));
-
-@app.route('/sports', methods=["GET", "POST"])
-
-#function that renders sports.html
-def sports(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('sports.html', articles=getArticles(url));
-
-@app.route('/science', methods=["GET", "POST"])
-
-#function that renders science.html
-def science(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('science.html', articles=getArticles(url));
-
-@app.route('/business', methods=["GET", "POST"])
-
-#function that renders contact.html
-def business(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('business.html', articles=getArticles(url));
-
-@app.route('/health', methods=["GET", "POST"])
-
-#function that renders contact.html
-def health(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('health.html', articles=getArticles(url));
-
-@app.route('/mldemo', methods=["GET", "POST"])
-
-#temporary
-def mldemo():
-    if request.method == 'GET':
-        prediction = request.args.get('prediction')
-        return render_template('machinelearningdemo.html', prediction=prediction)
-    else:
-        title = request.values.get("title")
-        model = joblib.load('demo_model.joblib')
-        target_names = ['CNN', 'Breitbart', 'New York Times']
-        prediction = target_names[model.predict([title])[0]]
-        return redirect(url_for('mldemo', prediction=prediction))
-
-
-@app.route('/about', methods=["GET", "POST"])
-
-#function that renders contact.html
-def about(methods=["POST"]):
-    return render_template('about.html')
-
-@app.route('/instructions', methods=["GET", "POST"])
-
-#function that renders contact.html
-def instructions(methods=["POST"]):
-    return render_template('instructions.html')
-
-@app.route('/contact', methods=["GET", "POST"])
-
-#function that renders contact.html
-def contact(methods=["POST"]):
-    return render_template('contact.html')
-
 def getArticles(url):
 
     try:
+        #figure out what this code does!
         open_bbc_page = requests.get(url).json()
         articles = open_bbc_page["articles"]
         results = []
 
-        dataSet = get_articles(articles);
-
-        #for i in range(len(dataSet)):
-            #print("")
-            #print("***********************")
-            #print(i + 1, dataSet[i])
-
-        imgURL = dataSet[15]['photo_url'];
-        articleName = dataSet[15]['title'];
-        articleAuthor = dataSet[15]['author'];
-        articleContent = dataSet[15]['content'];
-        articleURL = dataSet[15]['url'];
+        dataSet = getArticleResults(articles);
 
     #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
     except requests.exceptions.ConnectionError:
@@ -141,7 +34,7 @@ def getArticles(url):
 
     return dataSet;
 
-def get_articles(file):
+def getArticleResults(file):
 
     article_results = [];
 
@@ -269,6 +162,125 @@ def get_sentiment(url):
     except requests.exceptions.Timeout:
         print("Timeout occurred");
         return['n/a', 'n/a']
+
+## Create arrays storing articles for each category to prevent classification
+## through machine learning model upon each refresh of html pages
+
+#store an array of top headline articles and their assigned properties
+topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
+
+#store an array of entertainment articles and their assigned properties
+entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
+
+#store an array of sports articles and their assigned properties
+sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
+
+#store an array of business articles and their assigned properties
+businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
+
+#store an array of science articles and their assigned properties
+scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
+
+#store an array of health articles and their assigned properties
+healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
+
+@app.route('/', methods=["GET", "POST"])
+
+#function that renders index.html
+def index(methods=["GET", "POST"]):
+
+    #url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
+
+    #get list of checked categories in filter menu
+    #source: https://www.reddit.com/r/flask/comments/bz376w/how_do_i_get_checked_checkboxes_into_flask/
+    categories = request.form.getlist('party')
+    print('******************')
+    print(categories)
+
+    #if form hasn't been filled out yet
+    if len(categories) == 0:
+        containsRight = "True";
+        containsLeft = "True";
+        containsNeutral = "True";
+    #if form has been filled out by user
+    else:
+        #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
+        containsRight = "Right" in categories;
+        containsLeft = "Left" in categories;
+        containsNeutral = "Neutral" in categories;
+
+    checkedBooleans = assignCheckedBooleans(containsRight, containsLeft, containsNeutral);
+
+    return render_template('index.html', articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+
+@app.route('/entertainment', methods=["GET", "POST"])
+
+#function that renders entertainment.html
+def entertainment(methods=["GET"]):
+    #url = "http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('entertainment.html', articles=entertainmentArticles);
+
+@app.route('/sports', methods=["GET", "POST"])
+
+#function that renders sports.html
+def sports(methods=["GET"]):
+    #url = "http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('sports.html', articles=sportsArticles);
+
+@app.route('/science', methods=["GET", "POST"])
+
+#function that renders science.html
+def science(methods=["GET"]):
+    #url = "http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('science.html', articles=scienceArticles);
+
+@app.route('/business', methods=["GET", "POST"])
+
+#function that renders contact.html
+def business(methods=["GET"]):
+    #url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('business.html', articles=businessArticles);
+
+@app.route('/health', methods=["GET", "POST"])
+
+#function that renders contact.html
+def health(methods=["GET"]):
+    #url = "http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d"
+    return render_template('health.html', articles=healthArticles);
+
+@app.route('/mldemo', methods=["GET", "POST"])
+
+#temporary
+def mldemo():
+    if request.method == 'GET':
+        prediction = request.args.get('prediction')
+        return render_template('machinelearningdemo.html', prediction=prediction)
+    else:
+        title = request.values.get("title")
+        model = joblib.load('demo_model.joblib')
+        target_names = ['CNN', 'Breitbart', 'New York Times']
+        prediction = target_names[model.predict([title])[0]]
+        return redirect(url_for('mldemo', prediction=prediction))
+
+
+@app.route('/about', methods=["GET", "POST"])
+
+#function that renders contact.html
+def about(methods=["POST"]):
+    return render_template('about.html')
+
+@app.route('/instructions', methods=["GET", "POST"])
+
+#function that renders contact.html
+def instructions(methods=["POST"]):
+    return render_template('instructions.html')
+
+@app.route('/contact', methods=["GET", "POST"])
+
+#function that renders contact.html
+def contact(methods=["POST"]):
+    return render_template('contact.html')
+
 
 def clean(article):
 

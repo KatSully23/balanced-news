@@ -19,10 +19,9 @@
 <!--body of web page-->
 {% block body %}
 
+<!--source: https://stackoverflow.com/questions/14711552/external-javascript-file-is-not-getting-added-when-running-on-flask-->
 <script type="text/javascript"
         src="{{ url_for('static', filename='functions.js') }}"></script>
-        
-<!--<script type="text/javascript" src="functions.js"></script>-->
 
 <!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
 <script type="text/javascript">
@@ -32,7 +31,7 @@
 </script>
 
 <!--check if it is user's first time visiting site-->
-<script type="text/javascript">
+<!--<script type="text/javascript">
 
 function checkFirstVisit() {
   if(document.cookie.indexOf('mycookie')==-1) {
@@ -44,8 +43,7 @@ function checkFirstVisit() {
     alert('You refreshed!');
   }
 }
-
-</script>
+</script>-->
 
 <div class="container-fluid">
 
