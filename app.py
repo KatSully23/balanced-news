@@ -299,7 +299,6 @@ def mldemo():
         prediction = target_names[model.predict([title])[0]]
         return redirect(url_for('mldemo', prediction=prediction))
 
-
 @app.route('/about', methods=["GET", "POST"])
 
 #function that renders contact.html
