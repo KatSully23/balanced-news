@@ -13,10 +13,13 @@
     </head>
 
     <body>
+
+      <!--linking to JavaScript file-->
       <!--source: https://stackoverflow.com/questions/14711552/external-javascript-file-is-not-getting-added-when-running-on-flask-->
       <script type="text/javascript"
               src="{{ url_for('static', filename='functions.js') }}"></script>
 
+      <!--clear form input upon refresh of page-->
       <!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
       <script type="text/javascript">
           if ( window.history.replaceState ) {
@@ -90,6 +93,7 @@
     </body>
 
     {% block body %}
+
 
     {% endblock %}
 

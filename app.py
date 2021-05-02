@@ -163,6 +163,26 @@ def get_sentiment(url):
         print("Timeout occurred");
         return['n/a', 'n/a']
 
+def getCategories(categories):
+
+    print('******************')
+    print(categories)
+
+    #if form hasn't been filled out yet
+    if len(categories) == 0:
+        containsRight = "True";
+        containsLeft = "True";
+        containsNeutral = "True";
+    #if form has been filled out by user
+    else:
+        #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
+        containsRight = "Right" in categories;
+        containsLeft = "Left" in categories;
+        containsNeutral = "Neutral" in categories;
+
+    return [containsRight, containsLeft, containsNeutral]
+
+
 ## Create arrays storing articles for each category to prevent classification
 ## through machine learning model upon each refresh of html pages
 
@@ -194,22 +214,9 @@ def index(methods=["GET", "POST"]):
     #get list of checked categories in filter menu
     #source: https://www.reddit.com/r/flask/comments/bz376w/how_do_i_get_checked_checkboxes_into_flask/
     categories = request.form.getlist('party')
-    print('******************')
-    print(categories)
+    filters = getCategories(categories);
 
-    #if form hasn't been filled out yet
-    if len(categories) == 0:
-        containsRight = "True";
-        containsLeft = "True";
-        containsNeutral = "True";
-    #if form has been filled out by user
-    else:
-        #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
-        containsRight = "Right" in categories;
-        containsLeft = "Left" in categories;
-        containsNeutral = "Neutral" in categories;
-
-    checkedBooleans = assignCheckedBooleans(containsRight, containsLeft, containsNeutral);
+    checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
     return render_template('index.html', articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
@@ -218,39 +225,69 @@ def index(methods=["GET", "POST"]):
 #function that renders entertainment.html
 def entertainment(methods=["GET"]):
     #url = "http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('entertainment.html', articles=entertainmentArticles);
+    categories = request.form.getlist('party')
+    filters = getCategories(categories);
+
+    checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
+
+    return render_template('entertainment.html', articles=entertainmentArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+
 
 @app.route('/sports', methods=["GET", "POST"])
 
 #function that renders sports.html
 def sports(methods=["GET"]):
-    #url = "http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('sports.html', articles=sportsArticles);
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d"
+    categories = request.form.getlist('party')
+    filters = getCategories(categories);
+
+    checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
+
+    return render_template('sports.html', articles=sportsArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+
 
 @app.route('/science', methods=["GET", "POST"])
 
 #function that renders science.html
 def science(methods=["GET"]):
-    #url = "http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('science.html', articles=scienceArticles);
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d"
+    categories = request.form.getlist('party')
+    filters = getCategories(categories);
+
+    checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
+
+    return render_template('science.html', articles=scienceArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+
 
 @app.route('/business', methods=["GET", "POST"])
 
 #function that renders contact.html
 def business(methods=["GET"]):
-    #url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('business.html', articles=businessArticles);
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
+    categories = request.form.getlist('party')
+    filters = getCategories(categories);
+
+    checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
+
+    return render_template('business.html', articles=businessArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+
 
 @app.route('/health', methods=["GET", "POST"])
 
 #function that renders contact.html
 def health(methods=["GET"]):
-    #url = "http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d"
-    return render_template('health.html', articles=healthArticles);
+    url = "http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d"
+    categories = request.form.getlist('party')
+    filters = getCategories(categories);
+
+    checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
+
+    return render_template('health.html', articles=healthArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+
 
 @app.route('/mldemo', methods=["GET", "POST"])
 
-#temporary
+#temporary ~ delete this later!
 def mldemo():
     if request.method == 'GET':
         prediction = request.args.get('prediction')
