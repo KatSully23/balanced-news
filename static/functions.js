@@ -39,8 +39,8 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePat
 
 function createNoImageCard() {
 
-  /*card with headlines that don't have images*/
-  let otherArticles = "<div class='col-lg-3 mb-3'>" +
+  /* card with headlines that don't have image s*/
+  let otherArticles = "<div id='noImageCard' class='col-lg-3 mb-3'>" +
                         "<div class='card h-100'>" +
                         "<div class='card-header'>" +
                           "More from US Headlines" +
@@ -51,20 +51,19 @@ function createNoImageCard() {
                       "</div" +
                       "<br><br>"
 
-  var element = document.getElementById("mainRow");
-  element.innerHTML += "<br>";
-  element.innerHTML += otherArticles;
+    return otherArticles;
 
 }
 
-function appendNoImageArticle(noImageCount) {
+function appendNoImageArticle(articleURL, articleName) {
 
   $(document).ready(function(){
-    $("#list").append('<li class="list-group-item"><a href="{{articleURL}}">{{articleName}}</a></li>');
-  });
 
-  if (noImageCount == "1") {
-    createNoImageCard();
-  }
+    articleCode = '<li class="list-group-item"><a href="articleURL">articleName</a></li>';
+    articleCode2 = articleCode.replace("articleURL", articleURL);
+    articleCodeFinal = articleCode2.replace("articleName", articleName);
+    $("#list").append(articleCodeFinal);
+
+  });
 
 }

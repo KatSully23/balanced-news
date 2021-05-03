@@ -31,7 +31,6 @@
     </div>
 </section>
 <!--end of container storing articles-->
-
 <!--clear div with class row on page load-->
 <script type="text/javascript">
 
@@ -40,24 +39,21 @@
 
 </script>
 
-
-{% set noImageArticleCount = 0 %}
-
 <!--loop through articles; choose whether to display them & how to display them-->
 {% for article in articles %}
 
 <!--check if user wants to filter by each category-->
 {% set rightFilterActive = arrayBools[0] %}
 
-<script>console.log("Right filter active: " + "{{rightFilterActive}}")</script>
+<!--<script>console.log("Right filter active: " + "{{rightFilterActive}}")</script>-->
 
 {% set leftFilterActive = arrayBools[1] %}
 
-<script>console.log("Left filter active: " + "{{leftFilterActive}}")</script>
+<!--<script>console.log("Left filter active: " + "{{leftFilterActive}}")</script>-->
 
 {% set neutralFilterActive = arrayBools[2] %}
 
-<script>console.log("Neutral filter active: " + "{{neutralFilterActive}}")</script>
+<!--<script>console.log("Neutral filter active: " + "{{neutralFilterActive}}")</script>-->
 
 <!--getting properties of article-->
 {% set imgURL = article['photo_url'] %}
@@ -68,20 +64,16 @@
 {% set articlePoliticalAssignment = article['politicalAssignment'] %}
 {% set articleOnSpectrum = article['onSpectrum'] %}
 
-<!--TO-DO ITEMS FOR LATER-->
-<!--randomy shuffle articles-->
-<!--make it so machine learning code doesn't run every time-->
-
 {% if articlePoliticalAssignment != 'n/a' %}
 
 <!-- displaying republican / neutral articles if filters allow it -->
 {% if rightFilterActive == 'True' %}
 
-<script>console.log("Right filter is active");</script>
+<!--<script>console.log("Right filter is active");</script>
 
 <script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
 
-<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>
+<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>-->
 
   {% if (articlePoliticalAssignment == 'right' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'right' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
@@ -106,10 +98,7 @@
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
 
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-      {% set noImageArticleCount = noImageArticleCount + 1 %}
-
-      <script type="text/javascript"> appendNoImageArticle("{{noImageArticleCount}}") </script>
+      <script type="text/javascript"> appendNoImageArticle("{{articleURL}}", "{{articleName}}") </script>
 
       {% endif %}
 
@@ -121,11 +110,11 @@
 
 {% if leftFilterActive == 'True' %}
 
-<script>console.log("Left filter is active");</script>
+<!--<script>console.log("Left filter is active");</script>
 
 <script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
 
-<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>
+<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>-->
 
   {% if (articlePoliticalAssignment == 'left' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'left' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
@@ -145,15 +134,14 @@
 
       {% else %}
 
+      <script>console.log("article with no image!")</script>
+
       <!-- add card to the More in US Headlines card-->
       <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
 
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-      {% set noImageArticleCount = noImageArticleCount + 1 %}
-
-      <script type="text/javascript"> appendNoImageArticle("{{noImageArticleCount}}") </script>
+      <script type="text/javascript"> appendNoImageArticle("{{articleURL}}", "{{articleName}}") </script>
 
       {% endif %}
 
@@ -165,6 +153,30 @@
   {% endif %}
 
 {% endfor %}
+
+<script>
+
+otherArticlesCard = createNoImageCard()
+var element = document.getElementById("mainRow");
+element.innerHTML += "<br>";
+element.innerHTML += otherArticlesCard;
+
+var noImageArticles = document.getElementById("list").getElementsByTagName("li");
+console.log("number of list items: " + noImageArticles.length);
+
+if(document.getElementsByClassName("list-group-item") != null){
+  console.log(document.getElementsByClassName("list-group-item").length)
+}
+
+/*console.log("inner HTML of card list " + document.getElementById("list").innerHTML)*/
+/*console.log("number of list items: " +  document.querySelectorAll('ul li').length);*/
+/*console.log("number of list items: " + document.getElementById('noImageCard').getElementsByClassName('list-group-item').length)*/
+
+/*if (document.getElementById('list').getElementsByTagName('li').length == 0) {
+  document.getElementById('noImageCard').remove();
+}*/
+
+</script>
 
 <!--end of body-->
 {% endblock %}
