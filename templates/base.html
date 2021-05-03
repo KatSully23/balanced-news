@@ -6,13 +6,26 @@
         <link rel="stylesheet" href= "static/style.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
-        <!--<script src="static/functions.js"></script>-->
         <link rel="icon" href="static/logo3.png">
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <link rel="stylesheet" href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!--<script type="text/javascript" src="static/functions.js"></script>-->
     </head>
 
     <body>
+
+      <!--linking to JavaScript file-->
+      <!--source: https://stackoverflow.com/questions/14711552/external-javascript-file-is-not-getting-added-when-running-on-flask-->
+      <script type="text/javascript"
+              src="{{ url_for('static', filename='functions.js') }}"></script>
+
+      <!--clear form input upon refresh of page-->
+      <!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
+      <script type="text/javascript">
+          if ( window.history.replaceState ) {
+              window.history.replaceState( null, null, window.location.href );
+          }
+      </script>
 
       <nav class="navbar navbar-expand-md mb-4">
         <a class="navbar-brand" href="/">
@@ -80,6 +93,7 @@
     </body>
 
     {% block body %}
+
 
     {% endblock %}
 

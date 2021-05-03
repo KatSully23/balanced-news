@@ -6,6 +6,26 @@ p {
   color: black;
 }
 
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.howToFilter {
+  width: 630px;
+  height: 340px;
+}
+
+.instructions {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+}
+
+.instructionsText {
+  font-family: 'Raleway', sans-serif;
+  font-weight: medium;
+}
+
 .card {
   border-color: white;
   margin-right: 20px;
