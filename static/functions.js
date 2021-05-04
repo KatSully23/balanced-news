@@ -1,4 +1,14 @@
 
+var articlesWithImages = "all";
+
+function changeArticlesWithImages() {
+  articlesWithImages = "not all";
+}
+
+function getArticlesWithImages() {
+  return articlesWithImages;
+}
+
 /* creates code for specific card and store it in array using javascript function */
 /* pass in spectrumImagePath as a parameter  */
 function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePath) {
@@ -37,13 +47,13 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePat
 
 }
 
-function createNoImageCard() {
+function createNoImageCard(moreFromString) {
 
   /* card with headlines that don't have image s*/
   let otherArticles = "<div id='noImageCard' class='col-lg-3 mb-3'>" +
                         "<div class='card h-100'>" +
                         "<div class='card-header'>" +
-                          "More from US Headlines" +
+                          "Title" +
                         "</div>" +
                         "<ul id='list' class='list-group list-group-flush'>" +
                         "</ul>" +
@@ -51,7 +61,7 @@ function createNoImageCard() {
                       "</div" +
                       "<br><br>"
 
-    return otherArticles;
+    return otherArticles.replace('Title', moreFromString);
 
 }
 

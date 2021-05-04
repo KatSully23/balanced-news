@@ -31,6 +31,7 @@
     </div>
 </section>
 <!--end of container storing articles-->
+
 <!--clear div with class row on page load-->
 <script type="text/javascript">
 
@@ -98,7 +99,14 @@
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
 
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-      <script type="text/javascript"> appendNoImageArticle("{{articleURL}}", "{{articleName}}") </script>
+      <script type="text/javascript">
+
+      appendNoImageArticle("{{articleURL}}", "{{articleName}}")
+      changeArticlesWithImages();
+      console.log("articles with images: " + articlesWithImages);
+
+      </script>
+
 
       {% endif %}
 
@@ -141,7 +149,13 @@
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
 
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-      <script type="text/javascript"> appendNoImageArticle("{{articleURL}}", "{{articleName}}") </script>
+      <script type="text/javascript">
+
+      appendNoImageArticle("{{articleURL}}", "{{articleName}}")
+      changeArticlesWithImages();
+      console.log("articles with images: " + articlesWithImages);
+
+      </script>
 
       {% endif %}
 
@@ -156,25 +170,16 @@
 
 <script>
 
-otherArticlesCard = createNoImageCard()
+otherArticlesCard = createNoImageCard("More from Entertainment")
 var element = document.getElementById("mainRow");
 element.innerHTML += "<br>";
 element.innerHTML += otherArticlesCard;
 
-var noImageArticles = document.getElementById("list").getElementsByTagName("li");
-console.log("number of list items: " + noImageArticles.length);
+console.log("before deleting card, articles with images: " + getArticlesWithImages())
 
-if(document.getElementsByClassName("list-group-item") != null){
-  console.log(document.getElementsByClassName("list-group-item").length)
-}
-
-/*console.log("inner HTML of card list " + document.getElementById("list").innerHTML)*/
-/*console.log("number of list items: " +  document.querySelectorAll('ul li').length);*/
-/*console.log("number of list items: " + document.getElementById('noImageCard').getElementsByClassName('list-group-item').length)*/
-
-/*if (document.getElementById('list').getElementsByTagName('li').length == 0) {
+if (getArticlesWithImages() == "all") {
   document.getElementById('noImageCard').remove();
-}*/
+}
 
 </script>
 
