@@ -6,12 +6,12 @@
 {% block head %}
 
 <head>
-  <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@1,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
 <!--end of head-->
@@ -21,11 +21,11 @@
 {% block body %}
 
 <!--Featured Image-->
-  <img alt="instructions" src="static/howToUseOurSite.png" style="width:100%;" />
+<img alt="instructions" src="static/howToUseOurSite.png" style="width:100%;" />
 
-<div class="container-fluid">
+<div id="instructionsDiv" class="container-fluid">
 
-  <br><h2 class="instructionsTitle"> NEWS CATEGORIES </h2> <br>
+  <br><h2 class="instructionsTitle"> News Categories </h2> <br>
 
   <p class="instructionsText"> Balanced News offers the following news categories:</p>
 
@@ -38,36 +38,70 @@
   <li> Health </li>
   </ul>
 
-  <h2 class="instructionsTitle"> FILTERING </h2> <br>
+  <h2 class="instructionsTitle"> Filtering </h2> <br>
 
   <img class="howToFilter" alt="how to filter" src="static/howToFilter.png" /><br><br>
 
-  <p class="instructionsText"> Instructions on how to use the filter functionality </p>
+  <p id="filterInstructions" class="instructionsText"> To view articles based on their political party or lack thereof, hover over the filter icon in the top right corner of the screen. This will trigger a dropdown menu where you will be able to select what kinds of articles you would like to read: right-leaning, left-leaning, or neutral on the political spectrum.</p>
 
-  <h2 class="instructionsTitle"> IDENTIFYING POLITICAL SPECTRUM </h2> <br>
+  <h2 class="instructionsTitle"> Identifying Political Spectrum </h2> <br>
 
-  <!--<img class="howToFilter" alt="how to filter" src="static/spectrumImageDemo.png" /><br>-->
+  <img class="howToFilter" alt="get spectrum image" src="static/hoverFeature.png" /><br><br>
 
-  <p class="instructionsText"> Explanation of political spectrum images </p>
+  <p id="spectrumImagesExplanation" class="instructionsText"> When you hover over an article's associated link, you will notice an image pop up in front of it with a spectrum ranging from dark blue to dark red. This image will tell you where the article you are hovering over is on the political spectrum. </p>
+  <br><p id="spectrumImagesExplanation" class="instructionsText"> Below you will find a table explaining the meaning of the images you will see: </p><br>
 
   <table>
   <tr>
-    <th>Spectrum Image</th>
-    <th>Political Assignment</th>
+    <th><p class="tableText"> Spectrum Image </p></th>
+    <th><p class="tableText"> Political Assignment </p></th>
   </tr>
+
+  <!--Far Left-->
   <tr>
-    <td>Image #1</td>
-    <td>Far Left</td>
+    <td><br><img class="spectrumTableImage" alt="far left" src="static/spectrumIcons/farLeft.png" /><br></td>
+    <td><p class="tableText">  Far Left </p></td>
   </tr>
+
+  <!--Moderate Left-->
   <tr>
-    <td>Image #2</td>
-    <td>Moderate Left</td>
+    <td><br><img class="spectrumTableImage" alt="moderate left" src="static/spectrumIcons/moderateLeft.png" /><br></td>
+    <td><p class="tableText">  Moderate Left </p></td>
   </tr>
+
+  <!--Slight Left-->
   <tr>
-    <td>Image #3</td>
-    <td>Least Left</td>
+    <td><br><img class="spectrumTableImage" alt="slight left" src="static/spectrumIcons/leastLeft.png" /><br></td>
+    <td><p class="tableText">  Slight Left </p></td>
   </tr>
+
+  <!--Neutral-->
+  <tr>
+    <td><br><img class="spectrumTableImage" alt="neutral" src="static/spectrumIcons/neutral.png" /><br></td>
+    <td><p class="tableText">  Neutral </p></td>
+  </tr>
+
+  <!--Slight Right-->
+  <tr>
+    <td><br><img class="spectrumTableImage" alt="least right" src="static/spectrumIcons/farLeft.png" /><br></td>
+    <td><p class="tableText">  Slight Right </p></td>
+  </tr>
+
+  <!--Moderate Right-->
+  <tr>
+    <td><br><img class="spectrumTableImage" alt="moderate right" src="static/spectrumIcons/moderateRight.png" /><br></td>
+    <td><p class="tableText">  Moderate Right </p></td>
+  </tr>
+
+  <!--Far Right-->
+  <tr>
+    <td><br><img class="spectrumTableImage" alt="far right" src="static/spectrumIcons/farRight.png" /><br></td>
+    <td><p class="tableText"> Far Right </p></td>
+  </tr>
+
 </table><br>
+
+<br><p id="spectrumImagesExplanation" class="instructionsText"> If you're reading this, great job! You are now ready to use Balanced News 🎉 </p><br>
 
 </div>
 

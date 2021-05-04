@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+
 nav {
   background-color: black;
 }
@@ -11,6 +13,22 @@ table, th, td {
   border-collapse: collapse;
 }
 
+.tableText {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: medium;
+}
+
+.spectrumTableImage {
+  width: 180px;
+  height: 90px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
 .howToFilter {
   width: 630px;
   height: 340px;
@@ -18,12 +36,12 @@ table, th, td {
 
 .instructions {
   font-family: 'Raleway', sans-serif;
-  font-weight: bold;
+  font-weight: 700px;
 }
 
 .instructionsText {
   font-family: 'Raleway', sans-serif;
-  font-weight: medium;
+  font-weight: 500px;
 }
 
 .card {
@@ -200,6 +218,18 @@ table, th, td {
   -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+}
+
+#filterInstructions {
+  width: 670px;
+}
+
+#spectrumImagesExplanation {
+  width: 670px;
+}
+
+#instructionsDiv {
+  margin-left: 20px;
 }
 
 #siteLogo {

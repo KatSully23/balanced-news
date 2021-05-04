@@ -188,21 +188,27 @@ def getCategories(categories):
 
 #store an array of top headline articles and their assigned properties
 topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
+#topHeadlineArticles = [];
 
 #store an array of entertainment articles and their assigned properties
 entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
+#entertainmentArticles = [];
 
 #store an array of sports articles and their assigned properties
 sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
+#sportsArticles = [];
 
 #store an array of business articles and their assigned properties
 businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
+#businessArticles = [];
 
 #store an array of science articles and their assigned properties
 scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
+#scienceArticles = [];
 
 #store an array of health articles and their assigned properties
 healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
+#healthArticles = [];
 
 @app.route('/', methods=["GET", "POST"])
 
