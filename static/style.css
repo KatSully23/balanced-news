@@ -13,6 +13,16 @@ table, th, td {
   border-collapse: collapse;
 }
 
+#phones {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.navbar navbar-expand-md mb-4 {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
 .tableText {
   margin-left: 10px;
   margin-right: 10px;

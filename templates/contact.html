@@ -1,9 +1,41 @@
 <!--extends file called base.html-->
 {% extends "base.html" %}
 
+
+<!--head of web page-->
+{% block head %}
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+
+<!--end of head-->
+{% endblock %}
+
 <!--body of web page-->
 {% block body %}
 
+<!--Featured Image-->
+<img id="phones" alt="phones" src="static/phones.png" style="width:100%;" />
+
+<div id="instructionsDiv" class="container-fluid">
+
+  <br><h2 class="instructionsTitle"> Get in Touch </h2> <br>
+
+  <p class="instructionsText"> Contact us at the following email addresses: </p>
+
+  <ul class="instructionsText">
+  <li> Katherine: <a href="mailto:katherineS23@lakesideschool.org">KatherineS23@lakesideschool.org </a></li>
+  <li> Luke: <a href="mailto:lukeL23@lakesideschool.org">LukeL@lakesideschool.org </a></li>
+  <li> Sam: <a href="mailto:samK23@lakesideschool.org">SamK@lakesideschool.org </a></li>
+</ul><br>
+
+</div>
 
 <!--end of body-->
 {% endblock %}
