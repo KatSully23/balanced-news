@@ -149,6 +149,10 @@ table, th, td {
   height: 50px;
 }
 
+.list-group-item {
+  border: none;
+}
+
 /* filter icon dropdown */
 
 .dropbtn {

@@ -65,13 +65,22 @@ function createNoImageCard(moreFromString) {
 
 }
 
-function appendNoImageArticle(articleURL, articleName) {
+function appendNoImageArticle(articleURL, articleName, spectrumImage) {
 
   $(document).ready(function(){
 
-    articleCode = '<li class="list-group-item"><a href="articleURL">articleName</a></li>';
+    articleCode = "<div class='tooltip-wrap'>" +
+                  "<li class='list-group-item'>" +
+                  "<a href='articleURL'>articleName</a>" +
+                  "</li>" +
+                  "<div class='tooltip-content'>" +
+                    "<img class='spectrumImage' src='path' alt='spectrum' />" +
+                  "</div>" +
+                  "</div>"
+
     articleCode2 = articleCode.replace("articleURL", articleURL);
-    articleCodeFinal = articleCode2.replace("articleName", articleName);
+    articleCode3 = articleCode2.replace("articleName", articleName);
+    articleCodeFinal = articleCode3.replace("path", spectrumImage)
     $("#list").append(articleCodeFinal);
 
   });
