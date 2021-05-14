@@ -9,6 +9,7 @@ import requests
 import joblib
 import nltkModel as m
 import numpy as np
+import newspaper
 from newspaper import Article
 from newspaper import Config
 import string
@@ -40,85 +41,87 @@ def getArticleResults(file):
 
     for i in range(len(file)):
 
-        try:
-            article_dict = {}
-            article_dict['title'] = file[i]['title']
-            article_dict['author'] = file[i]['author']
-            article_dict['source'] = file[i]['source']
-            article_dict['description'] = file[i]['description']
-            article_dict['content'] = file[i]['content']
-            article_dict['pub_date'] = file[i]['publishedAt']
-            article_dict['url'] = file[i]['url']
-            article_dict['photo_url'] = file[i]['urlToImage']
+        #try:
+        article_dict = {}
+        article_dict['title'] = file[i]['title']
+        article_dict['author'] = file[i]['author']
+        article_dict['source'] = file[i]['source']
+        article_dict['description'] = file[i]['description']
+        article_dict['content'] = file[i]['content']
+        article_dict['pub_date'] = file[i]['publishedAt']
+        article_dict['url'] = file[i]['url']
+        article_dict['photo_url'] = file[i]['urlToImage']
 
-            sortedByModel = sortArticle(file[i]['url'])
-            article_dict['politicalAssignment'] = sortedByModel[0]
-            article_dict['onSpectrum'] = sortedByModel[1]
+        sortedByModel = sortArticle(file[i]['url'])
+        article_dict['politicalAssignment'] = sortedByModel[0]
+        article_dict['onSpectrum'] = sortedByModel[1]
 
-            article_results.append(article_dict)
+        article_results.append(article_dict)
 
         #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
-        except requests.exceptions.ConnectionError:
-            requests.status_code = "Connection refused"
-            print("error: connection refused")
+        #except requests.exceptions.ConnectionError:
+            #requests.status_code = "Connection refused"
+            #print("error: connection refused")
 
         #source: https://stackoverflow.com/questions/28377421/why-do-i-receive-a-timeout-error-from-pythons-requests-module
-        except requests.exceptions.Timeout:
-            print("Timeout occurred");
+        #except requests.exceptions.Timeout:
+            #print("Timeout occurred");
 
     return article_results;
 
 def sortArticle(articleURL):
 
-        try:
-            #pass article into machine learning model
-            articleResult = get_sentiment(articleURL)
+#try:
+    #pass article into machine learning model
+    articleResult = get_sentiment(articleURL)
 
-            #get party and confidence score
-            demOrRep = articleResult[0];
-            print("dem or rep: " + demOrRep)
+    #get party and confidence score
+    demOrRep = articleResult[0];
+    print("dem or rep: " + demOrRep)
 
-            confidenceScore = articleResult[1];
-            print("confidenceScore: " + str(confidenceScore))
+    confidenceScore = articleResult[1];
+    print("confidenceScore: " + str(confidenceScore))
 
-            onSpectrum = getSpectrumString(demOrRep, confidenceScore);
+    onSpectrum = getSpectrumString(demOrRep, confidenceScore);
 
-        #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
-        except requests.exceptions.ConnectionError:
-            requests.status_code = "Connection refused"
-            print("error: connection refused")
-            return['n/a', 'n/a']
+    return [demOrRep, onSpectrum]
 
-        #source: https://stackoverflow.com/questions/28377421/why-do-i-receive-a-timeout-error-from-pythons-requests-module
-        except requests.exceptions.Timeout:
-            print("Timeout occurred");
+    #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
+    #except requests.exceptions.ConnectionError:
+        #requests.status_code = "Connection refused"
+        #print("error: connection refused")
+        #return['n/a', 'n/a']
 
-        return [demOrRep, onSpectrum]
+    #source: https://stackoverflow.com/questions/28377421/why-do-i-receive-a-timeout-error-from-pythons-requests-module
+    #except requests.exceptions.Timeout:
+        #print("Timeout occurred");
 
 def getSpectrumString(demOrRep, confidenceScore):
 
-    if confidenceScore >= 0 and confidenceScore <= 0.33333333333:
-        rating = "least";
+    if confidenceScore != "n/a":
 
-    elif confidenceScore > 0.33333333333 and confidenceScore <= 0.66666666666:
-        rating = "moderate"
+        if confidenceScore >= 0 and confidenceScore <= 0.33333333333:
+            rating = "least";
 
-    elif confidenceScore > 0.66666666666 and confidenceScore <= 1.0:
-        rating = "far"
+        elif confidenceScore > 0.33333333333 and confidenceScore <= 0.66666666666:
+            rating = "moderate"
 
-    elif confidenceScore == 0:
-        rating = "neutral";
+        elif confidenceScore > 0.66666666666 and confidenceScore <= 1.0:
+            rating = "far"
 
-    else:
-        print("error: confidence score out of range");
+        elif confidenceScore == 0:
+            rating = "neutral";
 
-    if demOrRep == "right":
-        return rating + "Right";
+        else:
+            print("error: confidence score out of range");
 
-    elif demOrRep == "left":
-        return rating + "Left";
+        if demOrRep == "right":
+            return rating + "Right";
 
-    return "neutral";
+        elif demOrRep == "left":
+            return rating + "Left";
+
+    return "no spectrum string found"
 
 def assignCheckedBooleans(containsRight, containsLeft, containsNeutral):
 
@@ -153,15 +156,23 @@ def get_sentiment(url):
         article_text = article.text
         return m.sentiment(article_text)
 
-    except requests.exceptions.ConnectionError:
-        requests.status_code = "Connection refused"
-        print("error: connection refused")
-        return['n/a', 'n/a']
+    except newspaper.article.ArticleException:
+        return ['n/a', 'n/a']
+
+    #except DateTimeException:
+        #return ['n/a', 'n/a']
+
+    return "error!";
+
+    #except requests.exceptions.ConnectionError:
+        #requests.status_code = "Connection refused"
+        #print("error: connection refused")
+        #return['n/a', 'n/a']
 
     #source: https://stackoverflow.com/questions/28377421/why-do-i-receive-a-timeout-error-from-pythons-requests-module
-    except requests.exceptions.Timeout:
-        print("Timeout occurred");
-        return['n/a', 'n/a']
+    #except requests.exceptions.Timeout:
+        #print("Timeout occurred");
+        #return['n/a', 'n/a']
 
 def getCategories(categories):
 
@@ -349,4 +360,5 @@ def get_text(url):
         print("Got the article body!")
 
     cleaned_article_text = clean(article_text)
+
     return cleaned_article_text
