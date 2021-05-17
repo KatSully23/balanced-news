@@ -70,7 +70,7 @@ function appendNoImageArticle(articleURL, articleName, spectrumImage) {
   $(document).ready(function(){
 
     articleCode = "<div class='tooltip-wrap'>" +
-                  "<li class='list-group-item'>" +
+                  "<li class='list-group-item border-0'>" +
                   "<a href='articleURL'>articleName</a>" +
                   "</li>" +
                   "<div class='tooltip-content'>" +

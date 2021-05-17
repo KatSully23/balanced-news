@@ -140,6 +140,11 @@ table, th, td {
   /*margin-left: 50px;*/
 }
 
+/* source: https://stackoverflow.com/questions/4502633/how-to-affect-other-elements-when-one-element-is-hovered */
+.tooltip-wrap:hover > .tooltip-content{
+  bottom: 93%;
+}
+
 .tooltip-wrap:hover .tooltip-content {
   display: block;
 }
@@ -150,7 +155,10 @@ table, th, td {
 }
 
 .list-group-item {
-  border: none;
+  border-top: 0 none;
+  border-bottom: 0 none;
+  border-left: 0 none;
+  border-right: 0 none;
 }
 
 /* filter icon dropdown */
