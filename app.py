@@ -247,7 +247,7 @@ def entertainment(methods=["GET"]):
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('entertainment.html', articles=entertainmentArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('category.html', pageTitle = "ENTERTAINMENT", articles=entertainmentArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 
 @app.route('/sports', methods=["GET", "POST"])
@@ -260,7 +260,7 @@ def sports(methods=["GET"]):
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('sports.html', articles=sportsArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('category.html', pageTitle = "SPORTS", articles=sportsArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 
 @app.route('/science', methods=["GET", "POST"])
@@ -273,7 +273,7 @@ def science(methods=["GET"]):
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('science.html', articles=scienceArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('category.html', pageTitle = "SCIENCE", articles=scienceArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 
 @app.route('/business', methods=["GET", "POST"])
@@ -286,7 +286,7 @@ def business(methods=["GET"]):
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('business.html', articles=businessArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('category.html', pageTitle = "BUSINESS",  articles=businessArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 
 @app.route('/health', methods=["GET", "POST"])
@@ -299,7 +299,7 @@ def health(methods=["GET"]):
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('health.html', articles=healthArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('category.html', pageTitle = "HEALTH",  articles=healthArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 
 @app.route('/mldemo', methods=["GET", "POST"])
