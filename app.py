@@ -14,6 +14,7 @@ from newspaper import Article
 from newspaper import Config
 import string
 import re
+import validators
 
 app = Flask(__name__)
 
@@ -198,28 +199,28 @@ def getCategories(categories):
 ## through machine learning model upon each refresh of html pages
 
 #store an array of top headline articles and their assigned properties
-topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
-#topHeadlineArticles = [];
+#topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
+topHeadlineArticles = [];
 
 #store an array of entertainment articles and their assigned properties
-entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
-#entertainmentArticles = [];
+#entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
+entertainmentArticles = [];
 
 #store an array of sports articles and their assigned properties
-sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
-#sportsArticles = [];
+#sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
+sportsArticles = [];
 
 #store an array of business articles and their assigned properties
-businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
-#businessArticles = [];
+#businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
+businessArticles = [];
 
 #store an array of science articles and their assigned properties
-scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
-#scienceArticles = [];
+#scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
+scienceArticles = [];
 
 #store an array of health articles and their assigned properties
-healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
-#healthArticles = [];
+#healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
+healthArticles = [];
 
 @app.route('/', methods=["GET", "POST"])
 
@@ -301,6 +302,27 @@ def health(methods=["GET"]):
 
     return render_template('category.html', pageTitle = "HEALTH",  articles=healthArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
+@app.route('/classify', methods=["GET", "POST"])
+
+#function that renders classify.html
+def classify(methods=["GET", "POST"]):
+
+    articleURLInput = request.form.get('url')
+    spectrumImagePath = "empty";
+    politicalAssignment = "none";
+
+    if articleURLInput is not None:
+
+        #check whether it is a valid url
+        #source: https://www.codespeedy.com/check-if-a-string-is-a-valid-url-or-not-in-python/#:~:text=To%20check%20whether%20the%20string,%E2%80%A6)%20if%20URL%20is%20invalid.
+        validURL = validators.url(articleURLInput)
+
+        if validURL == True:
+            articleResults = sortArticle(articleURLInput);
+            spectrumImagePath = articleResults[0];
+            politicalAssignment = articleResults[1];
+
+    return render_template('classify.html', spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
 
 @app.route('/mldemo', methods=["GET", "POST"])
 

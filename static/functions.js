@@ -67,6 +67,7 @@ function createNoImageCard(moreFromString) {
 
 function appendNoImageArticle(articleURL, articleName, spectrumImage) {
 
+  /* source for 'border-0': https://stackoverflow.com/questions/32322775/how-to-remove-a-list-item-border-in-bootstrap-list-group/32322811 */
   $(document).ready(function(){
 
     articleCode = "<div class='tooltip-wrap'>" +

@@ -295,6 +295,19 @@ table, th, td {
   color: white;
 }
 
+#pasteArticle {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#inputEmail {
+  width: 700px;
+}
+
+#submitButton {
+  
+}
+
 /*#mainRow {
   float: left;
   width: 80%;

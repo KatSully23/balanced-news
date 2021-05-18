@@ -1,0 +1,41 @@
+<!--extends file called base.html-->
+{% extends "base.html" %}
+
+<!--head of web page-->
+{% block head %}
+
+<head>
+  <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+</head>
+
+<!--end of head-->
+{% endblock %}
+
+{% block body %}
+
+<!--Featured Image-->
+<img alt="instructions" src="static/classifyArticles.png" style="width:100%;" />
+
+<div id="instructionsDiv" class="container-fluid"><br><br>
+
+  <p id="pasteArticle" class="instructionsText"> Paste an article's url into the following input box to see its political assignment: </p>
+
+  <form id="articleLink" method="POST">
+  <div class="form-label-group">
+  <input type="text" id="inputEmail" class="form-control" placeholder="article url" name="url" required autofocus>
+  <br><input id="submitButton" type="submit" value="Submit"></p>
+  </div>
+  </form>
+  <br><br><br><br>
+
+  {% if spectrumImagePath != 'empty' and politicalAssignment != 'none' %}
+
+  <p id="pasteArticle" class="instructionsText"> Your article is left-leaning! </p>
+  <img alt="spectrum" src="static/{{spectrumImagePath}}.png" />
+
+  {% endif %}
+
+</div>
+
+{% endblock %}
