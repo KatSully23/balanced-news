@@ -22,17 +22,33 @@
   <p id="pasteArticle" class="instructionsText"> Paste an article's url into the following input box to see its political assignment: </p>
 
   <form id="articleLink" method="POST">
-  <div class="form-label-group">
-  <input type="text" id="inputEmail" class="form-control" placeholder="article url" name="url" required autofocus>
-  <br><input id="submitButton" type="submit" value="Submit"></p>
+
+  <div class="flex">
+    <!--<div class="form-label-group">-->
+      <input type="text" id="inputEmail" class="form-control" placeholder="enter an article url" name="url" required autofocus>
+      <br><input id="submitButton" type="submit" style="margin-left:10px" value="Submit">
+    <!--</div>-->
   </div>
+
   </form>
-  <br><br><br><br>
+  <br>
 
   {% if spectrumImagePath != 'empty' and politicalAssignment != 'none' %}
 
-  <p id="pasteArticle" class="instructionsText"> Your article is left-leaning! </p>
-  <img alt="spectrum" src="static/{{spectrumImagePath}}.png" />
+    {% if inputValid == 'yes' %}
+    <p id="pasteArticle" class="instructionsText"> Your article is {{politicalAssignment}}-leaning! </p>
+    <img id="classifierResultsImage" alt="spectrum" src="static/spectrumIcons/{{spectrumImagePath}}.png" />
+    <br><br><br>
+    <script>
+    console.log("spectrum path" + {{spectrumImagePath}})
+    console.log("spectrum path" + {{politicalAssignment}})
+    </script>
+
+    {% else %}
+
+    <script>alert("Oops! Your input was invalid. Enter a new URL to try again :)")</script>
+
+    {% endif %}
 
   {% endif %}
 

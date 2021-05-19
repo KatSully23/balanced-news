@@ -199,28 +199,28 @@ def getCategories(categories):
 ## through machine learning model upon each refresh of html pages
 
 #store an array of top headline articles and their assigned properties
-#topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
-topHeadlineArticles = [];
+topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
+#topHeadlineArticles = [];
 
 #store an array of entertainment articles and their assigned properties
-#entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
-entertainmentArticles = [];
+entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
+#entertainmentArticles = [];
 
 #store an array of sports articles and their assigned properties
-#sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
-sportsArticles = [];
+sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
+#sportsArticles = [];
 
 #store an array of business articles and their assigned properties
-#businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
-businessArticles = [];
+businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
+#businessArticles = [];
 
 #store an array of science articles and their assigned properties
-#scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
-scienceArticles = [];
+scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
+#scienceArticles = [];
 
 #store an array of health articles and their assigned properties
-#healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
-healthArticles = [];
+healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
+#healthArticles = [];
 
 @app.route('/', methods=["GET", "POST"])
 
@@ -310,6 +310,7 @@ def classify(methods=["GET", "POST"]):
     articleURLInput = request.form.get('url')
     spectrumImagePath = "empty";
     politicalAssignment = "none";
+    inputValid = "no";
 
     if articleURLInput is not None:
 
@@ -318,11 +319,12 @@ def classify(methods=["GET", "POST"]):
         validURL = validators.url(articleURLInput)
 
         if validURL == True:
+            inputValid = "yes";
             articleResults = sortArticle(articleURLInput);
-            spectrumImagePath = articleResults[0];
-            politicalAssignment = articleResults[1];
+            spectrumImagePath = articleResults[1];
+            politicalAssignment = articleResults[0];
 
-    return render_template('classify.html', spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
+    return render_template('classify.html', inputValid=inputValid, spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
 
 @app.route('/mldemo', methods=["GET", "POST"])
 

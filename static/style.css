@@ -304,8 +304,14 @@ table, th, td {
   width: 700px;
 }
 
-#submitButton {
-  
+#classifierResultsImage {
+  width: 300px;
+  height: 125px;
+}
+
+.flex {
+   display: flex;
+   flex-direction: row;
 }
 
 /*#mainRow {
