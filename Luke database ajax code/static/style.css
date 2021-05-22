@@ -1,0 +1,29 @@
+body
+{
+  background-image: url("topbanner2_wLion.png");
+  background-attachment: scroll;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: 700px 106px;
+}
+.navbar-custom
+{
+  background-color: #5b0019
+}
+
+.font-custom
+{
+  color: white;
+}
+
+#tweets
+{
+  position:relative;
+  margin-left: auto;
+  margin-right: auto;
+  display:inline;
+}
+
+#images{
+    text-align:center;
+}

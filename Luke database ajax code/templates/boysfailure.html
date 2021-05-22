@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="static/style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Failure</title>
+{% endblock %}
+
+{% block body %}
+<br><br><br><br><br>
+<nav class="navbar navbar-inverse" style="background-color: #5b0019;">
+  <div class="container-fluid">
+  <ul class="nav navbar-nav">
+    <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/">Home</a></li>
+    <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/news">News</a></li>
+    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Boys Teams<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/boystryouts">Tryout Registration</a></li>
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/registeredboys">Registered Athletes</a></li>
+      </ul>
+    </li>
+    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Girls Teams<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/girlstryouts">Tryout Registration</a></li>
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/registeredgirls">Registered Athletes</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+</nav>
+  <div class="alert alert-danger" role="alert">
+    Looks like you forgot to submit to one of the required fields!
+  </div>
+  <a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/boystryouts">Try again</a>
+{% endblock %}

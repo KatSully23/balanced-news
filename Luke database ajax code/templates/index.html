@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="static/slideshow.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!--all slideshow code from W3Schools https://www.w3schools.com/howto/howto_js_slideshow.asp-->
+<title>Home</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+<br><br><br><br><br>
+<nav class="navbar navbar-inverse" style="background-color: #5b0019;">
+  <div class="container-fluid">
+  <ul class="nav navbar-nav">
+    <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/">Home</a></li>
+    <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/news">News</a></li>
+    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Boys Teams<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/boystryouts">Tryout Registration</a></li>
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/registeredboys">Registered Athletes</a></li>
+      </ul>
+    </li>
+    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Girls Teams<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/girlstryouts">Tryout Registration</a></li>
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/registeredgirls">Registered Athletes</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+</nav>
+
+<div class="slideshow-container">
+
+<div class="mySlides fade">
+  <div class="numbertext">1 / 17</div>
+  <img src="static/bball/1.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">2 / 17</div>
+  <img src="static/bball/2.jpg" style="width:100%" alt="image1" >
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">3 / 17</div>
+  <img src="static/bball/3.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">4 / 17</div>
+  <img src="static/bball/4.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">5 / 17</div>
+  <img src="static/bball/5.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">6 / 17</div>
+  <img src="static/bball/6.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">7 / 17</div>
+  <img src="static/bball/7.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">8 / 17</div>
+  <img src="static/bball/8.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">9 / 17</div>
+  <img src="static/bball/9.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">10 / 17</div>
+  <img src="static/bball/10.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">11 / 17</div>
+  <img src="static/bball/11.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">12 / 17</div>
+  <img src="static/bball/12.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">13 / 17</div>
+  <img src="static/bball/13.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">14 / 17</div>
+  <img src="static/bball/14.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">15 / 17</div>
+  <img src="static/bball/15.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">16 / 17</div>
+  <img src="static/bball/16.jpg" style="width:100%" alt="image1">
+
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">17 / 17</div>
+  <img src="static/bball/17.jpg" style="width:100%" alt="image1">
+
+</div>
+
+
+</div>
+<br>
+
+<div style="text-align:center">
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+</div>
+<script>
+  var slideIndex = 0;
+  showSlides();
+
+  function showSlides() {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("dot");
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}
+    for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+    setTimeout(showSlides, 3000);
+  }
+</script>
+
+  {% endblock %}

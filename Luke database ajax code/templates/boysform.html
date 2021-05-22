@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="static/style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<title>Tryout Registration 2020-2021</title>
+{% endblock %}
+
+{% block body %}
+<br><br><br><br><br>
+<nav class="navbar navbar-inverse" style="background-color: #5b0019;">
+  <div class="container-fluid">
+  <ul class="nav navbar-nav">
+    <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/">Home</a></li>
+    <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/news">News</a></li>
+    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Boys Teams<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/boystryouts">Tryout Registration</a></li>
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/registeredboys">Registered Athletes</a></li>
+      </ul>
+    </li>
+    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Girls Teams<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/girlstryouts">Tryout Registration</a></li>
+        <li><a href="http://www.2021.lakeside-cs.org/LukeLi/finalproject/registeredgirls">Registered Athletes</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+</nav>
+<div class = "container">
+
+  <h1>Boys Basketball Tryout Registration 2020-2021</h1>
+  <form method="POST" action = "boystryouts">
+    <div class="form-group">
+      <label for="firstName">First name:</label>
+      <input type="text" class = "form-control" id ="firstName" name = "firstName" placeholder = "Enter your first name" required/><br>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last name:</label>
+      <input type="text" class = "form-control" id = "lastName" name = "lastName" placeholder = "Enter your last name" required/> <br>
+    </div>
+    <div class="form-group">
+      <label for="student-id">Student ID:</label>
+      <input type="number" class = "form-control" id ="student-id" name = "student-id" placeholder = "Enter your student ID" required/><br>
+    </div>
+    <label for="class">Choose your class:</label>
+  			<select id="class" name="class" required><option value="" selected>Choose your Class</option><option value="2024">2024</option>
+        <option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option>
+        </select>
+  <br><br>
+
+  <input type="submit" class = "btn btn-primary" value="register" />
+  </form>
+  </div>
+  <p id="total-boys" style="display: none">{{buffer}}</p>
+
+  {% endblock %}
