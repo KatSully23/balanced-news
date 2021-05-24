@@ -240,6 +240,14 @@ def index(methods=["GET", "POST"]):
 
     if searchBoxInput is not None:
         print("searchInputBox '" + searchBoxInput + "'")
+
+        searchBoxInputWords = searchBoxInput.split();
+
+        counter = 0;
+        for i in searchBoxInputWords:
+            counter += 1;
+            print("#" + str(counter) + " word in query: " + i)
+
         clearMainRow = 'True';
         if searchBoxInput == '':
             printEmptySearch = 'True';
