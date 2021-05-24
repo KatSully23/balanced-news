@@ -239,18 +239,29 @@ def index(methods=["GET", "POST"]):
     printEmptySearch = 'False';
 
     if searchBoxInput is not None:
-        print("searchInputBox '" + searchBoxInput + "'")
 
+        print("searchInputBox '" + searchBoxInput + "'")
+        clearMainRow = 'True';
+
+        #source: https://www.tutorialspoint.com/How-to-convert-a-string-to-a-list-of-words-in-python
         searchBoxInputWords = searchBoxInput.split();
 
         counter = 0;
         for i in searchBoxInputWords:
             counter += 1;
-            print("#" + str(counter) + " word in query: " + i)
+            print("#" + str(counter) + " word in search query: " + i)
 
-        clearMainRow = 'True';
         if searchBoxInput == '':
             printEmptySearch = 'True';
+
+        # select all articles in database
+
+        # SELECT title FROM articles
+
+    	# for each article in database
+    		# get title + split into words
+    			# if any words match search words
+    				# add article to array that will passed into index.html
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
