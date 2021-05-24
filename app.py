@@ -234,9 +234,19 @@ def index(methods=["GET", "POST"]):
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
+    searchBoxInput = request.form.get('searchText');
+    clearMainRow = 'False';
+    printEmptySearch = 'False';
+
+    if searchBoxInput is not None:
+        print("searchInputBox '" + searchBoxInput + "'")
+        clearMainRow = 'True';
+        if searchBoxInput == '':
+            printEmptySearch = 'True';
+
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('index.html', articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('index.html', printEmptySearch=printEmptySearch, clearMainRow=clearMainRow, articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 

@@ -87,3 +87,23 @@ function appendNoImageArticle(articleURL, articleName, spectrumImage) {
   });
 
 }
+
+/* source: https://stackoverflow.com/questions/3450593/how-do-i-clear-the-content-of-a-div-using-javascript */
+function clearBox(elementID, printEmptySearch)
+{
+    document.getElementById(elementID).innerHTML = " ";
+
+    if (printEmptySearch) {
+
+      emptyStringHTML = "<br>" +
+                        "<div class='container-fluid'>" +
+                          "<p class='instructionsText'> Oops! You entered an empty string. Please try again :)</p>" +
+                        "</div>" +
+                        "<br>" +
+                        "<br>"
+
+      document.getElementById(elementID).innerHTML = emptyStringHTML;
+
+    }
+
+}

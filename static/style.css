@@ -314,6 +314,41 @@ table, th, td {
    flex-direction: row;
 }
 
+/* search box formatting source: https://stackoverflow.com/questions/15314407/how-to-add-button-inside-input */
+
+#searchForm {
+  /* This bit sets up the horizontal layout */
+  display:flex;
+  flex-direction:row;
+
+  /* This bit draws the box around it */
+  border:none;
+
+  /* I've used padding so you can see the edges of the elements. */
+  padding-right:10px;
+}
+
+#searchInput {
+  /* Tell the input to use all the available space */
+  flex-grow:2;
+  /* And hide the input's outline, so the form looks like the outline */
+  border:none;
+}
+
+#searchInput:focus {
+  /* removing the input focus blue box. Put this on the form if you like. */
+  outline: none;
+}
+
+#search {
+  margin-left: 5px
+}
+
+/* change color on hover source: https://stackoverflow.com/questions/52225675/submit-button-not-changing-colour-on-hover */
+#search:hover {
+  background: #004aad;
+}
+
 /*#mainRow {
   float: left;
   width: 80%;

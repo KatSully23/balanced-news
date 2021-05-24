@@ -30,6 +30,26 @@
 
 </script>
 
+{% if clearMainRow == 'True' %}
+
+  {% if printEmptySearch == 'True' %}
+
+    <script>
+    clearBox('mainRow', true)
+    console.log("cleared mainRow div")
+    </script>
+
+  {% else %}
+
+    <script>
+    clearBox('mainRow', false)
+    console.log("cleared mainRow div")
+    </script>
+
+  {% endif %}
+
+{% else %}
+
 <!--loop through articles; choose whether to display them & how to display them-->
 {% for article in articles %}
 
@@ -175,6 +195,8 @@ if (getArticlesWithImages() == "all") {
 }
 
 </script>
+
+{% endif %}
 
 <!--end of body-->
 {% endblock %}
