@@ -1,6 +1,7 @@
 #configuring Flask
 import flask
 from flask import Flask, render_template, request, redirect, url_for
+from flask_mysqldb import MySQL
 from newsapi import NewsApiClient
 import pandas as pd
 import requests
@@ -17,6 +18,12 @@ import re
 import validators
 
 app = Flask(__name__)
+app.config['MYSQL_HOST'] = 'mysql.2021.lakeside-cs.org'
+app.config['MYSQL_USER'] = 'student2021'
+app.config['MYSQL_PASSWORD'] = 'm545CS42021'
+app.config['MYSQL_DB'] = '2021project'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+mysql = MySQL(app)
 
 def getArticles(url):
 
@@ -237,6 +244,7 @@ def index(methods=["GET", "POST"]):
     searchBoxInput = request.form.get('searchText');
     clearMainRow = 'False';
     printEmptySearch = 'False';
+    searchResults = [];
 
     if searchBoxInput is not None:
 
@@ -254,18 +262,48 @@ def index(methods=["GET", "POST"]):
         if searchBoxInput == '':
             printEmptySearch = 'True';
 
-        # select all articles in database
+        # empty out array with search results
+        searchResults = [];
 
-        # SELECT title FROM articles
+        #Sets up the MySQL object. You can use this one object
+        #for multiple queries if you want.
+        cursor = mysql.connection.cursor()
 
-    	# for each article in database
-    		# get title + split into words
-    			# if any words match search words
-    				# add article to array that will passed into index.html
+        ## for each word in searchBoxInputWords
+        for word in searchBoxInputWords:
+
+            ## select all articles in database where title contains word
+            # source: https://stackoverflow.com/questions/2602252/mysql-query-string-contains
+            query = 'SELECT * FROM lukeli_articles'
+            #query = "SELECT * FROM lukeli_articles WHERE title LIKE '%{$%s}%";
+
+            #DEFINING QUERY variables
+            #queryVars = (word);
+
+            #Executes the query. This actually runs your query String against
+            #the database.
+            cursor.execute(query);
+            #cursor.execute(query, queryVars);
+
+            #Commits the query. This is good practice, and is absolutely necessary
+            #if you’re doing multiple queries with the same cursor object.
+            mysql.connection.commit();
+
+            #Fetches all rows returned by the query, stored in a multidimensional
+            #associative array (AKA a 2D map). Note that fetchall() is
+            #generally only useful for SELECT queries; there would be nothing to fetch
+            #for an INSERT query, for example.
+            data = cursor.fetchall();
+
+        	# add those articles to array that will passed into index.html
+
+            if len(data) != 0:
+                for article in data:
+                    searchResults.append(article);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('index.html', printEmptySearch=printEmptySearch, clearMainRow=clearMainRow, articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('index.html', searchResults=searchResults, printEmptySearch=printEmptySearch, clearMainRow=clearMainRow, articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 

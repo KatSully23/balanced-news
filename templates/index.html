@@ -30,23 +30,71 @@
 
 </script>
 
+<!-- if there is an active search query -->
 {% if clearMainRow == 'True' %}
+
+  <script> console.log("cleared mainRow div") </script>
 
   {% if printEmptySearch == 'True' %}
 
-    <script>
-    clearBox('mainRow', true)
-    console.log("cleared mainRow div")
-    </script>
+    <script> clearBox('mainRow', true) </script>
 
   {% else %}
 
-    <script>
-    clearBox('mainRow', false)
-    console.log("cleared mainRow div")
-    </script>
+    <script> clearBox('mainRow', false) </script>
+
+    {% for article in searchResults %}
+
+      <!--getting properties of article-->
+      {% set articleName = article['title'] %}
+      {% set articleURL = article['url'] %}
+      {% set imgURL = article['imageURL'] %}
+      {% set articlePoliticalAssignment = article['leaning'] %}
+      {% set articleOnSpectrum = article['onSpectrum'] %}
+
+      {% if articlePoliticalAssignment != 'n/a' %}
+
+          <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
+          {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
+
+          {% if imgURL is not none and imgURL != "" %}
+
+          <script type="text/javascript">
+
+          console.log("image url: " + "{{imgURL}}")
+          var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
+          var element = document.getElementById("mainRow");
+          element.innerHTML += "<br>";
+          element.innerHTML += card;
+
+          </script>
+
+          {% else %}
+
+          <script>console.log("article with no image!")</script>
+
+          <!-- add card to the More in US Headlines card-->
+          <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
+          <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
+
+          <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+          <script type="text/javascript">
+
+          appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
+          changeArticlesWithImages();
+          console.log("articles with images: " + articlesWithImages);
+
+          </script>
+
+          {% endif %}
+
+      {% endif %}
+
+    {% endfor %}
 
   {% endif %}
+
+<!-- if no search query is active -->
 
 {% else %}
 
