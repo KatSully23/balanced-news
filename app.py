@@ -269,36 +269,36 @@ def index(methods=["GET", "POST"]):
         #for multiple queries if you want.
         cursor = mysql.connection.cursor()
 
-        ## for each word in searchBoxInputWords
-        for word in searchBoxInputWords:
+        #get titles of all articles in database
+        query = 'SELECT * FROM lukeli_articles'
 
-            ## select all articles in database where title contains word
-            # source: https://stackoverflow.com/questions/2602252/mysql-query-string-contains
-            query = 'SELECT * FROM lukeli_articles'
-            #query = "SELECT * FROM lukeli_articles WHERE title LIKE '%{$%s}%";
+        #Executes the query. This actually runs your query String against
+        #the database.
+        cursor.execute(query);
 
-            #DEFINING QUERY variables
-            #queryVars = (word);
+        #Commits the query. This is good practice, and is absolutely necessary
+        #if you’re doing multiple queries with the same cursor object.
+        mysql.connection.commit();
 
-            #Executes the query. This actually runs your query String against
-            #the database.
-            cursor.execute(query);
-            #cursor.execute(query, queryVars);
+        #Fetches all rows returned by the query, stored in a multidimensional
+        #associative array (AKA a 2D map). Note that fetchall() is
+        #generally only useful for SELECT queries; there would be nothing to fetch
+        #for an INSERT query, for example.
+        articlesData = cursor.fetchall();
 
-            #Commits the query. This is good practice, and is absolutely necessary
-            #if you’re doing multiple queries with the same cursor object.
-            mysql.connection.commit();
+        # for every article
+        for article in articlesData:
 
-            #Fetches all rows returned by the query, stored in a multidimensional
-            #associative array (AKA a 2D map). Note that fetchall() is
-            #generally only useful for SELECT queries; there would be nothing to fetch
-            #for an INSERT query, for example.
-            data = cursor.fetchall();
+            # for every word in search query
+            for word in searchBoxInputWords:
 
-        	# add those articles to array that will passed into index.html
+                # get the article title (lowercase)
+                # source: https://www.programiz.com/python-programming/methods/string/lower
+                title = article['title'].lower();
 
-            if len(data) != 0:
-                for article in data:
+                # if title contains search word (lowercase)
+                if word.lower() in title:
+                    # append the article to search results
                     searchResults.append(article);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
