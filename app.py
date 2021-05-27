@@ -201,40 +201,76 @@ def getCategories(categories):
 
     return [containsRight, containsLeft, containsNeutral]
 
+# function that gets articles from a specific category fromt the database
+def getCategoryArticles(category):
+
+    cursor = mysql.connection.cursor()
+
+    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    categoryArticles = cursor.fetchall();
+
+    return categoryArticles;
 
 ## Create arrays storing articles for each category to prevent classification
 ## through machine learning model upon each refresh of html pages
 
 #store an array of top headline articles and their assigned properties
-topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
+#topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
 #topHeadlineArticles = [];
+#topHeadlineArticles = getCategoryArticles('topHeadlines')
 
 #store an array of entertainment articles and their assigned properties
-entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
+#entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
 #entertainmentArticles = [];
+#entertainmentArticles = getCategoryArticles('entertainment')
 
 #store an array of sports articles and their assigned properties
-sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
+#sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
 #sportsArticles = [];
+#sportsArticles = getCategoryArticles('sports')
 
 #store an array of business articles and their assigned properties
-businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
+#businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
 #businessArticles = [];
+#businessArticles = getCategoryArticles('business')
 
 #store an array of science articles and their assigned properties
-scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
+#scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
 #scienceArticles = [];
+#scienceArticles = getCategoryArticles('science')
 
 #store an array of health articles and their assigned properties
-healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
+#healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
 #healthArticles = [];
+#healthArticles = getCategoryArticles('health')
 
 @app.route('/', methods=["GET", "POST"])
 
 #function that renders index.html
 def index(methods=["GET", "POST"]):
 
-    #url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
+    category = "topHeadlines";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    topHeadlinesData = cursor.fetchall();
+
+    topHeadlineArticles = topHeadlinesData;
 
     #get list of checked categories in filter menu
     #source: https://www.reddit.com/r/flask/comments/bz376w/how_do_i_get_checked_checkboxes_into_flask/
@@ -309,7 +345,23 @@ def index(methods=["GET", "POST"]):
 
 #function that renders entertainment.html
 def entertainment(methods=["GET"]):
-    #url = "http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    category = "entertainment";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    entertainmentData = cursor.fetchall();
+
+    entertainmentArticles = entertainmentData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -322,7 +374,23 @@ def entertainment(methods=["GET"]):
 
 #function that renders sports.html
 def sports(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    category = "sports";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    sportsData = cursor.fetchall();
+
+    sportsArticles = sportsData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -335,8 +403,25 @@ def sports(methods=["GET"]):
 
 #function that renders science.html
 def science(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    category = "science";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    scienceData = cursor.fetchall();
+
+    scienceArticles = scienceData;
+
     categories = request.form.getlist('party')
+
     filters = getCategories(categories);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
@@ -348,7 +433,23 @@ def science(methods=["GET"]):
 
 #function that renders contact.html
 def business(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    category = "business";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    businessData = cursor.fetchall();
+
+    businessArticles = businessData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -361,7 +462,23 @@ def business(methods=["GET"]):
 
 #function that renders contact.html
 def health(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    category = "health";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    healthData = cursor.fetchall();
+
+    healthArticles = healthData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 

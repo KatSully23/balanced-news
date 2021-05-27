@@ -56,14 +56,11 @@
 <!--<script>console.log("Neutral filter active: " + "{{neutralFilterActive}}")</script>-->
 
 <!--getting properties of article-->
-{% set imgURL = article['photo_url'] %}
 {% set articleName = article['title'] %}
-{% set articleAuthor = article['author'] %}
-{% set articleContent = article['content'] %}
 {% set articleURL = article['url'] %}
-{% set articlePoliticalAssignment = article['politicalAssignment'] %}
+{% set imgURL = article['imageURL'] %}
+{% set articlePoliticalAssignment = article['leaning'] %}
 {% set articleOnSpectrum = article['onSpectrum'] %}
-
 {% if articlePoliticalAssignment != 'n/a' %}
 
 <!-- displaying republican / neutral articles if filters allow it -->
