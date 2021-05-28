@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 import requests
 import joblib
-import nltkModel as m
+#import nltkModel as m
 import numpy as np
 import newspaper
 from newspaper import Article

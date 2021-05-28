@@ -22,6 +22,8 @@
 
   <div id="mainRow" class="row"></div>
 
+</div>
+
 <!--clear div with class row on page load-->
 <script type="text/javascript">
 
@@ -176,12 +178,6 @@
 <!-- displaying democratic / neutral articles if filters allow it -->
 
 {% if leftFilterActive == 'True' %}
-
-<!--<script>console.log("Left filter is active");</script>
-
-<script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
-
-<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>-->
 
   {% if (articlePoliticalAssignment == 'left' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'left' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
