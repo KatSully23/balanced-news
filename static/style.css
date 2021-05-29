@@ -84,6 +84,7 @@ table, th, td {
 .container-fluid {
   margin-left: 70px;
   margin-right: 70px;
+  margin-bottom: 250px;
 }
 
 .nav-link {
@@ -284,9 +285,9 @@ table, th, td {
 
 #footer {
   background-color: black;
-  position: fixed;
+  /*position: relative;*/
   bottom: 0px;
-  margin-bottom: 0px;
+  /*margin-bottom: 0px;*/
   margin-right: 0px;
   margin-left: 0px;
   padding-left: 0px;
