@@ -196,12 +196,38 @@ table, th, td {
 
 .dropdown-content p {
   color: black;
+  font-family: 'Raleway', sans-serif;
   padding-left: 5px;
   padding-right: 14px;
   padding-top: 8px;
   padding-bottom: 0px;
   text-decoration: none;
   display: block;
+}
+
+#logoDropdown a {
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  padding-left: 15px;
+  padding-right: 14px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-decoration: none;
+  display: block;
+}
+
+#dropdownLeft {
+  float: left;
+}
+
+#topHeadlinesLink {
+
+}
+
+#logoDropdown {
+  padding-left: 0px;
+  margin-left: 0px;
+  left: 0px;
 }
 
 #filterCheckboxes {
@@ -244,6 +270,61 @@ table, th, td {
   -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
   transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
+}
+
+/* mobile responsive code */
+
+@media screen and (max-width: 10000px) {
+
+  .regularNav {
+    display: block;
+  }
+
+  .smallNav {
+    display: none;
+  }
+
+}
+
+/* When the screen is less than 800 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+@media screen and (max-width: 800px) {
+
+  .regularNav {
+    display: none;
+  }
+
+  .smallNav {
+    display: block;
+  }
+
+
+  /*#navBarMain a:not(:first-child) {display: none;}
+  #navBarMain a.icon {
+    float: right;
+    display: block;
+  }
+
+  #expand {
+    width: 100%;
+  }*/
+
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+@media screen and (max-width: 800px) {
+
+  /*#navBarMain.responsive {position: relative;}
+  #navbarMain.responsive a.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  #navBarMain.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }*/
+
 }
 
 #filterInstructions {
