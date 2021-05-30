@@ -33,18 +33,18 @@ def sentiment(text):
     for i in range(int(len(conf_score)/2)):
         all_classes.append(conf_score[2*i+1])
     score = mean(all_classes)*4-2
-    if score < 0:
-        if score > -0.5:
+    if score < -0.5:
+        if score > -0.75:
             scores = ['left', 0]
         elif score > -1.1:
-            scores = ['left', 0.3]
+            scores = ['left', 0.5]
         else:
-            score = ['left', 1]
+            scores = ['left', 1]
     else:
-        if score < 0.5:
+        if score < 0.3:
             scores = ['right', 0]
         elif score < 1.1:
-            scores = ['right', 0.3]
+            scores = ['right', 0.5]
         else:
             scores = ['right', 1]
     return scores
