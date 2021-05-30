@@ -284,6 +284,14 @@ table, th, td {
     display: none;
   }
 
+  .regularFooter {
+    display: block;
+  }
+
+  .smallFooter {
+    display: none;
+  }
+
 }
 
 /* When the screen is less than 800 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
@@ -296,6 +304,22 @@ table, th, td {
   .smallNav {
     display: block;
   }
+
+  .regularFooter {
+    display: none;
+  }
+
+  .smallFooter {
+    display: block;
+  }
+
+  #footer {
+    height: 600px;
+  }
+
+/*.smallFooterItems {
+  float: center;
+}*/
 
 
   /*#navBarMain a:not(:first-child) {display: none;}
@@ -347,10 +371,20 @@ table, th, td {
   margin-left: 50px;
 }
 
+#footerLogoMobile {
+  margin: auto;
+}
+
 #footerCopyright {
   margin-top: 10px;
   margin-left: 50px;
 }
+
+#footerCopyrightMobiles {
+  width: 50%;
+  margin: auto;
+}
+
 
 #usNav {
   margin-left: 12px;
@@ -373,6 +407,18 @@ table, th, td {
   margin-left: 0px;
   padding-left: 0px;
   height: 250px;
+  width: 100%;
+}
+
+#footerSmall {
+  background-color: black;
+  /*position: relative;*/
+  bottom: 0px;
+  /*margin-bottom: 0px;*/
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-left: 0px;
+  height: 600px;
   width: 100%;
 }
 
@@ -414,12 +460,22 @@ table, th, td {
   padding-right:40px;
 }
 
+#searchFormMobile {
+  display:flex;
+  flex-direction:row;
+  border:none;
+  width: 80%;
+  margin: auto;
+
+}
+
 #searchInput {
   /* Tell the input to use all the available space */
   flex-grow:2;
   /* And hide the input's outline, so the form looks like the outline */
   border:none;
 }
+
 
 #searchInput:focus {
   /* removing the input focus blue box. Put this on the form if you like. */

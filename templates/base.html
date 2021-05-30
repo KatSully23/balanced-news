@@ -158,6 +158,7 @@
 
     <!--Footer Starts Here-->
 
+    <div class="regularFooter">
     <footer id="footer" class="pt-4 pt-md-5 border-top">
       <!--<div class="container-fluid">-->
        <div class="row">
@@ -195,6 +196,48 @@
          </div>
        </div>
      </footer>
+   </div>
+
+   <!-- footer for small screen size -->
+   <div class="smallFooter">
+
+     <footer id="footerSmall" class="pt-4 pt-md-5 border-top">
+       <!--<div class="container-fluid">-->
+
+       <div class="text-center">
+
+       <ul class="list-unstyled text-small">
+         <form id="searchFormMobile" class="form-inline justify-content-center" method="POST" action="/" >
+           <input id="searchInput" class="form-control" type="text" placeholder="type in your search and press enter!" aria-label="Search" name="searchText">
+           <!--<input id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search" />-->
+         </form>
+       </ul>
+
+          <h5 class="footerTitle">News</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="footerSubtitle" href="/">Top Headlines</a></li>
+            <li><a class="footerSubtitle" href="/entertainment">Entertainment</a></li>
+            <li><a class="footerSubtitle" href="/sports">Sports</a></li>
+            <li><a class="footerSubtitle" href="/business">Business</a></li>
+            <li><a class="footerSubtitle" href="/science">Science</a></li>
+            <li><a class="footerSubtitle" href="/health">Health</a></li>
+          </ul>
+
+          <h5 class="footerTitle">Learn More</h5>
+          <ul class="list-unstyled text-small">
+            <!--<li><a class="footerSubtitle" href="/about">About Us</a></li>-->
+            <li><a class="footerSubtitle" href="/instructions">How to Use Our Site</a></li>
+            <li><a class="footerSubtitle" href="/classify">Classify Your Own Articles!</a></li>
+            <li><a class="footerSubtitle" href="/contact">Get in Touch</a></li>
+          </ul>
+
+          <img id="footerLogoMobile" class="mb-2" src="static/logo3.png" alt="" width="50" height="50">
+          <small id="footerCopyrightMobiles" class="d-block mb-3 footerSubtitle">&copy; February 2021</small>
+
+        </div>
+      </div>
+      </footer>
+   </div>
 
     {% endblock %}
 
