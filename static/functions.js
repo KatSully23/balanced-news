@@ -1,6 +1,10 @@
 
 var articlesWithImages = "all";
 
+function changeBackArticlesWithImages() {
+  articlesWithImages = "all";
+}
+
 function changeArticlesWithImages() {
   articlesWithImages = "not all";
 }

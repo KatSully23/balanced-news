@@ -35,7 +35,22 @@
 <!-- if there is an active search query -->
 {% if clearMainRow == 'True' %}
 
-  <script> console.log("cleared mainRow div") </script>
+  <script>
+
+  console.log("cleared mainRow div")
+
+  /*document.getElementById("list").innerHTML = "";
+  console.log(str(document.getElementById("list").innerHTML));*/
+
+  /*$(document).ready(function(){
+
+    $("#list").empty();
+    console.log("emptied list");
+    console.log("list inner HTML" + str(document.getElementById("list")))
+
+  });*/
+
+  </script>
 
   {% if printEmptySearch == 'True' %}
 
@@ -59,7 +74,7 @@
           <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
           {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
 
-          {% if imgURL is not none and imgURL != "" %}
+          {% if imgURL is not none and imgURL != "blank" %}
 
           <script type="text/javascript">
 
@@ -93,6 +108,21 @@
       {% endif %}
 
     {% endfor %}
+
+    <script>
+
+    otherArticlesCard = createNoImageCard("More from US Headlines")
+    var element = document.getElementById("mainRow");
+    element.innerHTML += "<br>";
+    element.innerHTML += otherArticlesCard;
+
+    console.log("before deleting card, articles with images: " + getArticlesWithImages())
+
+    if (getArticlesWithImages() == "all") {
+      document.getElementById('noImageCard').remove();
+    }
+
+    </script>
 
   {% endif %}
 
@@ -142,7 +172,7 @@
       <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
       {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
 
-      {% if imgURL is not none and imgURL != "" %}
+      {% if imgURL is not none and imgURL != "blank" %}
 
       <script type="text/javascript">
 
@@ -184,7 +214,7 @@
       <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
       {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
 
-      {% if imgURL is not none and imgURL != "" %}
+      {% if imgURL is not none and imgURL != "blank" %}
 
       <script type="text/javascript">
 

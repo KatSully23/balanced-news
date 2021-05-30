@@ -323,6 +323,9 @@ def index(methods=["GET", "POST"]):
         #for an INSERT query, for example.
         articlesData = cursor.fetchall();
 
+        #print ("Number items in articlesData = ", len(articlesData));
+        #print ("Number of search box input words = ", len(searchBoxInputWords));
+
         # for every article
         for article in articlesData:
 
@@ -333,10 +336,26 @@ def index(methods=["GET", "POST"]):
                 # source: https://www.programiz.com/python-programming/methods/string/lower
                 title = article['title'].lower();
 
+                #if 'celtics'.lower() in title:
+                    # print("celtics was in the title!");
+
                 # if title contains search word (lowercase)
                 if word.lower() in title:
-                    # append the article to search results
-                    searchResults.append(article);
+
+                    notDuplicate = True;
+
+                    # if search results already exist
+                    if len(searchResults) != 0:
+                        # loop through all search results
+                        for result in searchResults:
+                            # make sure that title of current article does
+                            # not match title in search result
+                            if result['title'] == article['title']:
+                                notDuplicate = False;
+
+                    if notDuplicate:
+                        # append the article to search results
+                        searchResults.append(article);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
@@ -347,7 +366,7 @@ def index(methods=["GET", "POST"]):
 #function that renders entertainment.html
 def entertainment(methods=["GET"]):
 
-    category = "entertainment";
+    category = "entertainmentArticles";
 
     cursor = mysql.connection.cursor();
 
@@ -376,7 +395,7 @@ def entertainment(methods=["GET"]):
 #function that renders sports.html
 def sports(methods=["GET"]):
 
-    category = "sports";
+    category = "sportsArticles";
 
     cursor = mysql.connection.cursor();
 
@@ -405,7 +424,7 @@ def sports(methods=["GET"]):
 #function that renders science.html
 def science(methods=["GET"]):
 
-    category = "science";
+    category = "scienceArticles";
 
     cursor = mysql.connection.cursor();
 
@@ -435,7 +454,7 @@ def science(methods=["GET"]):
 #function that renders contact.html
 def business(methods=["GET"]):
 
-    category = "business";
+    category = "businessArticles";
 
     cursor = mysql.connection.cursor();
 
@@ -464,7 +483,7 @@ def business(methods=["GET"]):
 #function that renders contact.html
 def health(methods=["GET"]):
 
-    category = "health";
+    category = "healthArticles";
 
     cursor = mysql.connection.cursor();
 

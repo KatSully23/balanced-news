@@ -144,9 +144,9 @@ table, th, td {
 }
 
 /* source: https://stackoverflow.com/questions/4502633/how-to-affect-other-elements-when-one-element-is-hovered */
-.tooltip-wrap:hover > .tooltip-content{
-  bottom: 93%;
-}
+/*.tooltip-wrap:hover > .tooltip-content{
+  margin-bottom: 0px;
+}*/
 
 .tooltip-wrap:hover .tooltip-content {
   display: block;
@@ -316,21 +316,13 @@ table, th, td {
   #footer {
     height: 600px;
   }
+}
 
-/*.smallFooterItems {
-  float: center;
-}*/
+@media screen and (max-width: 1000px) {
 
-
-  /*#navBarMain a:not(:first-child) {display: none;}
-  #navBarMain a.icon {
-    float: right;
-    display: block;
+  #search {
+    display: hidden;
   }
-
-  #expand {
-    width: 100%;
-  }*/
 
 }
 
@@ -460,6 +452,7 @@ table, th, td {
   padding-right:40px;
 }
 
+
 #searchFormMobile {
   display:flex;
   flex-direction:row;
@@ -483,15 +476,13 @@ table, th, td {
 }
 
 #search {
-  margin-left: 5px
+  margin-left: 5px;
 }
 
 /* change color on hover source: https://stackoverflow.com/questions/52225675/submit-button-not-changing-colour-on-hover */
 #search:hover {
   background: #004aad;
 }
-
-
 
 /*#mainRow {
   float: left;
