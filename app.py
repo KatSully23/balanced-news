@@ -13,6 +13,7 @@ import numpy as np
 import newspaper
 from newspaper import Article
 from newspaper import Config
+from datetime import datetime
 import string
 import re
 import validators
@@ -236,8 +237,24 @@ def refreshDatabase():
     currentlyRefreshing = getCurrentlyRefreshing();
     print("currently refreshing: " + currentlyRefreshing);
 
+    now = getCurrentDateTime();
+    month = now[0];
+    date = now[1];
+    hour = now[2];
+
+    lastRefresh = getLastRefresh();
+    lastRefreshMonth = lastRefresh[0];
+    lastRefreshDate = lastRefresh[1];
+    lastRefreshHour = lastRefresh[2];
+
+    refreshTime = False;
+
+    if month != lastRefreshMonth or date != lastRefreshDate or hour != lastRefreshHour:
+        refreshTime = True;
+        print("time to refresh the database!")
+
     # check if currentlyRefreshing value equals no
-    if currentlyRefreshing == "No":
+    if currentlyRefreshing == "No" and refreshTime == True:
 
         # if it does, set currentlyRefreshing value to yes
         setCurrentlyRefreshing("Yes")
@@ -313,10 +330,9 @@ def refreshDatabase():
             mysql.connection.commit()
 
         switchLetter(firstLetter);
-
         setCurrentlyRefreshing("No")
         print("set currently refreshing to no");
-
+        setLastRefresh();
 
 def switchLetter(currentLetter):
 
@@ -357,6 +373,56 @@ def getCurrentLetter():
                 return "A";
 
         return "B";
+
+def getLastRefresh():
+
+        cursor = mysql.connection.cursor()
+        # source: https://stackoverflow.com/questions/3217217/grabbing-first-row-in-a-mysql-query-only
+        getCurrentlyRefreshing = 'SELECT * FROM katherinesullivan_refreshTime LIMIT 1'
+        cursor.execute(getCurrentlyRefreshing)
+        mysql.connection.commit();
+        currentlyRefreshing = cursor.fetchall();
+
+        if len(currentlyRefreshing) != 0:
+            month = currentlyRefreshing[0]['month']
+            day = currentlyRefreshing[0]['day']
+            hour = currentlyRefreshing[0]['hour']
+            return [month, day, hour];
+
+        return ['1', '1', '1']
+
+def getCurrentDateTime():
+    now = datetime.now()
+    month = now.strftime("%m")
+    date = now.strftime("%d")
+    hour = now.strftime("%H")
+
+    return [month, date, hour];
+
+
+def setLastRefresh():
+
+    now = getCurrentDateTime();
+    month = now[0];
+    date = now[1];
+    hour = now[2];
+
+    #print("now =", now)
+    # dd/mm/YY H:M:S
+    #dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    #print("month: ", month)
+    #print("date: ", date)
+    #print("hour: ", hour)
+
+    cursor = mysql.connection.cursor()
+    # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
+    setLastRefresh = 'UPDATE katherinesullivan_refreshTime SET month=%s, day=%s, hour=%s'
+    queryVars = (month, date, hour,)
+    cursor.execute(setLastRefresh, queryVars)
+    mysql.connection.commit();
+
+    return "";
+
 
 def getCurrentlyRefreshing():
 
