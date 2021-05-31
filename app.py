@@ -233,76 +233,89 @@ articlesList = [[],[],[],[],[],[]];
 # function that refreshes database
 def refreshDatabase():
 
-    firstLetter = getCurrentLetter();
-    print("current letter: " + firstLetter);
-    currentLetter = "";
+    currentlyRefreshing = getCurrentlyRefreshing();
+    print("currently refreshing: " + currentlyRefreshing);
 
-    if firstLetter == "A":
-        currentLetter = "B";
-    else:
-        currentLetter = "A";
+    # check if currentlyRefreshing value equals no
+    if currentlyRefreshing == "No":
 
-    cursor = mysql.connection.cursor()
-    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
-    cursor.execute(query)
-    mysql.connection.commit()
-    data = list(cursor.fetchall())
-    length = len(data)
-    if(length>0):
-        for i in data:
-            cursor = mysql.connection.cursor()
-            query = 'DELETE FROM katherinesullivan_articles' + currentLetter + ' ORDER BY title LIMIT 1';
-            cursor.execute(query)
-            print("article deleted")
+        # if it does, set currentlyRefreshing value to yes
+        setCurrentlyRefreshing("Yes")
+        print("set currently refreshing to yes");
+
+        firstLetter = getCurrentLetter();
+        print("current letter: " + firstLetter);
+        currentLetter = "";
+
+        if firstLetter == "A":
+            currentLetter = "B";
+        else:
+            currentLetter = "A";
+
+        cursor = mysql.connection.cursor()
+        query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
+        cursor.execute(query)
+        mysql.connection.commit()
+        data = list(cursor.fetchall())
+        length = len(data)
+        if(length>0):
+            for i in data:
+                cursor = mysql.connection.cursor()
+                query = 'DELETE FROM katherinesullivan_articles' + currentLetter + ' ORDER BY title LIMIT 1';
+                cursor.execute(query)
+                print("article deleted")
+                mysql.connection.commit()
+
+        tempArray = [];
+
+        # #store an array of top headline articles and their assigned properties
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "topHeadlines"))
+
+        # store an array of entertainment articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d", "entertainmentArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "entertainmentArticles"))
+        # entertainmentArticles = [];
+
+        # store an array of sports articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d", "sportsArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "sportsArticles"))
+        # sportsArticles = [];
+
+        # store an array of business articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d", "businessArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "businessArticles"))
+        # businessArticles = [];
+
+        # store an array of science articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d", "scienceArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "scienceArticles"))
+        # scienceArticles = [];
+
+        # store an array of health articles and their assigned properties
+        # tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d", "healthArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "healthArticles"))
+        # healthArticles = [];
+
+        articlesList = tempArray
+        for article in tempArray:
+            cur = mysql.connection.cursor()
+            title = article['title']
+            url = article['url']
+            imageURL = article['photo_url']
+            if imageURL is None:
+                imageURL = "blank"
+            sentiment = article['politicalAssignment']
+            confidence = article['onSpectrum']
+            category = article['category']
+            query = 'INSERT INTO katherinesullivan_articles' + currentLetter + ' (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s)';
+            queryVars = (title, url, imageURL, category, sentiment, confidence,)
+            cur.execute(query, queryVars);
             mysql.connection.commit()
 
-    tempArray = [];
+        switchLetter(firstLetter);
 
-    # #store an array of top headline articles and their assigned properties
-    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "topHeadlines"))
-
-    # store an array of entertainment articles and their assigned properties
-    #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d", "entertainmentArticles"))
-    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "entertainmentArticles"))
-    # entertainmentArticles = [];
-
-    # store an array of sports articles and their assigned properties
-    #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d", "sportsArticles"))
-    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "sportsArticles"))
-    # sportsArticles = [];
-
-    # store an array of business articles and their assigned properties
-    #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d", "businessArticles"))
-    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "businessArticles"))
-    # businessArticles = [];
-
-    # store an array of science articles and their assigned properties
-    #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d", "scienceArticles"))
-    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "scienceArticles"))
-    # scienceArticles = [];
-
-    # store an array of health articles and their assigned properties
-    # tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d", "healthArticles"))
-    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "healthArticles"))
-    # healthArticles = [];
-
-    articlesList = tempArray
-    for article in tempArray:
-        cur = mysql.connection.cursor()
-        title = article['title']
-        url = article['url']
-        imageURL = article['photo_url']
-        if imageURL is None:
-            imageURL = "blank"
-        sentiment = article['politicalAssignment']
-        confidence = article['onSpectrum']
-        category = article['category']
-        query = 'INSERT INTO katherinesullivan_articles' + currentLetter + ' (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s)';
-        queryVars = (title, url, imageURL, category, sentiment, confidence,)
-        cur.execute(query, queryVars);
-        mysql.connection.commit()
-
-    switchLetter(firstLetter);
+        setCurrentlyRefreshing("No")
+        print("set currently refreshing to no");
 
 
 def switchLetter(currentLetter):
@@ -315,6 +328,7 @@ def switchLetter(currentLetter):
         newLetter = "A";
 
     cursor = mysql.connection.cursor()
+    # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
     switchCurrentLetter = 'UPDATE katherinesullivan_AorB SET tableLetter=%s'
     queryVars = (newLetter,)
     cursor.execute(switchCurrentLetter, queryVars)
@@ -343,6 +357,38 @@ def getCurrentLetter():
                 return "A";
 
         return "B";
+
+def getCurrentlyRefreshing():
+
+        cursor = mysql.connection.cursor()
+        # source: https://stackoverflow.com/questions/3217217/grabbing-first-row-in-a-mysql-query-only
+        getCurrentlyRefreshing = 'SELECT * FROM katherinesullivan_isRefreshing LIMIT 1'
+        cursor.execute(getCurrentlyRefreshing)
+        mysql.connection.commit();
+        currentlyRefreshing = cursor.fetchall();
+
+        if len(currentlyRefreshing) != 0:
+            if currentlyRefreshing[0]['currentlyRefreshing'] == "Yes":
+                return "Yes";
+            else:
+                return "No";
+
+def setCurrentlyRefreshing(currentlyRefreshing):
+
+    # if currentlyRefreshing == "Yes":
+    #     currentlyRefreshing = "Yes";
+    # else:
+    #     currentlyRefreshing = "No";
+
+    cursor = mysql.connection.cursor()
+    # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
+    setCurrentlyRefreshing = 'UPDATE katherinesullivan_isRefreshing SET currentlyRefreshing=%s'
+    queryVars = (currentlyRefreshing,)
+    cursor.execute(setCurrentlyRefreshing, queryVars)
+    mysql.connection.commit();
+
+    return "";
+
 
 def getCurrentTable(letter):
 

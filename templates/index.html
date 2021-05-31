@@ -266,10 +266,12 @@ if (getArticlesWithImages() == "all") {
   document.getElementById('noImageCard').remove();
 }
 
+/* source: https://tecadmin.net/get-current-date-time-javascript/ */
+
 var today = new Date();
 var minute = today.getMinutes();
 
-if(minute == "10") {
+if(minute == "58") {
   databaseRefresh()
   /*alert("do not refresh the page! new articles are loading...")*/
 } else {
