@@ -27,7 +27,6 @@
 <!--clear div with class row on page load-->
 <script type="text/javascript">
 
-  /* refreshArticles() */
   var element = document.getElementsByClassName("row");
   element.innerHTML = '';
 
@@ -266,6 +265,17 @@ console.log("before deleting card, articles with images: " + getArticlesWithImag
 if (getArticlesWithImages() == "all") {
   document.getElementById('noImageCard').remove();
 }
+
+var today = new Date();
+var minute = today.getMinutes();
+
+if(minute == "10") {
+  databaseRefresh()
+  alert("do not refresh the page! new articles are loading...")
+} else {
+  console.log("we haven't reached a new hour yet!")
+}
+
 
 </script>
 

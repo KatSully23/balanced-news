@@ -26,7 +26,7 @@ app.config['MYSQL_DB'] = '2021project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
-def getArticles(url):
+def getArticles(url, category):
 
     try:
         #figure out what this code does!
@@ -34,7 +34,7 @@ def getArticles(url):
         articles = open_bbc_page["articles"]
         results = []
 
-        dataSet = getArticleResults(articles);
+        dataSet = getArticleResults(articles, category);
 
     #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
     except requests.exceptions.ConnectionError:
@@ -44,7 +44,7 @@ def getArticles(url):
 
     return dataSet;
 
-def getArticleResults(file):
+def getArticleResults(file, category):
 
     article_results = [];
 
@@ -60,11 +60,10 @@ def getArticleResults(file):
         article_dict['pub_date'] = file[i]['publishedAt']
         article_dict['url'] = file[i]['url']
         article_dict['photo_url'] = file[i]['urlToImage']
-
         sortedByModel = sortArticle(file[i]['url'])
         article_dict['politicalAssignment'] = sortedByModel[0]
         article_dict['onSpectrum'] = sortedByModel[1]
-
+        article_dict['category'] = category
         article_results.append(article_dict)
 
         #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
@@ -79,8 +78,9 @@ def getArticleResults(file):
     return article_results;
 
 def sortArticle(articleURL):
+    #print("url:" + articleURL)
+    #try:
 
-#try:
     #pass article into machine learning model
     articleResult = get_sentiment(articleURL)
 
@@ -163,7 +163,12 @@ def get_sentiment(url):
         article.download()
         article.parse()
         article_text = article.text
-        return m.sentiment(article_text)
+        sentiment = m.sentiment(article_text)
+        print(str(sentiment))
+        if len(sentiment) == 0:
+            print("sentiment list is empty")
+            sentiment = ['n/a', 'n/a']
+        return sentiment
 
     except newspaper.article.ArticleException:
         return ['n/a', 'n/a']
@@ -219,38 +224,71 @@ def getCategoryArticles(category):
 
     return categoryArticles;
 
-## Create arrays storing articles for each category to prevent classification
-## through machine learning model upon each refresh of html pages
+# 2D Array with list of articles
+articlesList = [[],[],[],[],[],[]];
 
-#store an array of top headline articles and their assigned properties
-#topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
-#topHeadlineArticles = [];
-#topHeadlineArticles = getCategoryArticles('topHeadlines')
+# function that refreshes database
+def refreshDatabase():
 
-#store an array of entertainment articles and their assigned properties
-#entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
-#entertainmentArticles = [];
-#entertainmentArticles = getCategoryArticles('entertainment')
+    cursor = mysql.connection.cursor()
+    query = 'SELECT * FROM lukeli_articles'
+    cursor.execute(query)
+    mysql.connection.commit()
+    data = list(cursor.fetchall())
+    length = len(data)
+    if(length>0):
+        for i in data:
+            cursor = mysql.connection.cursor()
+            query = 'DELETE FROM lukeli_articles ORDER BY title LIMIT 1'
+            cursor.execute(query)
+            print("article deleted")
+            mysql.connection.commit()
+    tempArray = [];
+    # #store an array of top headline articles and their assigned properties
+    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "topHeadlines"))
 
-#store an array of sports articles and their assigned properties
-#sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
-#sportsArticles = [];
-#sportsArticles = getCategoryArticles('sports')
+    # store an array of entertainment articles and their assigned properties
+    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d", "entertainmentArticles"))
+    # entertainmentArticles = [];
 
-#store an array of business articles and their assigned properties
-#businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
-#businessArticles = [];
-#businessArticles = getCategoryArticles('business')
+    # store an array of sports articles and their assigned properties
+    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d", "sportsArticles"))
+    # sportsArticles = [];
 
-#store an array of science articles and their assigned properties
-#scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
-#scienceArticles = [];
-#scienceArticles = getCategoryArticles('science')
+    # store an array of business articles and their assigned properties
+    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d", "businessArticles"))
+    # businessArticles = [];
 
-#store an array of health articles and their assigned properties
-#healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
-#healthArticles = [];
-#healthArticles = getCategoryArticles('health')
+    # store an array of science articles and their assigned properties
+    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d", "scienceArticles"))
+    # scienceArticles = [];
+
+    # store an array of health articles and their assigned properties
+    tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d", "healthArticles"))
+    # healthArticles = [];
+
+    articlesList = tempArray
+    for article in tempArray:
+        cur = mysql.connection.cursor()
+        title = article['title']
+        url = article['url']
+        imageURL = article['photo_url']
+        if imageURL is None:
+            imageURL = "blank"
+        sentiment = article['politicalAssignment']
+        confidence = article['onSpectrum']
+        category = article['category']
+        query = "INSERT INTO lukeli_articles (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s);"
+        queryVars = (title, url, imageURL, category, sentiment, confidence,)
+        cur.execute(query, queryVars);
+        mysql.connection.commit()
+
+@app.route('/articleRefresh', methods=['POST'])
+
+def databaseRefresh():
+
+    refreshDatabase()
+    return("Done")
 
 @app.route('/', methods=["GET", "POST"])
 
@@ -451,7 +489,7 @@ def science(methods=["GET"]):
 
 @app.route('/business', methods=["GET", "POST"])
 
-#function that renders contact.html
+#function that renders business.html
 def business(methods=["GET"]):
 
     category = "businessArticles";
@@ -480,7 +518,7 @@ def business(methods=["GET"]):
 
 @app.route('/health', methods=["GET", "POST"])
 
-#function that renders contact.html
+#function that renders health.html
 def health(methods=["GET"]):
 
     category = "healthArticles";
@@ -533,7 +571,7 @@ def classify(methods=["GET", "POST"]):
 
 @app.route('/instructions', methods=["GET", "POST"])
 
-#function that renders contact.html
+#function that renders instructions.html
 def instructions(methods=["POST"]):
     return render_template('instructions.html')
 
