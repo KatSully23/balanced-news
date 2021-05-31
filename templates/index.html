@@ -269,13 +269,12 @@ if (getArticlesWithImages() == "all") {
 var today = new Date();
 var minute = today.getMinutes();
 
-if(minute == "10") {
+if(minute == "0") {
   databaseRefresh()
-  alert("do not refresh the page! new articles are loading...")
+  /*alert("do not refresh the page! new articles are loading...")*/
 } else {
   console.log("we haven't reached a new hour yet!")
 }
-
 
 </script>
 

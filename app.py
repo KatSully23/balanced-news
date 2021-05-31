@@ -212,7 +212,7 @@ def getCategoryArticles(category):
 
     cursor = mysql.connection.cursor()
 
-    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
 
     queryVars = (category,);
 
@@ -231,7 +231,7 @@ articlesList = [[],[],[],[],[],[]];
 def refreshDatabase():
 
     cursor = mysql.connection.cursor()
-    query = 'SELECT * FROM lukeli_articles'
+    query = 'SELECT * FROM katherinesullivan_articlesA'
     cursor.execute(query)
     mysql.connection.commit()
     data = list(cursor.fetchall())
@@ -239,7 +239,7 @@ def refreshDatabase():
     if(length>0):
         for i in data:
             cursor = mysql.connection.cursor()
-            query = 'DELETE FROM lukeli_articles ORDER BY title LIMIT 1'
+            query = 'DELETE FROM katherinesullivan_articlesA ORDER BY title LIMIT 1'
             cursor.execute(query)
             print("article deleted")
             mysql.connection.commit()
@@ -278,7 +278,7 @@ def refreshDatabase():
         sentiment = article['politicalAssignment']
         confidence = article['onSpectrum']
         category = article['category']
-        query = "INSERT INTO lukeli_articles (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s);"
+        query = "INSERT INTO katherinesullivan_articlesA (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s);"
         queryVars = (title, url, imageURL, category, sentiment, confidence,)
         cur.execute(query, queryVars);
         mysql.connection.commit()
@@ -299,7 +299,7 @@ def index(methods=["GET", "POST"]):
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
 
     queryVars = (category,);
 
@@ -345,7 +345,7 @@ def index(methods=["GET", "POST"]):
         cursor = mysql.connection.cursor()
 
         #get titles of all articles in database
-        query = 'SELECT * FROM lukeli_articles'
+        query = 'SELECT * FROM katherinesullivan_articlesA'
 
         #Executes the query. This actually runs your query String against
         #the database.
@@ -408,7 +408,7 @@ def entertainment(methods=["GET"]):
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
 
     queryVars = (category,);
 
@@ -437,7 +437,7 @@ def sports(methods=["GET"]):
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
 
     queryVars = (category,);
 
@@ -466,7 +466,7 @@ def science(methods=["GET"]):
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
 
     queryVars = (category,);
 
@@ -496,7 +496,7 @@ def business(methods=["GET"]):
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
 
     queryVars = (category,);
 
@@ -525,7 +525,7 @@ def health(methods=["GET"]):
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM lukeli_articles WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
 
     queryVars = (category,);
 
