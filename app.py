@@ -233,8 +233,17 @@ articlesList = [[],[],[],[],[],[]];
 # function that refreshes database
 def refreshDatabase():
 
+    firstLetter = getCurrentLetter();
+    print("current letter: " + firstLetter);
+    currentLetter = "";
+
+    if firstLetter == "A":
+        currentLetter = "B";
+    else:
+        currentLetter = "A";
+
     cursor = mysql.connection.cursor()
-    query = 'SELECT * FROM katherinesullivan_articlesB'
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
     cursor.execute(query)
     mysql.connection.commit()
     data = list(cursor.fetchall())
@@ -242,12 +251,13 @@ def refreshDatabase():
     if(length>0):
         for i in data:
             cursor = mysql.connection.cursor()
-            query = 'DELETE FROM katherinesullivan_articlesB ORDER BY title LIMIT 1'
+            query = 'DELETE FROM katherinesullivan_articles' + currentLetter + ' ORDER BY title LIMIT 1';
             cursor.execute(query)
             print("article deleted")
             mysql.connection.commit()
 
     tempArray = [];
+
     # #store an array of top headline articles and their assigned properties
     tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "topHeadlines"))
 
@@ -287,10 +297,30 @@ def refreshDatabase():
         sentiment = article['politicalAssignment']
         confidence = article['onSpectrum']
         category = article['category']
-        query = "INSERT INTO katherinesullivan_articlesB (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s);"
+        query = 'INSERT INTO katherinesullivan_articles' + currentLetter + ' (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s)';
         queryVars = (title, url, imageURL, category, sentiment, confidence,)
         cur.execute(query, queryVars);
         mysql.connection.commit()
+
+    switchLetter(firstLetter);
+
+
+def switchLetter(currentLetter):
+
+    newLetter = "";
+
+    if currentLetter == "A":
+        newLetter = "B";
+    else:
+        newLetter = "A";
+
+    cursor = mysql.connection.cursor()
+    switchCurrentLetter = 'UPDATE katherinesullivan_AorB SET tableLetter=%s'
+    queryVars = (newLetter,)
+    cursor.execute(switchCurrentLetter, queryVars)
+    mysql.connection.commit();
+
+    return "";
 
 @app.route('/articleRefresh', methods=['POST'])
 
