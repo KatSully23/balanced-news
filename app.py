@@ -8,7 +8,6 @@ import requests
 from bs4 import BeautifulSoup
 import requests
 import joblib
-#import nltkModel as m
 import betterModel as m
 import numpy as np
 import newspaper
@@ -17,6 +16,7 @@ from newspaper import Config
 import string
 import re
 import validators
+import threading
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'mysql.2021.lakeside-cs.org'
@@ -530,25 +530,6 @@ def classify(methods=["GET", "POST"]):
 
     return render_template('classify.html', inputValid=inputValid, spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
 
-@app.route('/mldemo', methods=["GET", "POST"])
-
-#temporary ~ delete this later!
-def mldemo():
-    if request.method == 'GET':
-        prediction = request.args.get('prediction')
-        return render_template('machinelearningdemo.html', prediction=prediction)
-    else:
-        title = request.values.get("title")
-        model = joblib.load('demo_model.joblib')
-        target_names = ['CNN', 'Breitbart', 'New York Times']
-        prediction = target_names[model.predict([title])[0]]
-        return redirect(url_for('mldemo', prediction=prediction))
-
-@app.route('/about', methods=["GET", "POST"])
-
-#function that renders contact.html
-def about(methods=["POST"]):
-    return render_template('about.html')
 
 @app.route('/instructions', methods=["GET", "POST"])
 
@@ -561,7 +542,6 @@ def instructions(methods=["POST"]):
 #function that renders contact.html
 def contact(methods=["POST"]):
     return render_template('contact.html')
-
 
 def clean(article):
 

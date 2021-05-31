@@ -111,3 +111,30 @@ function clearBox(elementID, printEmptySearch)
     }
 
 }
+
+//function containing AJAX request
+function databaseRefresh(){
+
+  //Sets up the AJAX object
+  var xhttp = new XMLHttpRequest();
+
+  //function will be called AFTER the POST request returns
+  xhttp.onreadystatechange = function() {
+
+    //if we're actually done successfully
+    if (this.readyState == 4 && this.status == 200) {
+
+      console.log("database has been updated!")
+
+    }
+
+  }
+
+  //Tells JS which webpage to go to and
+  //how to go to it
+  xhttp.open("POST", "articleRefresh", true);
+  xhttp.send();
+
+}
+
+//var databaseUpdate = setInterval(databaseRefresh, 600000);
