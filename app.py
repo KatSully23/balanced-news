@@ -210,9 +210,12 @@ def getCategories(categories):
 # function that gets articles from a specific category fromt the database
 def getCategoryArticles(category):
 
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
     cursor = mysql.connection.cursor()
 
-    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
 
     queryVars = (category,);
 
@@ -231,7 +234,7 @@ articlesList = [[],[],[],[],[],[]];
 def refreshDatabase():
 
     cursor = mysql.connection.cursor()
-    query = 'SELECT * FROM katherinesullivan_articlesA'
+    query = 'SELECT * FROM katherinesullivan_articlesB'
     cursor.execute(query)
     mysql.connection.commit()
     data = list(cursor.fetchall())
@@ -239,7 +242,7 @@ def refreshDatabase():
     if(length>0):
         for i in data:
             cursor = mysql.connection.cursor()
-            query = 'DELETE FROM katherinesullivan_articlesA ORDER BY title LIMIT 1'
+            query = 'DELETE FROM katherinesullivan_articlesB ORDER BY title LIMIT 1'
             cursor.execute(query)
             print("article deleted")
             mysql.connection.commit()
@@ -284,7 +287,7 @@ def refreshDatabase():
         sentiment = article['politicalAssignment']
         confidence = article['onSpectrum']
         category = article['category']
-        query = "INSERT INTO katherinesullivan_articlesA (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s);"
+        query = "INSERT INTO katherinesullivan_articlesB (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s);"
         queryVars = (title, url, imageURL, category, sentiment, confidence,)
         cur.execute(query, queryVars);
         mysql.connection.commit()
@@ -296,16 +299,45 @@ def databaseRefresh():
     refreshDatabase()
     return "Done";
 
+def getCurrentLetter():
+
+        cursor = mysql.connection.cursor()
+        # source: https://stackoverflow.com/questions/3217217/grabbing-first-row-in-a-mysql-query-only
+        getCurrentLetter = 'SELECT * FROM katherinesullivan_AorB LIMIT 1'
+        cursor.execute(getCurrentLetter)
+        mysql.connection.commit();
+        currentLetter = cursor.fetchall();
+
+        if len(currentLetter) != 0:
+            if currentLetter[0]['tableLetter'] == "A":
+                return "A";
+
+        return "B";
+
+def getCurrentTable(letter):
+
+    if letter == "A":
+        return "katherinesullivan_articlesA";
+    elif letter == "B":
+        return "katherinesullivan_articlesB";
+
+    return "invalid letter input"
+
 @app.route('/', methods=["GET", "POST"])
 
 #function that renders index.html
 def index(methods=["GET", "POST"]):
 
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
     category = "topHeadlines";
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
+    #query = 'SELECT * FROM katherinesullivan_articlesB WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
+    print("query " + query)
 
     queryVars = (category,);
 
@@ -351,7 +383,7 @@ def index(methods=["GET", "POST"]):
         cursor = mysql.connection.cursor()
 
         #get titles of all articles in database
-        query = 'SELECT * FROM katherinesullivan_articlesA'
+        query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
 
         #Executes the query. This actually runs your query String against
         #the database.
@@ -410,11 +442,14 @@ def index(methods=["GET", "POST"]):
 #function that renders entertainment.html
 def entertainment(methods=["GET"]):
 
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
     category = "entertainmentArticles";
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
 
     queryVars = (category,);
 
@@ -439,11 +474,14 @@ def entertainment(methods=["GET"]):
 #function that renders sports.html
 def sports(methods=["GET"]):
 
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
     category = "sportsArticles";
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
 
     queryVars = (category,);
 
@@ -468,11 +506,14 @@ def sports(methods=["GET"]):
 #function that renders science.html
 def science(methods=["GET"]):
 
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
     category = "scienceArticles";
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
 
     queryVars = (category,);
 
@@ -498,11 +539,14 @@ def science(methods=["GET"]):
 #function that renders business.html
 def business(methods=["GET"]):
 
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
     category = "businessArticles";
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
 
     queryVars = (category,);
 
@@ -527,11 +571,14 @@ def business(methods=["GET"]):
 #function that renders health.html
 def health(methods=["GET"]):
 
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
     category = "healthArticles";
 
     cursor = mysql.connection.cursor();
 
-    query = 'SELECT * FROM katherinesullivan_articlesA WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
 
     queryVars = (category,);
 
