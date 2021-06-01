@@ -15,9 +15,10 @@
 {% block body %}
 
 <!--Featured Image-->
-<img alt="instructions" src="static/classifyArticles.png" style="width:100%;" />
 
 <div id="instructionsDiv" class="container-fluid"><br><br>
+
+  <img alt="instructions" src="static/classifyArticles.png" style="width:100%;" /><br><br>
 
   <p id="pasteArticle" class="instructionsText"> Paste an article's url into the following input box to see its political assignment: </p>
 
@@ -38,7 +39,6 @@
     {% if inputValid == 'yes' %}
     <p id="pasteArticle" class="instructionsText"> Your article is {{politicalAssignment}}-leaning! </p>
     <img id="classifierResultsImage" alt="spectrum" src="static/spectrumIcons/{{spectrumImagePath}}.png" />
-    <br><br><br>
     <script>
     console.log("spectrum path" + {{spectrumImagePath}})
     console.log("spectrum path" + {{politicalAssignment}})

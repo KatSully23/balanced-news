@@ -1,24 +1,33 @@
 #configuring Flask
 import flask
 from flask import Flask, render_template, request, redirect, url_for
+from flask_mysqldb import MySQL
 from newsapi import NewsApiClient
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import requests
 import joblib
-import nltkModel as m
+import betterModel as m
 import numpy as np
 import newspaper
 from newspaper import Article
 from newspaper import Config
+from datetime import datetime
 import string
 import re
 import validators
+import threading
 
 app = Flask(__name__)
+app.config['MYSQL_HOST'] = 'mysql.2021.lakeside-cs.org'
+app.config['MYSQL_USER'] = 'student2021'
+app.config['MYSQL_PASSWORD'] = 'm545CS42021'
+app.config['MYSQL_DB'] = '2021project'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+mysql = MySQL(app)
 
-def getArticles(url):
+def getArticles(url, category):
 
     try:
         #figure out what this code does!
@@ -26,7 +35,7 @@ def getArticles(url):
         articles = open_bbc_page["articles"]
         results = []
 
-        dataSet = getArticleResults(articles);
+        dataSet = getArticleResults(articles, category);
 
     #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
     except requests.exceptions.ConnectionError:
@@ -36,7 +45,7 @@ def getArticles(url):
 
     return dataSet;
 
-def getArticleResults(file):
+def getArticleResults(file, category):
 
     article_results = [];
 
@@ -52,11 +61,10 @@ def getArticleResults(file):
         article_dict['pub_date'] = file[i]['publishedAt']
         article_dict['url'] = file[i]['url']
         article_dict['photo_url'] = file[i]['urlToImage']
-
         sortedByModel = sortArticle(file[i]['url'])
         article_dict['politicalAssignment'] = sortedByModel[0]
         article_dict['onSpectrum'] = sortedByModel[1]
-
+        article_dict['category'] = category
         article_results.append(article_dict)
 
         #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
@@ -71,8 +79,9 @@ def getArticleResults(file):
     return article_results;
 
 def sortArticle(articleURL):
+    #print("url:" + articleURL)
+    #try:
 
-#try:
     #pass article into machine learning model
     articleResult = get_sentiment(articleURL)
 
@@ -155,7 +164,12 @@ def get_sentiment(url):
         article.download()
         article.parse()
         article_text = article.text
-        return m.sentiment(article_text)
+        sentiment = m.sentiment(article_text)
+        print(str(sentiment))
+        if len(sentiment) == 0:
+            print("sentiment list is empty")
+            sentiment = ['n/a', 'n/a']
+        return sentiment
 
     except newspaper.article.ArticleException:
         return ['n/a', 'n/a']
@@ -194,55 +208,401 @@ def getCategories(categories):
 
     return [containsRight, containsLeft, containsNeutral]
 
+# function that gets articles from a specific category fromt the database
+def getCategoryArticles(category):
 
-## Create arrays storing articles for each category to prevent classification
-## through machine learning model upon each refresh of html pages
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
 
-#store an array of top headline articles and their assigned properties
-topHeadlineArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0");
-#topHeadlineArticles = [];
+    cursor = mysql.connection.cursor()
 
-#store an array of entertainment articles and their assigned properties
-entertainmentArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d");
-#entertainmentArticles = [];
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
 
-#store an array of sports articles and their assigned properties
-sportsArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d");
-#sportsArticles = [];
+    queryVars = (category,);
 
-#store an array of business articles and their assigned properties
-businessArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d");
-#businessArticles = [];
+    cursor.execute(query, queryVars);
 
-#store an array of science articles and their assigned properties
-scienceArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d");
-#scienceArticles = [];
+    mysql.connection.commit();
 
-#store an array of health articles and their assigned properties
-healthArticles = getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d");
-#healthArticles = [];
+    categoryArticles = cursor.fetchall();
+
+    return categoryArticles;
+
+# 2D Array with list of articles
+articlesList = [[],[],[],[],[],[]];
+
+# function that refreshes database
+def refreshDatabase():
+
+    currentlyRefreshing = getCurrentlyRefreshing();
+    print("currently refreshing: " + currentlyRefreshing);
+
+    now = getCurrentDateTime();
+    month = now[0];
+    date = now[1];
+    hour = now[2];
+
+    lastRefresh = getLastRefresh();
+    lastRefreshMonth = lastRefresh[0];
+    lastRefreshDate = lastRefresh[1];
+    lastRefreshHour = lastRefresh[2];
+
+    refreshTime = False;
+
+    if month != lastRefreshMonth or date != lastRefreshDate or hour != lastRefreshHour:
+        refreshTime = True;
+        print("time to refresh the database!")
+
+    # check if currentlyRefreshing value equals no
+    if currentlyRefreshing == "No" and refreshTime == True:
+
+        # if it does, set currentlyRefreshing value to yes
+        setCurrentlyRefreshing("Yes")
+        print("set currently refreshing to yes");
+
+        firstLetter = getCurrentLetter();
+        print("current letter: " + firstLetter);
+        currentLetter = "";
+
+        if firstLetter == "A":
+            currentLetter = "B";
+        else:
+            currentLetter = "A";
+
+        cursor = mysql.connection.cursor()
+        query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
+        cursor.execute(query)
+        mysql.connection.commit()
+        data = list(cursor.fetchall())
+        length = len(data)
+        if(length>0):
+            for i in data:
+                cursor = mysql.connection.cursor()
+                query = 'DELETE FROM katherinesullivan_articles' + currentLetter + ' ORDER BY title LIMIT 1';
+                cursor.execute(query)
+                print("article deleted")
+                mysql.connection.commit()
+
+        tempArray = [];
+
+        # #store an array of top headline articles and their assigned properties
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "topHeadlines"))
+
+        # store an array of entertainment articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d", "entertainmentArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "entertainmentArticles"))
+        # entertainmentArticles = [];
+
+        # store an array of sports articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d", "sportsArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "sportsArticles"))
+        # sportsArticles = [];
+
+        # store an array of business articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d", "businessArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "businessArticles"))
+        # businessArticles = [];
+
+        # store an array of science articles and their assigned properties
+        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d", "scienceArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "scienceArticles"))
+        # scienceArticles = [];
+
+        # store an array of health articles and their assigned properties
+        # tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d", "healthArticles"))
+        tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "healthArticles"))
+        # healthArticles = [];
+
+        articlesList = tempArray
+        for article in tempArray:
+            cur = mysql.connection.cursor()
+            title = article['title']
+            url = article['url']
+            imageURL = article['photo_url']
+            if imageURL is None:
+                imageURL = "blank"
+            sentiment = article['politicalAssignment']
+            confidence = article['onSpectrum']
+            category = article['category']
+            query = 'INSERT INTO katherinesullivan_articles' + currentLetter + ' (title, url, imageURL, category, leaning, onSpectrum) VALUES (%s, %s, %s, %s, %s, %s)';
+            queryVars = (title, url, imageURL, category, sentiment, confidence,)
+            cur.execute(query, queryVars);
+            mysql.connection.commit()
+
+        switchLetter(firstLetter);
+        setCurrentlyRefreshing("No")
+        print("set currently refreshing to no");
+        setLastRefresh();
+
+def switchLetter(currentLetter):
+
+    newLetter = "";
+
+    if currentLetter == "A":
+        newLetter = "B";
+    else:
+        newLetter = "A";
+
+    cursor = mysql.connection.cursor()
+    # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
+    switchCurrentLetter = 'UPDATE katherinesullivan_AorB SET tableLetter=%s'
+    queryVars = (newLetter,)
+    cursor.execute(switchCurrentLetter, queryVars)
+    mysql.connection.commit();
+
+    return "";
+
+@app.route('/articleRefresh', methods=['POST'])
+
+def databaseRefresh():
+
+    refreshDatabase()
+    return "Done";
+
+def getCurrentLetter():
+
+        cursor = mysql.connection.cursor()
+        # source: https://stackoverflow.com/questions/3217217/grabbing-first-row-in-a-mysql-query-only
+        getCurrentLetter = 'SELECT * FROM katherinesullivan_AorB LIMIT 1'
+        cursor.execute(getCurrentLetter)
+        mysql.connection.commit();
+        currentLetter = cursor.fetchall();
+
+        if len(currentLetter) != 0:
+            if currentLetter[0]['tableLetter'] == "A":
+                return "A";
+
+        return "B";
+
+def getLastRefresh():
+
+        cursor = mysql.connection.cursor()
+        # source: https://stackoverflow.com/questions/3217217/grabbing-first-row-in-a-mysql-query-only
+        getCurrentlyRefreshing = 'SELECT * FROM katherinesullivan_refreshTime LIMIT 1'
+        cursor.execute(getCurrentlyRefreshing)
+        mysql.connection.commit();
+        currentlyRefreshing = cursor.fetchall();
+
+        if len(currentlyRefreshing) != 0:
+            month = currentlyRefreshing[0]['month']
+            day = currentlyRefreshing[0]['day']
+            hour = currentlyRefreshing[0]['hour']
+            return [month, day, hour];
+
+        return ['1', '1', '1']
+
+def getCurrentDateTime():
+    now = datetime.now()
+    month = now.strftime("%m")
+    date = now.strftime("%d")
+    hour = now.strftime("%H")
+
+    return [month, date, hour];
+
+
+def setLastRefresh():
+
+    now = getCurrentDateTime();
+    month = now[0];
+    date = now[1];
+    hour = now[2];
+
+    #print("now =", now)
+    # dd/mm/YY H:M:S
+    #dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    #print("month: ", month)
+    #print("date: ", date)
+    #print("hour: ", hour)
+
+    cursor = mysql.connection.cursor()
+    # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
+    setLastRefresh = 'UPDATE katherinesullivan_refreshTime SET month=%s, day=%s, hour=%s'
+    queryVars = (month, date, hour,)
+    cursor.execute(setLastRefresh, queryVars)
+    mysql.connection.commit();
+
+    return "";
+
+
+def getCurrentlyRefreshing():
+
+        cursor = mysql.connection.cursor()
+        # source: https://stackoverflow.com/questions/3217217/grabbing-first-row-in-a-mysql-query-only
+        getCurrentlyRefreshing = 'SELECT * FROM katherinesullivan_isRefreshing LIMIT 1'
+        cursor.execute(getCurrentlyRefreshing)
+        mysql.connection.commit();
+        currentlyRefreshing = cursor.fetchall();
+
+        if len(currentlyRefreshing) != 0:
+            if currentlyRefreshing[0]['currentlyRefreshing'] == "Yes":
+                return "Yes";
+            else:
+                return "No";
+
+def setCurrentlyRefreshing(currentlyRefreshing):
+
+    # if currentlyRefreshing == "Yes":
+    #     currentlyRefreshing = "Yes";
+    # else:
+    #     currentlyRefreshing = "No";
+
+    cursor = mysql.connection.cursor()
+    # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
+    setCurrentlyRefreshing = 'UPDATE katherinesullivan_isRefreshing SET currentlyRefreshing=%s'
+    queryVars = (currentlyRefreshing,)
+    cursor.execute(setCurrentlyRefreshing, queryVars)
+    mysql.connection.commit();
+
+    return "";
+
+
+def getCurrentTable(letter):
+
+    if letter == "A":
+        return "katherinesullivan_articlesA";
+    elif letter == "B":
+        return "katherinesullivan_articlesB";
+
+    return "invalid letter input"
 
 @app.route('/', methods=["GET", "POST"])
 
 #function that renders index.html
 def index(methods=["GET", "POST"]):
 
-    #url = "http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0"
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
+    category = "topHeadlines";
+
+    cursor = mysql.connection.cursor();
+
+    #query = 'SELECT * FROM katherinesullivan_articlesB WHERE category=%s';
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
+    print("query " + query)
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    topHeadlinesData = cursor.fetchall();
+
+    topHeadlineArticles = topHeadlinesData;
 
     #get list of checked categories in filter menu
     #source: https://www.reddit.com/r/flask/comments/bz376w/how_do_i_get_checked_checkboxes_into_flask/
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
+    searchBoxInput = request.form.get('searchText');
+    clearMainRow = 'False';
+    printEmptySearch = 'False';
+    searchResults = [];
+
+    if searchBoxInput is not None:
+
+        print("searchInputBox '" + searchBoxInput + "'")
+        clearMainRow = 'True';
+
+        #source: https://www.tutorialspoint.com/How-to-convert-a-string-to-a-list-of-words-in-python
+        searchBoxInputWords = searchBoxInput.split();
+
+        counter = 0;
+        for i in searchBoxInputWords:
+            counter += 1;
+            print("#" + str(counter) + " word in search query: " + i)
+
+        if searchBoxInput == '':
+            printEmptySearch = 'True';
+
+        # empty out array with search results
+        searchResults = [];
+
+        #Sets up the MySQL object. You can use this one object
+        #for multiple queries if you want.
+        cursor = mysql.connection.cursor()
+
+        #get titles of all articles in database
+        query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
+
+        #Executes the query. This actually runs your query String against
+        #the database.
+        cursor.execute(query);
+
+        #Commits the query. This is good practice, and is absolutely necessary
+        #if you’re doing multiple queries with the same cursor object.
+        mysql.connection.commit();
+
+        #Fetches all rows returned by the query, stored in a multidimensional
+        #associative array (AKA a 2D map). Note that fetchall() is
+        #generally only useful for SELECT queries; there would be nothing to fetch
+        #for an INSERT query, for example.
+        articlesData = cursor.fetchall();
+
+        #print ("Number items in articlesData = ", len(articlesData));
+        #print ("Number of search box input words = ", len(searchBoxInputWords));
+
+        # for every article
+        for article in articlesData:
+
+            # for every word in search query
+            for word in searchBoxInputWords:
+
+                # get the article title (lowercase)
+                # source: https://www.programiz.com/python-programming/methods/string/lower
+                title = article['title'].lower();
+
+                #if 'celtics'.lower() in title:
+                    # print("celtics was in the title!");
+
+                # if title contains search word (lowercase)
+                if word.lower() in title:
+
+                    notDuplicate = True;
+
+                    # if search results already exist
+                    if len(searchResults) != 0:
+                        # loop through all search results
+                        for result in searchResults:
+                            # make sure that title of current article does
+                            # not match title in search result
+                            if result['title'] == article['title']:
+                                notDuplicate = False;
+
+                    if notDuplicate:
+                        # append the article to search results
+                        searchResults.append(article);
+
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('index.html', articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('index.html', searchResults=searchResults, printEmptySearch=printEmptySearch, clearMainRow=clearMainRow, articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 
 #function that renders entertainment.html
 def entertainment(methods=["GET"]):
-    #url = "http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
+    category = "entertainmentArticles";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    entertainmentData = cursor.fetchall();
+
+    entertainmentArticles = entertainmentData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -255,7 +615,26 @@ def entertainment(methods=["GET"]):
 
 #function that renders sports.html
 def sports(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
+    category = "sportsArticles";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    sportsData = cursor.fetchall();
+
+    sportsArticles = sportsData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -268,8 +647,28 @@ def sports(methods=["GET"]):
 
 #function that renders science.html
 def science(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
+    category = "scienceArticles";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    scienceData = cursor.fetchall();
+
+    scienceArticles = scienceData;
+
     categories = request.form.getlist('party')
+
     filters = getCategories(categories);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
@@ -279,9 +678,28 @@ def science(methods=["GET"]):
 
 @app.route('/business', methods=["GET", "POST"])
 
-#function that renders contact.html
+#function that renders business.html
 def business(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
+    category = "businessArticles";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    businessData = cursor.fetchall();
+
+    businessArticles = businessData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -292,9 +710,28 @@ def business(methods=["GET"]):
 
 @app.route('/health', methods=["GET", "POST"])
 
-#function that renders contact.html
+#function that renders health.html
 def health(methods=["GET"]):
-    url = "http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d"
+
+    currentLetter = getCurrentLetter();
+    print("current letter: " + currentLetter);
+
+    category = "healthArticles";
+
+    cursor = mysql.connection.cursor();
+
+    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
+
+    queryVars = (category,);
+
+    cursor.execute(query, queryVars);
+
+    mysql.connection.commit();
+
+    healthData = cursor.fetchall();
+
+    healthArticles = healthData;
+
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -326,29 +763,10 @@ def classify(methods=["GET", "POST"]):
 
     return render_template('classify.html', inputValid=inputValid, spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
 
-@app.route('/mldemo', methods=["GET", "POST"])
-
-#temporary ~ delete this later!
-def mldemo():
-    if request.method == 'GET':
-        prediction = request.args.get('prediction')
-        return render_template('machinelearningdemo.html', prediction=prediction)
-    else:
-        title = request.values.get("title")
-        model = joblib.load('demo_model.joblib')
-        target_names = ['CNN', 'Breitbart', 'New York Times']
-        prediction = target_names[model.predict([title])[0]]
-        return redirect(url_for('mldemo', prediction=prediction))
-
-@app.route('/about', methods=["GET", "POST"])
-
-#function that renders contact.html
-def about(methods=["POST"]):
-    return render_template('about.html')
 
 @app.route('/instructions', methods=["GET", "POST"])
 
-#function that renders contact.html
+#function that renders instructions.html
 def instructions(methods=["POST"]):
     return render_template('instructions.html')
 
@@ -357,7 +775,6 @@ def instructions(methods=["POST"]):
 #function that renders contact.html
 def contact(methods=["POST"]):
     return render_template('contact.html')
-
 
 def clean(article):
 

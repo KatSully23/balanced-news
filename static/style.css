@@ -77,11 +77,14 @@ table, th, td {
   content: "";
   display: table;
   clear: both;
+  margin-bottom: 0px;
+  padding: 0px;
 }
 
 .container-fluid {
   margin-left: 70px;
   margin-right: 70px;
+  margin-bottom: 250px;
 }
 
 .nav-link {
@@ -141,9 +144,9 @@ table, th, td {
 }
 
 /* source: https://stackoverflow.com/questions/4502633/how-to-affect-other-elements-when-one-element-is-hovered */
-.tooltip-wrap:hover > .tooltip-content{
-  bottom: 93%;
-}
+/*.tooltip-wrap:hover > .tooltip-content{
+  margin-bottom: 0px;
+}*/
 
 .tooltip-wrap:hover .tooltip-content {
   display: block;
@@ -193,12 +196,38 @@ table, th, td {
 
 .dropdown-content p {
   color: black;
+  font-family: 'Raleway', sans-serif;
   padding-left: 5px;
   padding-right: 14px;
   padding-top: 8px;
   padding-bottom: 0px;
   text-decoration: none;
   display: block;
+}
+
+#logoDropdown a {
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  padding-left: 15px;
+  padding-right: 14px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-decoration: none;
+  display: block;
+}
+
+#dropdownLeft {
+  float: left;
+}
+
+#topHeadlinesLink {
+
+}
+
+#logoDropdown {
+  padding-left: 0px;
+  margin-left: 0px;
+  left: 0px;
 }
 
 #filterCheckboxes {
@@ -243,6 +272,77 @@ table, th, td {
   transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
 }
 
+/* mobile responsive code */
+
+@media screen and (max-width: 10000px) {
+
+  .regularNav {
+    display: block;
+  }
+
+  .smallNav {
+    display: none;
+  }
+
+  .regularFooter {
+    display: block;
+  }
+
+  .smallFooter {
+    display: none;
+  }
+
+}
+
+/* When the screen is less than 800 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+@media screen and (max-width: 800px) {
+
+  .regularNav {
+    display: none;
+  }
+
+  .smallNav {
+    display: block;
+  }
+
+  .regularFooter {
+    display: none;
+  }
+
+  .smallFooter {
+    display: block;
+  }
+
+  #footer {
+    height: 600px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+
+  #search {
+    display: hidden;
+  }
+
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+@media screen and (max-width: 800px) {
+
+  /*#navBarMain.responsive {position: relative;}
+  #navbarMain.responsive a.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  #navBarMain.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }*/
+
+}
+
 #filterInstructions {
   width: 670px;
 }
@@ -263,10 +363,20 @@ table, th, td {
   margin-left: 50px;
 }
 
+#footerLogoMobile {
+  margin: auto;
+}
+
 #footerCopyright {
   margin-top: 10px;
   margin-left: 50px;
 }
+
+#footerCopyrightMobiles {
+  width: 50%;
+  margin: auto;
+}
+
 
 #usNav {
   margin-left: 12px;
@@ -282,12 +392,26 @@ table, th, td {
 
 #footer {
   background-color: black;
+  /*position: relative;*/
   bottom: 0px;
-  right: 0px;
-  left: 0px;
+  /*margin-bottom: 0px;*/
+  margin-right: 0px;
   margin-left: 0px;
   padding-left: 0px;
   height: 250px;
+  width: 100%;
+}
+
+#footerSmall {
+  background-color: black;
+  /*position: relative;*/
+  bottom: 0px;
+  /*margin-bottom: 0px;*/
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-left: 0px;
+  height: 600px;
+  width: 100%;
 }
 
 #search {
@@ -312,6 +436,52 @@ table, th, td {
 .flex {
    display: flex;
    flex-direction: row;
+}
+
+/* search box formatting source: https://stackoverflow.com/questions/15314407/how-to-add-button-inside-input */
+
+#searchForm {
+  /* This bit sets up the horizontal layout */
+  display:flex;
+  flex-direction:row;
+
+  /* This bit draws the box around it */
+  border:none;
+
+  /* I've used padding so you can see the edges of the elements. */
+  padding-right:40px;
+}
+
+
+#searchFormMobile {
+  display:flex;
+  flex-direction:row;
+  border:none;
+  width: 80%;
+  margin: auto;
+
+}
+
+#searchInput {
+  /* Tell the input to use all the available space */
+  flex-grow:2;
+  /* And hide the input's outline, so the form looks like the outline */
+  border:none;
+}
+
+
+#searchInput:focus {
+  /* removing the input focus blue box. Put this on the form if you like. */
+  outline: none;
+}
+
+#search {
+  margin-left: 5px;
+}
+
+/* change color on hover source: https://stackoverflow.com/questions/52225675/submit-button-not-changing-colour-on-hover */
+#search:hover {
+  background: #004aad;
 }
 
 /*#mainRow {

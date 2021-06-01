@@ -1,6 +1,10 @@
 
 var articlesWithImages = "all";
 
+function changeBackArticlesWithImages() {
+  articlesWithImages = "all";
+}
+
 function changeArticlesWithImages() {
   articlesWithImages = "not all";
 }
@@ -87,3 +91,50 @@ function appendNoImageArticle(articleURL, articleName, spectrumImage) {
   });
 
 }
+
+/* source: https://stackoverflow.com/questions/3450593/how-do-i-clear-the-content-of-a-div-using-javascript */
+function clearBox(elementID, printEmptySearch)
+{
+    document.getElementById(elementID).innerHTML = " ";
+
+    if (printEmptySearch) {
+
+      emptyStringHTML = "<br>" +
+                        "<div class='container-fluid'>" +
+                          "<p class='instructionsText'> Oops! You entered an empty string. Please try again :)</p>" +
+                        "</div>" +
+                        "<br>" +
+                        "<br>"
+
+      document.getElementById(elementID).innerHTML = emptyStringHTML;
+
+    }
+
+}
+
+//function containing AJAX request
+function databaseRefresh(){
+
+  //Sets up the AJAX object
+  var xhttp = new XMLHttpRequest();
+
+  //function will be called AFTER the POST request returns
+  xhttp.onreadystatechange = function() {
+
+    //if we're actually done successfully
+    if (this.readyState == 4 && this.status == 200) {
+
+      console.log("database has been updated!")
+
+    }
+
+  }
+
+  //Tells JS which webpage to go to and
+  //how to go to it
+  xhttp.open("POST", "articleRefresh", true);
+  xhttp.send();
+
+}
+
+//var databaseUpdate = setInterval(databaseRefresh, 600000);
