@@ -230,11 +230,11 @@ table, th, td {
   left: 0px;
 }
 
-#filterCheckboxes {
+.filterCheckboxes {
   padding-left: 15px;
 }
 
-#filterIcon {
+.filterIcon {
   margin-right: 0px;
 }
 
@@ -347,7 +347,7 @@ table, th, td {
   width: 670px;
 }
 
-#spectrumImagesExplanation {
+.spectrumImagesExplanation {
   width: 670px;
 }
 
@@ -355,7 +355,7 @@ table, th, td {
   margin-left: 20px;
 }
 
-#siteLogo {
+.siteLogo {
   margin-left: 5px;
 }
 
@@ -378,17 +378,26 @@ table, th, td {
 }
 
 
-#usNav {
+#entertainmentNav {
   margin-left: 12px;
 }
 
-#worldNav {
+#sportsNav {
  margin-left: 13px;
 }
 
 #businessNav {
  margin-left: 12px;
 }
+
+#scienceNav {
+ margin-left: 12px;
+}
+
+#healthNav {
+ margin-left: 12px;
+}
+
 
 #footer {
   background-color: black;
@@ -462,7 +471,14 @@ table, th, td {
 
 }
 
-#searchInput {
+.searchInput {
+  /* Tell the input to use all the available space */
+  flex-grow:2;
+  /* And hide the input's outline, so the form looks like the outline */
+  border:none;
+}
+
+.searchInput2 {
   /* Tell the input to use all the available space */
   flex-grow:2;
   /* And hide the input's outline, so the form looks like the outline */

@@ -13,140 +13,7 @@
         <!--<script type="text/javascript" src="static/functions.js"></script>-->
     </head>
 
-    <body>
 
-      <!--linking to JavaScript file-->
-      <!--source: https://stackoverflow.com/questions/14711552/external-javascript-file-is-not-getting-added-when-running-on-flask-->
-      <script type="text/javascript"
-              src="{{ url_for('static', filename='functions.js') }}"></script>
-
-      <!--clear form input upon refresh of page-->
-      <!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
-      <script type="text/javascript">
-          if ( window.history.replaceState ) {
-              window.history.replaceState( null, null, window.location.href );
-          }
-      </script>
-
-        <!-- nav bar when screen is phone-sized -->
-
-        <div class="smallNav">
-
-        <nav class="navbar navbar-expand-md mb-4">
-
-        <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>-->
-
-        <div id="dropdownLeft" class="dropdown">
-
-        <button class="dropbtn">
-          <div class="float-left">
-            <img id="siteLogo" src="static/logo3.png" width="65px" height="60px" alt="logo">
-          </div>
-        </button>
-
-          <div id="logoDropdown" class="dropdown-content">
-            <a id="topHeadlinesLink" class="nav-link" href="/">Top Headlines</a>
-            <a class="nav-link" href="/entertainment">Entertainment</a>
-            <a class="nav-link" href="/sports">Sports</a>
-            <a class="nav-link" href="/business">Business</a>
-            <a class="nav-link" href="/science">Science</a>
-            <a class="nav-link" href="/health">Health</a>
-          </div>
-        </div>
-
-        <div class="dropdown" style="float:right;">
-
-        <button class="dropbtn">
-          <div class="float-right">
-            <img id="filterIcon" src="static/filterIcon.png" width="65px" height="60px" alt="logo">
-          </div>
-        </button>
-
-          <div class="dropdown-content">
-            <form id="filterCheckboxes" method="post">
-            <p>Filter by:</p>
-            <p>Right-leaning <input type="checkbox" id="right-leaning" name="party" value="Right"></p>
-            <p>Left-leaning <input type="checkbox" id="left-leaning" name="party" value="Left"></p>
-            <p>Neutral <input type="checkbox" id="neutral" name="party" value="Neutral"></p>
-            <p><input type="submit" value="Submit"></p>
-            </form>
-          </div>
-      </div>
-
-      </nav>
-
-      </div>
-
-        <!-- regular navigation bar -->
-
-        <div class="regularNav">
-
-        <nav class="navbar navbar-expand-md mb-4">
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <a class="navbar-brand" href="/">
-          <img id="siteLogo" src="static/logo3.png" width="65px" height="60px" alt="logo">
-        </a>
-
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav mr-auto">
-
-            <li class="nav-item">
-              <a id="usNav" class="nav-link" href="/entertainment">Entertainment</a>
-            </li>
-
-            <li class="nav-item">
-              <a id="businessNav" class="nav-link" href="/sports">Sports</a>
-            </li>
-
-            <li class="nav-item">
-              <a id="businessNav" class="nav-link" href="/business">Business</a>
-            </li>
-
-            <li class="nav-item">
-              <a id="businessNav" class="nav-link" href="/science">Science</a>
-            </li>
-
-            <li class="nav-item">
-              <a id="businessNav" class="nav-link" href="/health">Health</a>
-            </li>
-
-            <!--<li class="nav-item">
-              <a id="worldNav" class="nav-link" href="/mldemo">Machine Learning Demo</a>
-            </li>-->
-
-          </ul>
-
-          <div class="dropdown" style="float:right;">
-
-          <button class="dropbtn">
-            <div class="float-right">
-              <img id="filterIcon" src="static/filterIcon.png" width="65px" height="60px" alt="logo">
-            </div>
-          </button>
-
-            <div class="dropdown-content">
-              <form id="filterCheckboxes" method="post">
-              <p>Filter by:</p>
-              <p>Right-leaning <input type="checkbox" id="right-leaning" name="party" value="Right"></p>
-              <p>Left-leaning <input type="checkbox" id="left-leaning" name="party" value="Left"></p>
-              <p>Neutral <input type="checkbox" id="neutral" name="party" value="Neutral"></p>
-              <p><input type="submit" value="Submit"></p>
-              </form>
-            </div>
-        </div>
-
-          </div>
-        </nav>
-      </div>
-
-
-    </body>
 
     {% block body %}
 
@@ -187,12 +54,12 @@
          </div>
          <div class="col-md-3">
            <h5 class="footerTitle">Search Our Site</h5>
-           <ul class="list-unstyled text-small">
              <form id="searchForm" class="form-inline mt-2 mt-md-0" method="POST" action="/" >
                <input id="searchInput" class="form-control" type="text" placeholder="Search" aria-label="Search" name="searchText">
+               <ul class="list-unstyled text-small">
+               </ul>
                <input id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search" />
              </form>
-           </ul>
          </div>
 
        </div>
@@ -207,12 +74,14 @@
 
        <div class="text-center">
 
-       <ul class="list-unstyled text-small">
+
          <form id="searchFormMobile" class="form-inline justify-content-center" method="POST" action="/" >
-           <input id="searchInput" class="form-control" type="text" placeholder="type in your search and press enter!" aria-label="Search" name="searchText">
+           <input id="searchInput2" class="form-control" type="text" placeholder="type in your search and press enter!" aria-label="Search" name="searchText">
+           <ul class="list-unstyled text-small">
            <!--<input id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search" />-->
+            </ul>
          </form>
-       </ul>
+
 
           <h5 class="footerTitle">News</h5>
           <ul class="list-unstyled text-small">
@@ -234,14 +103,13 @@
 
           <img id="footerLogoMobile" class="mb-2" src="static/logo3.png" alt="" width="50" height="50">
           <small id="footerCopyrightMobiles" class="d-block mb-3 footerSubtitle">&copy; February 2021</small>
-
         </div>
+        </footer>
       </div>
-      </footer>
-   </div>
+
+
 
     {% endblock %}
 
-</body>
 
 </html>
