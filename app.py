@@ -1,4 +1,3 @@
-#configuring Flask
 import flask
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
@@ -30,7 +29,6 @@ mysql = MySQL(app)
 def getArticles(url, category):
 
     try:
-        #figure out what this code does!
         open_bbc_page = requests.get(url).json()
         articles = open_bbc_page["articles"]
         results = []
@@ -51,7 +49,6 @@ def getArticleResults(file, category):
 
     for i in range(len(file)):
 
-        #try:
         article_dict = {}
         article_dict['title'] = file[i]['title']
         article_dict['author'] = file[i]['author']
@@ -67,20 +64,9 @@ def getArticleResults(file, category):
         article_dict['category'] = category
         article_results.append(article_dict)
 
-        #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
-        #except requests.exceptions.ConnectionError:
-            #requests.status_code = "Connection refused"
-            #print("error: connection refused")
-
-        #source: https://stackoverflow.com/questions/28377421/why-do-i-receive-a-timeout-error-from-pythons-requests-module
-        #except requests.exceptions.Timeout:
-            #print("Timeout occurred");
-
     return article_results;
 
 def sortArticle(articleURL):
-    #print("url:" + articleURL)
-    #try:
 
     #pass article into machine learning model
     articleResult = get_sentiment(articleURL)
@@ -96,21 +82,11 @@ def sortArticle(articleURL):
 
     return [demOrRep, onSpectrum]
 
-    #source: https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
-    #except requests.exceptions.ConnectionError:
-        #requests.status_code = "Connection refused"
-        #print("error: connection refused")
-        #return['n/a', 'n/a']
-
-    #source: https://stackoverflow.com/questions/28377421/why-do-i-receive-a-timeout-error-from-pythons-requests-module
-    #except requests.exceptions.Timeout:
-        #print("Timeout occurred");
-
 def getSpectrumString(demOrRep, confidenceScore):
 
     if confidenceScore != "n/a":
 
-        if confidenceScore >= 0 and confidenceScore <= 0.33333333333:
+        if confidenceScore > 0 and confidenceScore <= 0.33333333333:
             rating = "least";
 
         elif confidenceScore > 0.33333333333 and confidenceScore <= 0.66666666666:
@@ -150,8 +126,6 @@ def assignString(boxesCheckedArray, containsBoolean, index):
     if not containsBoolean:
         boxesCheckedArray[index] = "False";
 
-#web scraping code
-
 def get_sentiment(url):
 
     try:
@@ -174,20 +148,7 @@ def get_sentiment(url):
     except newspaper.article.ArticleException:
         return ['n/a', 'n/a']
 
-    #except DateTimeException:
-        #return ['n/a', 'n/a']
-
     return "error!";
-
-    #except requests.exceptions.ConnectionError:
-        #requests.status_code = "Connection refused"
-        #print("error: connection refused")
-        #return['n/a', 'n/a']
-
-    #source: https://stackoverflow.com/questions/28377421/why-do-i-receive-a-timeout-error-from-pythons-requests-module
-    #except requests.exceptions.Timeout:
-        #print("Timeout occurred");
-        #return['n/a', 'n/a']
 
 def getCategories(categories):
 
@@ -289,29 +250,19 @@ def refreshDatabase():
         tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "topHeadlines"))
 
         # store an array of entertainment articles and their assigned properties
-        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=77ab5895b882445b8796fa78919f022d", "entertainmentArticles"))
         tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "entertainmentArticles"))
-        # entertainmentArticles = [];
 
         # store an array of sports articles and their assigned properties
-        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=77ab5895b882445b8796fa78919f022d", "sportsArticles"))
         tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "sportsArticles"))
-        # sportsArticles = [];
 
         # store an array of business articles and their assigned properties
-        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=77ab5895b882445b8796fa78919f022d", "businessArticles"))
         tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "businessArticles"))
-        # businessArticles = [];
 
         # store an array of science articles and their assigned properties
-        #tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=77ab5895b882445b8796fa78919f022d", "scienceArticles"))
         tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=science&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "scienceArticles"))
-        # scienceArticles = [];
 
         # store an array of health articles and their assigned properties
-        # tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=77ab5895b882445b8796fa78919f022d", "healthArticles"))
         tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "healthArticles"))
-        # healthArticles = [];
 
         articlesList = tempArray
         for article in tempArray:
@@ -392,6 +343,7 @@ def getLastRefresh():
         return ['1', '1', '1']
 
 def getCurrentDateTime():
+    # source: https://www.programiz.com/python-programming/datetime/current-datetime
     now = datetime.now()
     month = now.strftime("%m")
     date = now.strftime("%d")
@@ -406,13 +358,6 @@ def setLastRefresh():
     month = now[0];
     date = now[1];
     hour = now[2];
-
-    #print("now =", now)
-    # dd/mm/YY H:M:S
-    #dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    #print("month: ", month)
-    #print("date: ", date)
-    #print("hour: ", hour)
 
     cursor = mysql.connection.cursor()
     # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
@@ -440,12 +385,6 @@ def getCurrentlyRefreshing():
                 return "No";
 
 def setCurrentlyRefreshing(currentlyRefreshing):
-
-    # if currentlyRefreshing == "Yes":
-    #     currentlyRefreshing = "Yes";
-    # else:
-    #     currentlyRefreshing = "No";
-
     cursor = mysql.connection.cursor()
     # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
     setCurrentlyRefreshing = 'UPDATE katherinesullivan_isRefreshing SET currentlyRefreshing=%s'
@@ -454,7 +393,6 @@ def setCurrentlyRefreshing(currentlyRefreshing):
     mysql.connection.commit();
 
     return "";
-
 
 def getCurrentTable(letter):
 
@@ -477,9 +415,7 @@ def index(methods=["GET", "POST"]):
 
     cursor = mysql.connection.cursor();
 
-    #query = 'SELECT * FROM katherinesullivan_articlesB WHERE category=%s';
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-    print("query " + query)
 
     queryVars = (category,);
 
@@ -520,29 +456,15 @@ def index(methods=["GET", "POST"]):
         # empty out array with search results
         searchResults = [];
 
-        #Sets up the MySQL object. You can use this one object
-        #for multiple queries if you want.
         cursor = mysql.connection.cursor()
 
-        #get titles of all articles in database
         query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
 
-        #Executes the query. This actually runs your query String against
-        #the database.
         cursor.execute(query);
 
-        #Commits the query. This is good practice, and is absolutely necessary
-        #if you’re doing multiple queries with the same cursor object.
         mysql.connection.commit();
 
-        #Fetches all rows returned by the query, stored in a multidimensional
-        #associative array (AKA a 2D map). Note that fetchall() is
-        #generally only useful for SELECT queries; there would be nothing to fetch
-        #for an INSERT query, for example.
         articlesData = cursor.fetchall();
-
-        #print ("Number items in articlesData = ", len(articlesData));
-        #print ("Number of search box input words = ", len(searchBoxInputWords));
 
         # for every article
         for article in articlesData:
@@ -553,9 +475,6 @@ def index(methods=["GET", "POST"]):
                 # get the article title (lowercase)
                 # source: https://www.programiz.com/python-programming/methods/string/lower
                 title = article['title'].lower();
-
-                #if 'celtics'.lower() in title:
-                    # print("celtics was in the title!");
 
                 # if title contains search word (lowercase)
                 if word.lower() in title:
