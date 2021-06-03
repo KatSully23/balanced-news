@@ -209,6 +209,10 @@ table, th, td {
   float: left;
 }
 
+#dropdownRight {
+  float: right;
+}
+
 #logoDropdown {
   padding-left: 0px;
   margin-left: 0px;

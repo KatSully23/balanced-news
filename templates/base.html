@@ -12,6 +12,107 @@
         <link rel="stylesheet" href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
 
+        <!-- nav bar when screen is phone-sized -->
+
+        <div class="smallNav">
+
+        <nav class="navbar navbar-expand-md mb-4">
+
+        <div id="dropdownLeft" class="dropdown">
+
+          <button class="dropbtn">
+            <img class="siteLogo float-left" src="static/logo3.png" width="65" height="60" alt="logo">
+          </button>
+
+          <div id="logoDropdown" class="dropdown-content">
+            <a id="topHeadlinesLink" class="nav-link" href="/">Top Headlines</a>
+            <a class="nav-link" href="/entertainment">Entertainment</a>
+            <a class="nav-link" href="/sports">Sports</a>
+            <a class="nav-link" href="/business">Business</a>
+            <a class="nav-link" href="/science">Science</a>
+            <a class="nav-link" href="/health">Health</a>
+          </div>
+        </div>
+
+        <div class="dropdown" style="float:right;">
+          <button class="dropbtn">
+            <img class="filterIcon float-right" src="static/filterIcon.png" width="65" height="60" alt="logo">
+          </button>
+          <div class="dropdown-content">
+            <form class="filterCheckboxes" method="post">
+            <p>Filter by:</p>
+            <p>Right-leaning <input type="checkbox" class="right-leaning" name="party" value="Right"></p>
+            <p>Left-leaning <input type="checkbox" class="left-leaning" name="party" value="Left"></p>
+            <p>Neutral <input type="checkbox" class="neutral" name="party" value="Neutral"></p>
+            <p><input type="submit" value="Submit"></p>
+            </form>
+          </div>
+      </div>
+
+      </nav>
+
+      </div>
+
+      <!-- regular navigation bar -->
+
+      <div class="regularNav">
+
+      <nav class="navbar navbar-expand-md mb-4">
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand" href="/">
+        <img class="siteLogo" src="static/logo3.png" width="65" height="60" alt="logo">
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item">
+            <a id="entertainmentNav" class="nav-link" href="/entertainment">Entertainment</a>
+          </li>
+
+          <li class="nav-item">
+            <a id="sportsNav" class="nav-link" href="/sports">Sports</a>
+          </li>
+
+          <li class="nav-item">
+            <a id="businessNav" class="nav-link" href="/business">Business</a>
+          </li>
+
+          <li class="nav-item">
+            <a id="scienceNav" class="nav-link" href="/science">Science</a>
+          </li>
+
+          <li class="nav-item">
+            <a id="healthNav" class="nav-link" href="/health">Health</a>
+          </li>
+
+        </ul>
+
+        <div id="dropdownRight" class="dropdown">
+
+        <button class="dropbtn">
+            <img class="float-right" src="static/filterIcon.png" width="65" height="60" alt="logo">
+        </button>
+
+          <div class="dropdown-content">
+            <form class="filterCheckboxes" method="post">
+            <p>Filter by:</p>
+            <p>Right-leaning <input type="checkbox" class="right-leaning" name="party" value="Right"></p>
+            <p>Left-leaning <input type="checkbox" class="left-leaning" name="party" value="Left"></p>
+            <p>Neutral <input type="checkbox" class="neutral" name="party" value="Neutral"></p>
+            <p><input type="submit" value="Submit"></p>
+            </form>
+          </div>
+      </div>
+
+        </div>
+      </nav>
+    </div>
+
     {% block body %} {% endblock %}
 
     {% block footer %}
