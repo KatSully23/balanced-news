@@ -17,19 +17,12 @@
 
 <!--body of web page-->
 {% block body %}
-<!--linking to JavaScript file-->
-<!--source: https://stackoverflow.com/questions/14711552/external-javascript-file-is-not-getting-added-when-running-on-flask-->
-
 
   <!-- nav bar when screen is phone-sized -->
 
   <div class="smallNav">
 
   <nav class="navbar navbar-expand-md mb-4">
-
-  <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>-->
 
   <div id="dropdownLeft" class="dropdown">
   <div class="float-left">
@@ -105,10 +98,6 @@
         <a id="healthNav" class="nav-link" href="/health">Health</a>
       </li>
 
-      <!--<li class="nav-item">
-        <a id="worldNav" class="nav-link" href="/mldemo">Machine Learning Demo</a>
-      </li>-->
-
     </ul>
 
     <div class="dropdown" style="float:right;">
@@ -144,11 +133,13 @@
 
 <!--clear form input upon refresh of page-->
 <!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
+
 <script type="text/javascript">
     if ( window.history.replaceState ) {
         window.history.replaceState( null, null, window.location.href );
     }
 </script>
+
 <script type="text/javascript">
 
   var element = document.getElementsByClassName("row");
@@ -158,23 +149,6 @@
 
 <!-- if there is an active search query -->
 {% if clearMainRow == 'True' %}
-
-  <script>
-
-  console.log("cleared mainRow div")
-
-  /*document.getElementById("list").innerHTML = "";
-  console.log(str(document.getElementById("list").innerHTML));*/
-
-  /*$(document).ready(function(){
-
-    $("#list").empty();
-    console.log("emptied list");
-    console.log("list inner HTML" + str(document.getElementById("list")))
-
-  });*/
-
-  </script>
 
   {% if printEmptySearch == 'True' %}
 
@@ -202,7 +176,6 @@
 
           <script type="text/javascript">
 
-          console.log("image url: " + "{{imgURL}}")
           var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
           var element = document.getElementById("mainRow");
           element.innerHTML += "<br>";
@@ -211,8 +184,6 @@
           </script>
 
           {% else %}
-
-          <script>console.log("article with no image!")</script>
 
           <!-- add card to the More in US Headlines card-->
           <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
@@ -223,7 +194,6 @@
 
           appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
           changeArticlesWithImages();
-          console.log("articles with images: " + articlesWithImages);
 
           </script>
 
@@ -239,8 +209,6 @@
     var element = document.getElementById("mainRow");
     element.innerHTML += "<br>";
     element.innerHTML += otherArticlesCard;
-
-    console.log("before deleting card, articles with images: " + getArticlesWithImages())
 
     if (getArticlesWithImages() == "all") {
       document.getElementById('noImageCard').remove();
@@ -260,15 +228,9 @@
 <!--check if user wants to filter by each category-->
 {% set rightFilterActive = arrayBools[0] %}
 
-<!--<script>console.log("Right filter active: " + "{{rightFilterActive}}")</script>-->
-
 {% set leftFilterActive = arrayBools[1] %}
 
-<!--<script>console.log("Left filter active: " + "{{leftFilterActive}}")</script>-->
-
 {% set neutralFilterActive = arrayBools[2] %}
-
-<!--<script>console.log("Neutral filter active: " + "{{neutralFilterActive}}")</script>-->
 
 <!--getting properties of article-->
 {% set articleName = article['title'] %}
@@ -277,19 +239,10 @@
 {% set articlePoliticalAssignment = article['leaning'] %}
 {% set articleOnSpectrum = article['onSpectrum'] %}
 
-<script>console.log("article political assignment: {{articlePoliticalAssignment}}")</script>
-
-
 {% if articlePoliticalAssignment != 'n/a' %}
 
-<!-- displaying republican / neutral articles if filters allow it -->
+<!-- displaying right-leaning / neutral articles  -->
 {% if rightFilterActive == 'True' %}
-
-<!--<script>console.log("Right filter is active");</script>
-
-<script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
-
-<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>-->
 
   {% if (articlePoliticalAssignment == 'right' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'right' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
@@ -318,7 +271,6 @@
 
       appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
       changeArticlesWithImages();
-      console.log("articles with images: " + articlesWithImages);
 
       </script>
 
@@ -329,7 +281,7 @@
 
 {% endif %}
 
-<!-- displaying democratic / neutral articles if filters allow it -->
+<!-- displaying left-leaning / neutral articles -->
 
 {% if leftFilterActive == 'True' %}
 
@@ -351,8 +303,6 @@
 
       {% else %}
 
-      <script>console.log("article with no image!")</script>
-
       <!-- add card to the More in US Headlines card-->
       <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
@@ -362,7 +312,6 @@
 
       appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
       changeArticlesWithImages();
-      console.log("articles with images: " + articlesWithImages);
 
       </script>
 
@@ -384,25 +333,14 @@ var element = document.getElementById("mainRow");
 element.innerHTML += "<br>";
 element.innerHTML += otherArticlesCard;
 
-console.log("before deleting card, articles with images: " + getArticlesWithImages())
-
+/* if all articles have images */
 if (getArticlesWithImages() == "all") {
+  /* remove card created to store articles with no images */
   document.getElementById('noImageCard').remove();
 }
 
-/* refresh database and check if this is necessary in app.py */
+/* refresh database (app.py checks if this is necessary) */
 databaseRefresh()
-
-/* source: https://tecadmin.net/get-current-date-time-javascript/
-
-var today = new Date();
-var minute = today.getMinutes();
-
-if(minute == "58") {
-  databaseRefresh()
-} else {
-  console.log("we haven't reached a new hour yet!")
-}*/
 
 </script>
 

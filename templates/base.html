@@ -10,24 +10,16 @@
         <link rel="icon" href="static/logo3.png">
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <link rel="stylesheet" href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <!--<script type="text/javascript" src="static/functions.js"></script>-->
     </head>
 
-
-
-    {% block body %}
-
-
-    {% endblock %}
-
+    {% block body %} {% endblock %}
 
     {% block footer %}
 
-    <!--Footer Starts Here-->
+    <!--regular footer starts here-->
 
     <div class="regularFooter">
     <footer id="footer" class="pt-4 pt-md-5 border-top">
-      <!--<div class="container-fluid">-->
        <div class="row">
          <div class="col-md-3">
            <img id="footerLogo" class="mb-2" src="static/logo3.png" alt="" width="50" height="50">
@@ -36,7 +28,6 @@
          <div class="col-md-3">
            <h5 class="footerTitle">Learn More</h5>
            <ul class="list-unstyled text-small">
-             <!--<li><a class="footerSubtitle" href="/about">About Us</a></li>-->
              <li><a class="footerSubtitle" href="/instructions">How to Use Our Site</a></li>
              <li><a class="footerSubtitle" href="/classify">Classify Your Own Articles!</a></li>
              <li><a class="footerSubtitle" href="/contact">Get in Touch</a></li>
@@ -70,18 +61,12 @@
    <div class="smallFooter">
 
      <footer id="footerSmall" class="pt-4 pt-md-5 border-top">
-       <!--<div class="container-fluid">-->
-
        <div class="text-center">
-
-
          <form id="searchFormMobile" class="form-inline justify-content-center" method="POST" action="/" >
            <input id="searchInput2" class="form-control" type="text" placeholder="type in your search and press enter!" aria-label="Search" name="searchText">
            <ul class="list-unstyled text-small">
-           <!--<input id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search" />-->
             </ul>
          </form>
-
 
           <h5 class="footerTitle">News</h5>
           <ul class="list-unstyled text-small">
@@ -95,7 +80,6 @@
 
           <h5 class="footerTitle">Learn More</h5>
           <ul class="list-unstyled text-small">
-            <!--<li><a class="footerSubtitle" href="/about">About Us</a></li>-->
             <li><a class="footerSubtitle" href="/instructions">How to Use Our Site</a></li>
             <li><a class="footerSubtitle" href="/classify">Classify Your Own Articles!</a></li>
             <li><a class="footerSubtitle" href="/contact">Get in Touch</a></li>
@@ -107,9 +91,6 @@
         </footer>
       </div>
 
-
-
     {% endblock %}
-
 
 </html>

@@ -39,7 +39,6 @@ def getArticles(url, category):
     except requests.exceptions.ConnectionError:
         requests.status_code = "Connection refused";
         dataSet = "error: unable to fetch dataset";
-        print(dataSet)
 
     return dataSet;
 
@@ -71,12 +70,12 @@ def sortArticle(articleURL):
     #pass article into machine learning model
     articleResult = get_sentiment(articleURL)
 
-    #get party and confidence score
+    #get political assignment and confidence score
     demOrRep = articleResult[0];
     print("dem or rep: " + demOrRep)
 
     confidenceScore = articleResult[1];
-    print("confidenceScore: " + str(confidenceScore))
+    print("confidence score: " + str(confidenceScore))
 
     onSpectrum = getSpectrumString(demOrRep, confidenceScore);
 
@@ -98,16 +97,16 @@ def getSpectrumString(demOrRep, confidenceScore):
         elif confidenceScore == 0:
             rating = "neutral";
 
-        else:
-            print("error: confidence score out of range");
-
-        if demOrRep == "right":
+        if demOrRep == "right" and confidenceScore == 0:
+            return rating;
+        elif demOrRep == "left" and confidenceScore == 0:
+            return rating;
+        elif demOrRep == "right":
             return rating + "Right";
-
         elif demOrRep == "left":
             return rating + "Left";
 
-    return "no spectrum string found"
+    return "neutral";
 
 def assignCheckedBooleans(containsRight, containsLeft, containsNeutral):
 
@@ -117,9 +116,7 @@ def assignCheckedBooleans(containsRight, containsLeft, containsNeutral):
     assignString(checkedBooleans, containsLeft, 1)
     assignString(checkedBooleans, containsNeutral, 2)
 
-    print("checked booleans array" + str(checkedBooleans));
     return checkedBooleans;
-
 
 def assignString(boxesCheckedArray, containsBoolean, index):
 
@@ -129,7 +126,6 @@ def assignString(boxesCheckedArray, containsBoolean, index):
 def get_sentiment(url):
 
     try:
-        #include laptops other than your own's user agents?
         user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
         config = Config()
         config.browser_user_agent = user_agent
@@ -139,9 +135,7 @@ def get_sentiment(url):
         article.parse()
         article_text = article.text
         sentiment = m.sentiment(article_text)
-        print(str(sentiment))
         if len(sentiment) == 0:
-            print("sentiment list is empty")
             sentiment = ['n/a', 'n/a']
         return sentiment
 
@@ -152,15 +146,13 @@ def get_sentiment(url):
 
 def getCategories(categories):
 
-    print('******************')
-    print(categories)
-
-    #if form hasn't been filled out yet
+    #if filter form hasn't been filled out yet
     if len(categories) == 0:
         containsRight = "True";
         containsLeft = "True";
         containsNeutral = "True";
-    #if form has been filled out by user
+
+    #if filter form has been filled out by user
     else:
         #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
         containsRight = "Right" in categories;
@@ -174,17 +166,11 @@ def getCategoryArticles(category):
 
     currentLetter = getCurrentLetter();
     print("current letter: " + currentLetter);
-
     cursor = mysql.connection.cursor()
-
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-
     queryVars = (category,);
-
     cursor.execute(query, queryVars);
-
     mysql.connection.commit();
-
     categoryArticles = cursor.fetchall();
 
     return categoryArticles;
@@ -241,8 +227,8 @@ def refreshDatabase():
                 cursor = mysql.connection.cursor()
                 query = 'DELETE FROM katherinesullivan_articles' + currentLetter + ' ORDER BY title LIMIT 1';
                 cursor.execute(query)
-                print("article deleted")
                 mysql.connection.commit()
+                print("article deleted")
 
         tempArray = [];
 
@@ -403,6 +389,8 @@ def getCurrentTable(letter):
 
     return "invalid letter input"
 
+## @app.route functions start here ##
+
 @app.route('/', methods=["GET", "POST"])
 
 #function that renders index.html
@@ -412,19 +400,12 @@ def index(methods=["GET", "POST"]):
     print("current letter: " + currentLetter);
 
     category = "topHeadlines";
-
     cursor = mysql.connection.cursor();
-
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-
     queryVars = (category,);
-
     cursor.execute(query, queryVars);
-
     mysql.connection.commit();
-
     topHeadlinesData = cursor.fetchall();
-
     topHeadlineArticles = topHeadlinesData;
 
     #get list of checked categories in filter menu
@@ -439,7 +420,6 @@ def index(methods=["GET", "POST"]):
 
     if searchBoxInput is not None:
 
-        print("searchInputBox '" + searchBoxInput + "'")
         clearMainRow = 'True';
 
         #source: https://www.tutorialspoint.com/How-to-convert-a-string-to-a-list-of-words-in-python
@@ -448,7 +428,6 @@ def index(methods=["GET", "POST"]):
         counter = 0;
         for i in searchBoxInputWords:
             counter += 1;
-            print("#" + str(counter) + " word in search query: " + i)
 
         if searchBoxInput == '':
             printEmptySearch = 'True';
@@ -457,13 +436,9 @@ def index(methods=["GET", "POST"]):
         searchResults = [];
 
         cursor = mysql.connection.cursor()
-
         query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
-
         cursor.execute(query);
-
         mysql.connection.commit();
-
         articlesData = cursor.fetchall();
 
         # for every article
@@ -507,21 +482,13 @@ def entertainment(methods=["GET"]):
     print("current letter: " + currentLetter);
 
     category = "entertainmentArticles";
-
     cursor = mysql.connection.cursor();
-
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-
     queryVars = (category,);
-
     cursor.execute(query, queryVars);
-
     mysql.connection.commit();
-
     entertainmentData = cursor.fetchall();
-
     entertainmentArticles = entertainmentData;
-
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -539,21 +506,13 @@ def sports(methods=["GET"]):
     print("current letter: " + currentLetter);
 
     category = "sportsArticles";
-
     cursor = mysql.connection.cursor();
-
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-
     queryVars = (category,);
-
     cursor.execute(query, queryVars);
-
     mysql.connection.commit();
-
     sportsData = cursor.fetchall();
-
     sportsArticles = sportsData;
-
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -571,23 +530,14 @@ def science(methods=["GET"]):
     print("current letter: " + currentLetter);
 
     category = "scienceArticles";
-
     cursor = mysql.connection.cursor();
-
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-
     queryVars = (category,);
-
     cursor.execute(query, queryVars);
-
     mysql.connection.commit();
-
     scienceData = cursor.fetchall();
-
     scienceArticles = scienceData;
-
     categories = request.form.getlist('party')
-
     filters = getCategories(categories);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
@@ -604,21 +554,13 @@ def business(methods=["GET"]):
     print("current letter: " + currentLetter);
 
     category = "businessArticles";
-
     cursor = mysql.connection.cursor();
-
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-
     queryVars = (category,);
-
     cursor.execute(query, queryVars);
-
     mysql.connection.commit();
-
     businessData = cursor.fetchall();
-
     businessArticles = businessData;
-
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -636,21 +578,13 @@ def health(methods=["GET"]):
     print("current letter: " + currentLetter);
 
     category = "healthArticles";
-
     cursor = mysql.connection.cursor();
-
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-
     queryVars = (category,);
-
     cursor.execute(query, queryVars);
-
     mysql.connection.commit();
-
     healthData = cursor.fetchall();
-
     healthArticles = healthData;
-
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -681,7 +615,6 @@ def classify(methods=["GET", "POST"]):
             politicalAssignment = articleResults[0];
 
     return render_template('classify.html', inputValid=inputValid, spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
-
 
 @app.route('/instructions', methods=["GET", "POST"])
 
@@ -715,7 +648,6 @@ def get_text(url):
 
     if article_text == '':
         print("Could not locate article body")
-        #raise Exception("Could not locate article body")
     else:
         print("Got the article body!")
 

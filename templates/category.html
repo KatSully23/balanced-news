@@ -14,15 +14,11 @@
 
 <!--body of web page-->
 {% block body %}
-<!-- nav bar when screen is phone-sized -->
 
+<!-- nav bar when screen is phone-sized -->
 <div class="smallNav">
 
 <nav class="navbar navbar-expand-md mb-4">
-
-<!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-</button>-->
 
 <div id="dropdownLeft" class="dropdown">
 <div class="float-left">
@@ -98,32 +94,29 @@
       <a id="healthNav" class="nav-link" href="/health">Health</a>
     </li>
 
-           <!--<li class="nav-item">
-             <a id="worldNav" class="nav-link" href="/mldemo">Machine Learning Demo</a>
-           </li>-->
+  </ul>
 
-         </ul>
+ <div class="dropdown" style="float:right;">
+ <div class="float-right">
+   <button class="dropbtn">
+     <img class="filterIcon" src="static/filterIcon.png" width="65" height="60" alt="logo">
+   </button>
+ </div>
+   <div class="dropdown-content">
+     <form class="filterCheckboxes" method="post">
+     <p>Filter by:</p>
+     <p>Right-leaning <input type="checkbox" class="right-leaning" name="party" value="Right"></p>
+     <p>Left-leaning <input type="checkbox" class="left-leaning" name="party" value="Left"></p>
+     <p>Neutral <input type="checkbox" class="neutral" name="party" value="Neutral"></p>
+     <p><input type="submit" value="Submit"></p>
+     </form>
+   </div>
+</div>
 
-         <div class="dropdown" style="float:right;">
-         <div class="float-right">
-           <button class="dropbtn">
-             <img class="filterIcon" src="static/filterIcon.png" width="65" height="60" alt="logo">
-           </button>
-         </div>
-           <div class="dropdown-content">
-             <form class="filterCheckboxes" method="post">
-             <p>Filter by:</p>
-             <p>Right-leaning <input type="checkbox" class="right-leaning" name="party" value="Right"></p>
-             <p>Left-leaning <input type="checkbox" class="left-leaning" name="party" value="Left"></p>
-             <p>Neutral <input type="checkbox" class="neutral" name="party" value="Neutral"></p>
-             <p><input type="submit" value="Submit"></p>
-             </form>
-           </div>
-       </div>
+ </div>
+</nav>
+</div>
 
-         </div>
-       </nav>
-     </div>
 <!--container to store articles-->
 <div class="container-fluid">
 
@@ -154,6 +147,7 @@
         window.history.replaceState( null, null, window.location.href );
     }
 </script>
+
 <script type="text/javascript">
 
   var element = document.getElementsByClassName("row");
@@ -167,15 +161,9 @@
 <!--check if user wants to filter by each category-->
 {% set rightFilterActive = arrayBools[0] %}
 
-<!--<script>console.log("Right filter active: " + "{{rightFilterActive}}")</script>-->
-
 {% set leftFilterActive = arrayBools[1] %}
 
-<!--<script>console.log("Left filter active: " + "{{leftFilterActive}}")</script>-->
-
 {% set neutralFilterActive = arrayBools[2] %}
-
-<!--<script>console.log("Neutral filter active: " + "{{neutralFilterActive}}")</script>-->
 
 <!--getting properties of article-->
 {% set articleName = article['title'] %}
@@ -185,14 +173,8 @@
 {% set articleOnSpectrum = article['onSpectrum'] %}
 {% if articlePoliticalAssignment != 'n/a' %}
 
-<!-- displaying republican / neutral articles if filters allow it -->
+<!-- displaying right-leaning / neutral articles -->
 {% if rightFilterActive == 'True' %}
-
-<!--<script>console.log("Right filter is active");</script>
-
-<script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
-
-<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>-->
 
   {% if (articlePoliticalAssignment == 'right' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'right' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 
@@ -232,15 +214,9 @@
 
 {% endif %}
 
-<!-- displaying democratic / neutral articles if filters allow it -->
+<!-- displaying left-leaning / neutral articles -->
 
 {% if leftFilterActive == 'True' %}
-
-<!--<script>console.log("Left filter is active");</script>
-
-<script>console.log("political assignment: {{articlePoliticalAssignment}}");</script>
-
-<script>console.log("on spectrum: {{articleOnSpectrum}}");</script>-->
 
   {% if (articlePoliticalAssignment == 'left' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'left' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
 

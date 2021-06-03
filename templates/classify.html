@@ -17,10 +17,6 @@
 
 <nav class="navbar navbar-expand-md mb-4">
 
-<!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-</button>-->
-
 <div id="dropdownLeft" class="dropdown">
 <div class="float-left">
   <button class="dropbtn">
@@ -132,10 +128,8 @@
   <form id="articleLink" method="POST">
 
   <div class="flex">
-    <!--<div class="form-label-group">-->
       <input type="text" id="inputEmail" class="form-control" placeholder="enter an article url" name="url" required autofocus>
       <br><input id="submitButton" type="submit" style="margin-left:10px" value="Submit">
-    <!--</div>-->
   </div>
 
   </form>
@@ -146,10 +140,6 @@
     {% if inputValid == 'yes' %}
     <p id="pasteArticle" class="instructionsText"> Your article is {{politicalAssignment}}-leaning! </p>
     <img id="classifierResultsImage" alt="spectrum" src="static/spectrumIcons/{{spectrumImagePath}}.png" />
-    <script>
-    console.log("spectrum path" + {{spectrumImagePath}})
-    console.log("spectrum path" + {{politicalAssignment}})
-    </script>
 
     {% else %}
 
