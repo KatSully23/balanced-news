@@ -291,7 +291,7 @@ def switchLetter(currentLetter):
 
 @app.route('/articleRefresh', methods=['POST'])
 
-def databaseRefresh():
+def articleRefresh():
 
     refreshDatabase()
     return "Done";
@@ -399,14 +399,7 @@ def index(methods=["GET", "POST"]):
     currentLetter = getCurrentLetter();
     print("current letter: " + currentLetter);
 
-    category = "topHeadlines";
-    cursor = mysql.connection.cursor();
-    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-    queryVars = (category,);
-    cursor.execute(query, queryVars);
-    mysql.connection.commit();
-    topHeadlinesData = cursor.fetchall();
-    topHeadlineArticles = topHeadlinesData;
+    topHeadlineArticles = getCategoryArticles("topHeadlines")
 
     #get list of checked categories in filter menu
     #source: https://www.reddit.com/r/flask/comments/bz376w/how_do_i_get_checked_checkboxes_into_flask/
@@ -441,10 +434,8 @@ def index(methods=["GET", "POST"]):
         mysql.connection.commit();
         articlesData = cursor.fetchall();
 
-        # for every article
         for article in articlesData:
 
-            # for every word in search query
             for word in searchBoxInputWords:
 
                 # get the article title (lowercase)
@@ -458,15 +449,13 @@ def index(methods=["GET", "POST"]):
 
                     # if search results already exist
                     if len(searchResults) != 0:
-                        # loop through all search results
                         for result in searchResults:
                             # make sure that title of current article does
-                            # not match title in search result
+                            # not match any titles currently in searchResults
                             if result['title'] == article['title']:
                                 notDuplicate = False;
 
                     if notDuplicate:
-                        # append the article to search results
                         searchResults.append(article);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
@@ -481,21 +470,13 @@ def entertainment(methods=["GET"]):
     currentLetter = getCurrentLetter();
     print("current letter: " + currentLetter);
 
-    category = "entertainmentArticles";
-    cursor = mysql.connection.cursor();
-    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-    queryVars = (category,);
-    cursor.execute(query, queryVars);
-    mysql.connection.commit();
-    entertainmentData = cursor.fetchall();
-    entertainmentArticles = entertainmentData;
+    entertainmentArticles = getCategoryArticles("entertainmentArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
     return render_template('category.html', pageTitle = "ENTERTAINMENT", articles=entertainmentArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
-
 
 @app.route('/sports', methods=["GET", "POST"])
 
@@ -505,14 +486,7 @@ def sports(methods=["GET"]):
     currentLetter = getCurrentLetter();
     print("current letter: " + currentLetter);
 
-    category = "sportsArticles";
-    cursor = mysql.connection.cursor();
-    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-    queryVars = (category,);
-    cursor.execute(query, queryVars);
-    mysql.connection.commit();
-    sportsData = cursor.fetchall();
-    sportsArticles = sportsData;
+    sportsArticles = getCategoryArticles("sportsArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -529,14 +503,7 @@ def science(methods=["GET"]):
     currentLetter = getCurrentLetter();
     print("current letter: " + currentLetter);
 
-    category = "scienceArticles";
-    cursor = mysql.connection.cursor();
-    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-    queryVars = (category,);
-    cursor.execute(query, queryVars);
-    mysql.connection.commit();
-    scienceData = cursor.fetchall();
-    scienceArticles = scienceData;
+    scienceArticles = getCategoryArticles("scienceArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -553,14 +520,7 @@ def business(methods=["GET"]):
     currentLetter = getCurrentLetter();
     print("current letter: " + currentLetter);
 
-    category = "businessArticles";
-    cursor = mysql.connection.cursor();
-    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-    queryVars = (category,);
-    cursor.execute(query, queryVars);
-    mysql.connection.commit();
-    businessData = cursor.fetchall();
-    businessArticles = businessData;
+    businessArticles = getCategoryArticles("businessArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
@@ -577,14 +537,7 @@ def health(methods=["GET"]):
     currentLetter = getCurrentLetter();
     print("current letter: " + currentLetter);
 
-    category = "healthArticles";
-    cursor = mysql.connection.cursor();
-    query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
-    queryVars = (category,);
-    cursor.execute(query, queryVars);
-    mysql.connection.commit();
-    healthData = cursor.fetchall();
-    healthArticles = healthData;
+    healthArticles = getCategoryArticles("healthArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
 
