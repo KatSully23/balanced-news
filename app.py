@@ -232,7 +232,7 @@ def refreshDatabase():
 
         tempArray = [];
 
-        # #store an array of top headline articles and their assigned properties
+        # store an array of top headline articles and their assigned properties
         tempArray.extend(getArticles("http://newsapi.org/v2/top-headlines?country=us&apiKey=f4767a5c003944e5bbe9b97170bb65c0", "topHeadlines"))
 
         # store an array of entertainment articles and their assigned properties
@@ -396,9 +396,6 @@ def getCurrentTable(letter):
 #function that renders index.html
 def index(methods=["GET", "POST"]):
 
-    currentLetter = getCurrentLetter();
-    print("current letter: " + currentLetter);
-
     topHeadlineArticles = getCategoryArticles("topHeadlines")
 
     #get list of checked categories in filter menu
@@ -414,7 +411,6 @@ def index(methods=["GET", "POST"]):
     if searchBoxInput is not None:
 
         clearMainRow = 'True';
-
         #source: https://www.tutorialspoint.com/How-to-convert-a-string-to-a-list-of-words-in-python
         searchBoxInputWords = searchBoxInput.split();
 
@@ -427,7 +423,6 @@ def index(methods=["GET", "POST"]):
 
         # empty out array with search results
         searchResults = [];
-
         cursor = mysql.connection.cursor()
         query = 'SELECT * FROM katherinesullivan_articles' + currentLetter;
         cursor.execute(query);
@@ -467,9 +462,6 @@ def index(methods=["GET", "POST"]):
 #function that renders entertainment.html
 def entertainment(methods=["GET"]):
 
-    currentLetter = getCurrentLetter();
-    print("current letter: " + currentLetter);
-
     entertainmentArticles = getCategoryArticles("entertainmentArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
@@ -482,9 +474,6 @@ def entertainment(methods=["GET"]):
 
 #function that renders sports.html
 def sports(methods=["GET"]):
-
-    currentLetter = getCurrentLetter();
-    print("current letter: " + currentLetter);
 
     sportsArticles = getCategoryArticles("sportsArticles")
     categories = request.form.getlist('party')
@@ -500,9 +489,6 @@ def sports(methods=["GET"]):
 #function that renders science.html
 def science(methods=["GET"]):
 
-    currentLetter = getCurrentLetter();
-    print("current letter: " + currentLetter);
-
     scienceArticles = getCategoryArticles("scienceArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
@@ -517,9 +503,6 @@ def science(methods=["GET"]):
 #function that renders business.html
 def business(methods=["GET"]):
 
-    currentLetter = getCurrentLetter();
-    print("current letter: " + currentLetter);
-
     businessArticles = getCategoryArticles("businessArticles")
     categories = request.form.getlist('party')
     filters = getCategories(categories);
@@ -533,9 +516,6 @@ def business(methods=["GET"]):
 
 #function that renders health.html
 def health(methods=["GET"]):
-
-    currentLetter = getCurrentLetter();
-    print("current letter: " + currentLetter);
 
     healthArticles = getCategoryArticles("healthArticles")
     categories = request.form.getlist('party')
