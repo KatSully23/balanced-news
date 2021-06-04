@@ -31,14 +31,13 @@
 </section>
 
 </div>
-
 <!--end of container storing articles-->
 
-<!--clear div with class row on page load-->
+<!--linking html file to javascript file-->
 <script type="text/javascript"
         src="{{ url_for('static', filename='functions.js') }}"></script>
 
-<!--clear form input upon refresh of page-->
+<!--clear filter form input upon refresh of page-->
 <!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
 <script type="text/javascript">
     if ( window.history.replaceState ) {
@@ -46,6 +45,7 @@
     }
 </script>
 
+<!--clear div with class row on page load-->
 <script type="text/javascript">
 
   var element = document.getElementsByClassName("row");
@@ -101,7 +101,6 @@
 
       appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
       changeArticlesWithImages();
-      console.log("articles with images: " + articlesWithImages);
 
       </script>
 
@@ -134,8 +133,6 @@
 
       {% else %}
 
-      <script>console.log("article with no image!")</script>
-
       <!-- add card to the More in US Headlines card-->
       <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
       <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
@@ -145,7 +142,6 @@
 
       appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
       changeArticlesWithImages();
-      console.log("articles with images: " + articlesWithImages);
 
       </script>
 
@@ -167,9 +163,9 @@ var element = document.getElementById("mainRow");
 element.innerHTML += "<br>";
 element.innerHTML += otherArticlesCard;
 
-console.log("before deleting card, articles with images: " + getArticlesWithImages())
-
+/* if all articles have images */
 if (getArticlesWithImages() == "all") {
+  /* remove card created to store articles with no images */
   document.getElementById('noImageCard').remove();
 }
 

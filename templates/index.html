@@ -24,11 +24,11 @@
 
 </div>
 
-<!--clear div with class row on page load-->
+<!--linking html file to javascript file-->
 <script type="text/javascript"
         src="{{ url_for('static', filename='functions.js') }}"></script>
 
-<!--clear form input upon refresh of page-->
+<!--clear filter form input upon refresh of page-->
 <!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
 
 <script type="text/javascript">
@@ -37,6 +37,7 @@
     }
 </script>
 
+<!--clear div with class row on page load-->
 <script type="text/javascript">
 
   var element = document.getElementsByClassName("row");
@@ -47,6 +48,7 @@
 <!-- if there is an active search query -->
 {% if clearMainRow == 'True' %}
 
+  <!-- if user inputted blank string as search query -->
   {% if printEmptySearch == 'True' %}
 
     <script> clearBox('mainRow', true) </script>
@@ -116,7 +118,6 @@
   {% endif %}
 
 <!-- if no search query is active -->
-
 {% else %}
 
 <!--loop through articles; choose whether to display them & how to display them-->
@@ -138,7 +139,7 @@
 
 {% if articlePoliticalAssignment != 'n/a' %}
 
-<!-- displaying right-leaning / neutral articles  -->
+<!-- displaying right-leaning / neutral articles -->
 {% if rightFilterActive == 'True' %}
 
   {% if (articlePoliticalAssignment == 'right' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'right' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
@@ -237,7 +238,7 @@ if (getArticlesWithImages() == "all") {
 }
 
 /* refresh database (app.py checks if this is necessary) */
-databaseRefresh()
+databaseRefresh();
 
 </script>
 
