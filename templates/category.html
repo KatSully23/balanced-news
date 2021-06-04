@@ -58,9 +58,7 @@
 
 <!--check if user wants to filter by each category-->
 {% set rightFilterActive = arrayBools[0] %}
-
 {% set leftFilterActive = arrayBools[1] %}
-
 {% set neutralFilterActive = arrayBools[2] %}
 
 <!--getting properties of article-->
@@ -69,96 +67,59 @@
 {% set imgURL = article['imageURL'] %}
 {% set articlePoliticalAssignment = article['leaning'] %}
 {% set articleOnSpectrum = article['onSpectrum'] %}
+
 {% if articlePoliticalAssignment != 'n/a' %}
 
-<!-- displaying right-leaning / neutral articles -->
-{% if rightFilterActive == 'True' %}
+    {% set articleIsLeft = (articlePoliticalAssignment == 'left') and (articleOnSpectrum != 'neutral') %}
+    {% set articleIsRight = (articlePoliticalAssignment == 'left') and (articleOnSpectrum != 'neutral') %}
+    {% set articleIsNeutral = (articleOnSpectrum == 'neutral') %}
 
-  {% if (articlePoliticalAssignment == 'right' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'right' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
+    {% set showLeftArticle = articleIsLeft and leftFilterActive == 'True' %}
+    {% set showRightArticle = articleIsRight and rightFilterActive == 'True' %}
+    {% set showNeutralArticle = articleIsNeutral and neutralFilterActive == 'True' %}
 
-      <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
-      {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
+    <!-- displaying right-leaning / neutral articles -->
+    {% if showLeftArticle or showRightArticle or showNeutralArticle %}
 
-      {% if imgURL is not none and imgURL != "blank" %}
+        <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
+        {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
 
-      <script type="text/javascript">
+        {% if imgURL is not none and imgURL != "blank" %}
 
-      var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
-      var element = document.getElementById("mainRow");
-      element.innerHTML += "<br>";
-      element.innerHTML += card;
+        <script type="text/javascript">
 
-      </script>
+        var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
+        var element = document.getElementById("mainRow");
+        element.innerHTML += "<br>";
+        element.innerHTML += card;
 
-      {% else %}
+        </script>
 
-      <!-- add card to the More in US Headlines card-->
-      <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
-      <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
+        {% else %}
 
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-      <script type="text/javascript">
+        <!-- add card to the More in US Headlines card-->
+        <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
+        <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
 
-      appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
-      changeArticlesWithImages();
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript">
 
-      </script>
+        appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
+        changeArticlesWithImages();
 
+        </script>
 
-      {% endif %}
+        {% endif %}
 
     {% endif %}
 
 {% endif %}
 
-<!-- displaying left-leaning / neutral articles -->
-
-{% if leftFilterActive == 'True' %}
-
-  {% if (articlePoliticalAssignment == 'left' and articleOnSpectrum != "neutral") or (articlePoliticalAssignment == 'left' and neutralFilter == "True" and articleOnSpectrum == "neutral") %}
-
-      <!--source: https://stackoverflow.com/questions/2061439/string-concatenation-in-jinja-->
-      {% set spectrumImagePath = 'static/spectrumIcons/' ~ articleOnSpectrum ~ '.png' %}
-
-      {% if imgURL is not none and imgURL != "blank" %}
-
-      <script type="text/javascript">
-
-      var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
-      var element = document.getElementById("mainRow");
-      element.innerHTML += "<br>";
-      element.innerHTML += card;
-
-      </script>
-
-      {% else %}
-
-      <!-- add card to the More in US Headlines card-->
-      <!--source: https://stackoverflow.com/questions/44830188/uncaught-typeerror-cannot-read-property-append-of-null-in-jquery-->
-      <!--source: https://www.tutorialrepublic.com/faq/how-to-add-li-in-an-existing-ul-using-jquery.php-->
-
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-      <script type="text/javascript">
-
-      appendNoImageArticle("{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
-      changeArticlesWithImages();
-
-      </script>
-
-      {% endif %}
-
-    {% endif %}
-
-  {% endif %}
-
-  <!--end of if statement checking if article has been classified-->
-  {% endif %}
-
 {% endfor %}
 
 <script>
 
-otherArticlesCard = createNoImageCard("More from Entertainment")
+otherArticlesCard = createNoImageCard("More from US Headlines")
 var element = document.getElementById("mainRow");
 element.innerHTML += "<br>";
 element.innerHTML += otherArticlesCard;

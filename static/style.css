@@ -50,15 +50,10 @@ table, th, td {
   font-weight: 700px;
 }
 
-/*.instructionsText {
+.instructionsText {
   font-family: 'Raleway', sans-serif;
   font-weight: 500px;
-}*/
-
-/*.card {
-  border-color: white;
-  margin-right: 20px;
-}*/
+}
 
 .card-title {
   margin-left: 0px;
@@ -66,11 +61,6 @@ table, th, td {
   padding-left: 0px;
   padding-right: 0px;
 }
-
-/*column {
-  float: left;
-  width: 33.33%;
-}*/
 
 .row:after {
   content: "";
@@ -97,25 +87,6 @@ table, th, td {
 .footerTitle {
   color: white;
 }
-
-/*.navbar-fixed-bottom {
-  height: 200px;
-}*/
-
-/*.articleImage {
-  width: 395px;
-  height: 230px;
-}*/
-
-/*.titles {
-  padding-left: 10px;
-  padding-bottom: 10px;
-}*/
-
-/*.cardSpectrum {
-  width: 70%;
-  text-align: center;
-}*/
 
 /* new tool tip code */
 
@@ -226,21 +197,6 @@ table, th, td {
 .filterIcon {
   margin-right: 0px;
 }
-
-/*#trendingTitle {
-  padding-left: 10px;
-  padding-bottom: 10px;
-  font-family: 'Asap', sans-serif;
-  font-style: italic;
-  font-weight: bold;
-  font-size: 50px;
-  color: #ff1414;
-  -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-  transform: scale(1) rotate(0deg) translate(0px, 0px) skew(7deg, 0deg);
-}*/
 
 .subpageTitle {
   position: relative;
