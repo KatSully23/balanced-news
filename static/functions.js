@@ -19,7 +19,7 @@ function resetArticlesOnDisplay() {
 }
 
 function incrementArticlesOnDisplay() {
-  articlesOnDisplay = articlesOnDisplay + 1;
+  articlesOnDisplay += 1;
 }
 
 function getArticlesOnDisplay() {
