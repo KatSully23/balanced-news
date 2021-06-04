@@ -1,5 +1,6 @@
 
 var articlesWithImages = "all";
+var articlesOnDisplay = 0;
 
 function changeBackArticlesWithImages() {
   articlesWithImages = "all";
@@ -11,6 +12,18 @@ function changeArticlesWithImages() {
 
 function getArticlesWithImages() {
   return articlesWithImages;
+}
+
+function resetArticlesOnDisplay() {
+  articlesOnDisplay = 0;
+}
+
+function incrementArticlesOnDisplay() {
+  articlesOnDisplay = articlesOnDisplay + 1;
+}
+
+function getArticlesOnDisplay() {
+  return articlesOnDisplay;
 }
 
 /* creates code for specific card and store it in array using javascript function */
@@ -93,7 +106,7 @@ function appendNoImageArticle(articleURL, articleName, spectrumImage) {
 }
 
 /* source: https://stackoverflow.com/questions/3450593/how-do-i-clear-the-content-of-a-div-using-javascript */
-function clearBox(elementID, printEmptySearch)
+function clearBox(elementID, printEmptySearch, printNoResults)
 {
     document.getElementById(elementID).innerHTML = " ";
 
@@ -109,6 +122,34 @@ function clearBox(elementID, printEmptySearch)
       document.getElementById(elementID).innerHTML = emptyStringHTML;
 
     }
+
+    if (printNoResults) {
+
+      emptyStringHTML = "<br>" +
+                        "<div class='container-fluid'>" +
+                          "<p class='instructionsText'> Looks like there are no results for your search! Please search for something else or refresh the page :) </p>" +
+                        "</div>" +
+                        "<br>" +
+                        "<br>"
+
+      document.getElementById(elementID).innerHTML = emptyStringHTML;
+
+    }
+
+}
+
+function noFilterResults() {
+
+  document.getElementById("mainRow").innerHTML = " ";
+
+  emptyStringHTML = "<br>" +
+                    "<div class='container-fluid'>" +
+                      "<p class='instructionsText'> Looks like there are no articles with the political classification(s) you selected! Please try another filter or refresh the page :)</p>" +
+                    "</div>" +
+                    "<br>" +
+                    "<br>"
+
+  document.getElementById("mainRow").innerHTML = emptyStringHTML;
 
 }
 

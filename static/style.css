@@ -405,6 +405,10 @@ table, th, td {
   border:none;
 }
 
+#smallFooterNewsTitle {
+  padding-top: 20px;
+}
+
 #searchInput:focus {
   /* removing the input focus blue box. Put this on the form if you like. */
   outline: none;

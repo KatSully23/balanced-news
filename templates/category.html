@@ -71,12 +71,12 @@
 {% if articlePoliticalAssignment != 'n/a' %}
 
     {% set articleIsLeft = (articlePoliticalAssignment == 'left') and (articleOnSpectrum != 'neutral') %}
-    {% set articleIsRight = (articlePoliticalAssignment == 'left') and (articleOnSpectrum != 'neutral') %}
+    {% set articleIsRight = (articlePoliticalAssignment == 'right') and (articleOnSpectrum != 'neutral') %}
     {% set articleIsNeutral = (articleOnSpectrum == 'neutral') %}
 
-    {% set showLeftArticle = articleIsLeft and leftFilterActive == 'True' %}
-    {% set showRightArticle = articleIsRight and rightFilterActive == 'True' %}
-    {% set showNeutralArticle = articleIsNeutral and neutralFilterActive == 'True' %}
+    {% set showLeftArticle = articleIsLeft and (leftFilterActive == 'True') %}
+    {% set showRightArticle = articleIsRight and (rightFilterActive == 'True') %}
+    {% set showNeutralArticle = articleIsNeutral and (neutralFilterActive == 'True') %}
 
     <!-- displaying right-leaning / neutral articles -->
     {% if showLeftArticle or showRightArticle or showNeutralArticle %}
@@ -88,6 +88,7 @@
 
         <script type="text/javascript">
 
+        incrementArticlesOnDisplay()
         var card = getCardCode("{{imgURL}}", "{{articleURL}}", "{{articleName}}", "{{spectrumImagePath}}")
         var element = document.getElementById("mainRow");
         element.innerHTML += "<br>";
@@ -119,7 +120,10 @@
 
 <script>
 
-otherArticlesCard = createNoImageCard("More from US Headlines")
+pageTitleLowerCase = "{{pageTitle}}".toLowerCase();
+pageTitle = pageTitleLowerCase.replace(pageTitleLowerCase.charAt(0), pageTitleLowerCase.charAt(0).toUpperCase());
+
+otherArticlesCard = createNoImageCard("More from " + pageTitle)
 var element = document.getElementById("mainRow");
 element.innerHTML += "<br>";
 element.innerHTML += otherArticlesCard;
@@ -128,6 +132,13 @@ element.innerHTML += otherArticlesCard;
 if (getArticlesWithImages() == "all") {
   /* remove card created to store articles with no images */
   document.getElementById('noImageCard').remove();
+}
+
+if (getArticlesOnDisplay() == 0) {
+  noFilterResults();
+  console.log("no articles on display");
+} else {
+  resetArticlesOnDisplay();
 }
 
 </script>

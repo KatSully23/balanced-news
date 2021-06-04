@@ -480,11 +480,13 @@ def index(methods=["GET", "POST"]):
     searchBoxInput = request.form.get('searchText');
     clearMainRow = 'False';
     printEmptySearch = 'False';
+    noSearchResults = 'False';
     searchResults = [];
 
     # if search box has input from the user
     if searchBoxInput is not None:
 
+        currentLetter = getCurrentLetter();
         clearMainRow = 'True';
         #source: https://www.tutorialspoint.com/How-to-convert-a-string-to-a-list-of-words-in-python
         searchBoxInputWords = searchBoxInput.split();
@@ -528,9 +530,12 @@ def index(methods=["GET", "POST"]):
                     if notDuplicate:
                         searchResults.append(article);
 
+        if len(searchResults) == 0:
+            noSearchResults = 'True';
+
     checkedBooleans = assignCheckedBooleans(filters[0], filters[1], filters[2]);
 
-    return render_template('index.html', searchResults=searchResults, printEmptySearch=printEmptySearch, clearMainRow=clearMainRow, articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
+    return render_template('index.html', noSearchResults=noSearchResults, searchResults=searchResults, printEmptySearch=printEmptySearch, clearMainRow=clearMainRow, articles=topHeadlineArticles, rightFilter = checkedBooleans[0], leftFilter = checkedBooleans[1], neutralFilter = checkedBooleans[2], arrayBools = checkedBooleans);
 
 @app.route('/entertainment', methods=["GET", "POST"])
 
