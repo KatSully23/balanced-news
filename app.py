@@ -18,6 +18,7 @@ import re
 import validators
 import threading
 
+# setting up connection to MySQL database
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'mysql.2021.lakeside-cs.org'
 app.config['MYSQL_USER'] = 'student2021'
@@ -26,6 +27,10 @@ app.config['MYSQL_DB'] = '2021project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
+# function that gets all articles under a specific category from NewsApi
+# parameter 'url': url that NewsApi uses to retrieve articles in category
+# parameter 'category': category of articles being retrieved
+# return 'dataSet': list of articles from specific NewsApi category
 def getArticles(url, category):
 
     try:
@@ -42,22 +47,26 @@ def getArticles(url, category):
 
     return dataSet;
 
-def getArticleResults(file, category):
+# function that assigns properties to NewsApi articles from a specific category
+# parameter 'data': array with data from NewsApi for a specific article category
+# parameter 'category': category of articles being assigned with properties
+# return 'article_results': list of articles with full set of assigned properties
+def getArticleResults(data, category):
 
     article_results = [];
 
-    for i in range(len(file)):
+    for i in range(len(data)):
 
         article_dict = {}
-        article_dict['title'] = file[i]['title']
-        article_dict['author'] = file[i]['author']
-        article_dict['source'] = file[i]['source']
-        article_dict['description'] = file[i]['description']
-        article_dict['content'] = file[i]['content']
-        article_dict['pub_date'] = file[i]['publishedAt']
-        article_dict['url'] = file[i]['url']
-        article_dict['photo_url'] = file[i]['urlToImage']
-        sortedByModel = sortArticle(file[i]['url'])
+        article_dict['title'] = data[i]['title']
+        article_dict['author'] = data[i]['author']
+        article_dict['source'] = data[i]['source']
+        article_dict['description'] = data[i]['description']
+        article_dict['content'] = data[i]['content']
+        article_dict['pub_date'] = data[i]['publishedAt']
+        article_dict['url'] = data[i]['url']
+        article_dict['photo_url'] = data[i]['urlToImage']
+        sortedByModel = sortArticle(data[i]['url'])
         article_dict['politicalAssignment'] = sortedByModel[0]
         article_dict['onSpectrum'] = sortedByModel[1]
         article_dict['category'] = category
@@ -65,6 +74,10 @@ def getArticleResults(file, category):
 
     return article_results;
 
+# function that determines an article's political assignment
+# parameter 'articleURL': url to article that is being classified
+# return: array containing a string with the political assignment of an article
+# (left or right) and a string indicating where it falls on the political spectrum
 def sortArticle(articleURL):
 
     #pass article into machine learning model
@@ -81,6 +94,12 @@ def sortArticle(articleURL):
 
     return [demOrRep, onSpectrum]
 
+# function that constructs a string indicating where an article falls on
+# the political spectrum
+# parameter 'demOrRep': an article's political assignment (left or right)
+# parameter 'confidenceScore': integer indicating certitude of
+# machine learning algorithm about political assignment of article
+# return: string indicating where an article falls on the political spectrum
 def getSpectrumString(demOrRep, confidenceScore):
 
     if confidenceScore != "n/a":
@@ -108,6 +127,13 @@ def getSpectrumString(demOrRep, confidenceScore):
 
     return "neutral";
 
+# function that creates an array indicating whether user wants to filter
+# by Right, Left, or Neutral political classifications
+# parameter 'containsRight': boolean indicating whether or not user has checked 'Right' in filter form
+# parameter 'containsLeft': boolean indicating whether or not user has checked 'Left' in filter form
+# parameter 'containsNeutral': boolean indicating whether or not user has checked 'Neutral' in filter form
+# return 'checkedBooleans': array of strings indicating whether or not user wants
+# to filter by right-leaning, left-leaning, or neutral political classifications
 def assignCheckedBooleans(containsRight, containsLeft, containsNeutral):
 
     checkedBooleans = ["True", "True", "True"];
@@ -118,11 +144,44 @@ def assignCheckedBooleans(containsRight, containsLeft, containsNeutral):
 
     return checkedBooleans;
 
+# function that changes values in an array based on boolean passed in
+# parameter 'boxesCheckedArray': array storing boxes checked in website filter form
+# parameter 'containsBoolean': boolean indicating whether or not a
+# box has been checked in website filter form
+# parameter 'index': index of array to be altered
+# returns: none
 def assignString(boxesCheckedArray, containsBoolean, index):
 
     if not containsBoolean:
         boxesCheckedArray[index] = "False";
 
+# function that creates an array that indicates which categories the user
+# has checked off in the website filter form
+# parameter 'categories': array with categories checked off by user
+# return: array of booleans that indicates which categories the user
+# has checked off in the website filter form
+def getCategories(categories):
+
+    #if filter form hasn't been filled out yet
+    if len(categories) == 0:
+        containsRight = "True";
+        containsLeft = "True";
+        containsNeutral = "True";
+
+    #if filter form has been filled out by user
+    else:
+        #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
+        containsRight = "Right" in categories;
+        containsLeft = "Left" in categories;
+        containsNeutral = "Neutral" in categories;
+
+    return [containsRight, containsLeft, containsNeutral]
+
+# function that determines political classification and location of an article
+# on the political spectrum using an imported machine learning algorithm
+# parameter 'url': url of article being classified
+# return: array containing string with political classification of article and
+# string with an integer value representing where article falls on political spectrum
 def get_sentiment(url):
 
     try:
@@ -144,24 +203,9 @@ def get_sentiment(url):
 
     return "error!";
 
-def getCategories(categories):
-
-    #if filter form hasn't been filled out yet
-    if len(categories) == 0:
-        containsRight = "True";
-        containsLeft = "True";
-        containsNeutral = "True";
-
-    #if filter form has been filled out by user
-    else:
-        #source: https://stackoverflow.com/questions/7571635/fastest-way-to-check-if-a-value-exists-in-a-list
-        containsRight = "Right" in categories;
-        containsLeft = "Left" in categories;
-        containsNeutral = "Neutral" in categories;
-
-    return [containsRight, containsLeft, containsNeutral]
-
-# function that gets articles from a specific category fromt the database
+# function that gets articles under a specific NewsApi category from MySQL database
+# parameter 'category': category of articles being retrieved from database
+# return: array with articles from chosen category currently in database
 def getCategoryArticles(category):
 
     currentLetter = getCurrentLetter();
@@ -175,10 +219,13 @@ def getCategoryArticles(category):
 
     return categoryArticles;
 
-# 2D Array with list of articles
+# 2D Array with list of articles from each NewsApi category
 articlesList = [[],[],[],[],[],[]];
 
-# function that refreshes database
+# function that populates project MySQL database tables with fresh
+# NewsApi article data when appropriate conditions are met
+# parameters: none
+# returns: none
 def refreshDatabase():
 
     currentlyRefreshing = getCurrentlyRefreshing();
@@ -271,6 +318,9 @@ def refreshDatabase():
         print("set currently refreshing to no");
         setLastRefresh();
 
+# function that switches MySQL database table that user interface is reading data from
+# parameter 'currentLetter': current letter representing table user interface is reading data from
+# returns: none
 def switchLetter(currentLetter):
 
     newLetter = "";
@@ -287,15 +337,19 @@ def switchLetter(currentLetter):
     cursor.execute(switchCurrentLetter, queryVars)
     mysql.connection.commit();
 
-    return "";
-
 @app.route('/articleRefresh', methods=['POST'])
 
+# function that is called by AJAX javascript function to trigger database refresh
+# parameters: none
+# returns: empty string
 def articleRefresh():
+    refreshDatabase();
+    return "";
 
-    refreshDatabase()
-    return "Done";
-
+# function that reads MySQl database and gets current letter representing
+# which MySQL database table user interface is reading to display articles
+# parameters: none
+# return: string with letter representing which table of data user interface is displaying
 def getCurrentLetter():
 
         cursor = mysql.connection.cursor()
@@ -311,6 +365,11 @@ def getCurrentLetter():
 
         return "B";
 
+# function that reads MySQl database and gets last time at which data tables
+# containing NewsApi data were cleared and repopulated
+# parameters: none
+# return: array containing last month, day, and hour at which data
+# tables containing NewsApi data were cleared and repopulated
 def getLastRefresh():
 
         cursor = mysql.connection.cursor()
@@ -328,6 +387,9 @@ def getLastRefresh():
 
         return ['1', '1', '1']
 
+# function that gets current month, date, and hour
+# parameters: none
+# return: array containing strings representing current month, day, and hour
 def getCurrentDateTime():
     # source: https://www.programiz.com/python-programming/datetime/current-datetime
     now = datetime.now()
@@ -337,7 +399,9 @@ def getCurrentDateTime():
 
     return [month, date, hour];
 
-
+# function that sets last table refresh time as current time in MySQL database
+# parameters: none
+# returns: none
 def setLastRefresh():
 
     now = getCurrentDateTime();
@@ -352,9 +416,11 @@ def setLastRefresh():
     cursor.execute(setLastRefresh, queryVars)
     mysql.connection.commit();
 
-    return "";
-
-
+# function that reads MySQL database to determine if tables with
+# article data are currently being cleared and repopulated to prevent interruptions
+# parameters: none
+# return: string indicating whether or not article data is currently
+# being cleared or repopulated
 def getCurrentlyRefreshing():
 
         cursor = mysql.connection.cursor()
@@ -370,6 +436,10 @@ def getCurrentlyRefreshing():
             else:
                 return "No";
 
+# function that sets value in MySQL database that indicates if tables with article data
+# are currently being cleared and repopulated to prevent interruptions in this process
+# parameters: string value to be put in database
+# returns: none
 def setCurrentlyRefreshing(currentlyRefreshing):
     cursor = mysql.connection.cursor()
     # source: https://stackoverflow.com/questions/21258250/sql-how-to-update-only-first-row
@@ -378,8 +448,12 @@ def setCurrentlyRefreshing(currentlyRefreshing):
     cursor.execute(setCurrentlyRefreshing, queryVars)
     mysql.connection.commit();
 
-    return "";
-
+# function that determines which MySQL table the user interface
+# should read from to display articles
+# parameter 'letter': letter representing which table user interface
+# should read from to display articles
+# return: string with name of table the user interface
+# should read from to display articles
 def getCurrentTable(letter):
 
     if letter == "A":
@@ -408,6 +482,7 @@ def index(methods=["GET", "POST"]):
     printEmptySearch = 'False';
     searchResults = [];
 
+    # if search box has input from the user
     if searchBoxInput is not None:
 
         clearMainRow = 'True';
@@ -537,7 +612,7 @@ def classify(methods=["GET", "POST"]):
 
     if articleURLInput is not None:
 
-        #check whether it is a valid url
+        #check whether or not user input is a valid url
         #source: https://www.codespeedy.com/check-if-a-string-is-a-valid-url-or-not-in-python/#:~:text=To%20check%20whether%20the%20string,%E2%80%A6)%20if%20URL%20is%20invalid.
         validURL = validators.url(articleURLInput)
 
@@ -561,12 +636,18 @@ def instructions(methods=["POST"]):
 def contact(methods=["POST"]):
     return render_template('contact.html')
 
+# function that cleans up formatting in article text content
+# parameter 'article': text content of article being cleaned
+# return: string with cleaned text content of an article
 def clean(article):
 
     cleaned_article = re.sub('[\n\t,]', ' ', article)
     cleaned_article = cleaned_article.replace('Advertisement', ' ')
     return cleaned_article
 
+# function that gets text content of an article
+# parameter 'url': url to article whose text content is being retrieved
+# return: string with text content of article
 def get_text(url):
 
     article_text = ''
