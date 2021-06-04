@@ -2,35 +2,79 @@
 var articlesWithImages = "all";
 var articlesOnDisplay = 0;
 
+/*
+function that resets value of articlesWithImages variable to
+indicate that all articles read from database have images
+parameters: none
+returns: none
+*/
 function changeBackArticlesWithImages() {
   articlesWithImages = "all";
 }
 
+/*
+function that resets value of articlesWithImages variable
+to indicate that not all articles read from database have images
+parameters: none
+returns: none
+*/
 function changeArticlesWithImages() {
   articlesWithImages = "not all";
 }
 
+/*
+function that returns value of articleWithImages variable
+to determine whether or not all articles have images
+parameters: none
+returns: articlesWithImages variable
+*/
 function getArticlesWithImages() {
   return articlesWithImages;
 }
 
+/*
+function that resets value of articlesOnDisplay variable
+to indicate that no articles are currently
+being displayed on the user interface
+parameters: none
+returns: none
+*/
 function resetArticlesOnDisplay() {
   articlesOnDisplay = 0;
 }
 
+/*
+function that increments value of articlesOnDisplay variable
+to indicate that an article has been added
+to the user interface display
+parameters: none
+returns: none
+*/
 function incrementArticlesOnDisplay() {
   articlesOnDisplay += 1;
 }
 
+/*
+function that returns value of articlesOnDisplay variable
+to determine how many articles are currently
+being displayed on the user interface
+parameters: none
+returns: number of articles being displayed on user interface
+*/
 function getArticlesOnDisplay() {
   return articlesOnDisplay;
 }
 
-/* creates code for specific card and store it in array using javascript function */
-/* pass in spectrumImagePath as a parameter  */
+/*
+function that generates html code for a Boostrap card that will display an article
+parameter 'imageURL': url to image associated with article
+parameter 'newsArticleURL': url to article
+parameter 'newsArticleName': name of article
+parameter 'spectrumImagePath': name of image associated with article's
+location on political spectrum
+return: string with html code for article being displayed on user interface
+*/
 function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePath) {
-
-  /*console.log("hello");*/
 
  let cardCode = "<div class='col-lg-3 mb-3'>" +
                     "<div class='card h-100'>" +
@@ -54,16 +98,21 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePat
                     "</div>" +
                   "</div>"
 
-  /* change variable names to something more informative */
-  let cardParameter1 = cardCode.replace("url", imageURL);
-  let cardParameter2 = cardParameter1.replace("linkToArticle", newsArticleURL);
-  let cardParameter3 = cardParameter2.replace("nameOfArticle", newsArticleName);
-  let cardParameter4 = cardParameter3.replace("path", spectrumImagePath);
+  let cardCode1 = cardCode.replace("url", imageURL);
+  let cardCode2 = cardCode1.replace("linkToArticle", newsArticleURL);
+  let cardCode3 = cardCode2.replace("nameOfArticle", newsArticleName);
+  let cardCode4 = cardCode3.replace("path", spectrumImagePath);
 
-  return cardParameter4;
+  return cardCode4;
 
 }
 
+/*
+function that generates html code for a card where articles
+without an associated image are placed
+parameter 'moreFromString': string representing title of 'no image articles' card
+return: string with html code for 'no image articles' card
+*/
 function createNoImageCard(moreFromString) {
 
   /* card with headlines that don't have image s*/
@@ -82,6 +131,15 @@ function createNoImageCard(moreFromString) {
 
 }
 
+/*
+function that generates html code for an article without an associated
+image and adds it to the 'no image articles' card on the user interface
+parameter 'articleURL': url to article
+parameter 'articleName': name of article
+parameter 'spectrumImage': name of image associated with article's
+location on political spectrum
+returns: none
+*/
 function appendNoImageArticle(articleURL, articleName, spectrumImage) {
 
   /* source for 'border-0': https://stackoverflow.com/questions/32322775/how-to-remove-a-list-item-border-in-bootstrap-list-group/32322811 */
@@ -105,7 +163,18 @@ function appendNoImageArticle(articleURL, articleName, spectrumImage) {
 
 }
 
-/* source: https://stackoverflow.com/questions/3450593/how-do-i-clear-the-content-of-a-div-using-javascript */
+/*
+function that clears content of a specified element and replaces it with a string
+that tells the user they have entered an empty search query or that
+there are no results for their search query
+parameter 'elementId': element whose content is being cleared
+parameter 'printEmptySearch': boolean indicating whether or not to print a messsage
+that will alert the user of the fact that they have entered an empty search query
+parameter 'printNoResults': boolean indicating whether or not to print a messsage
+that will alert the user of the fact that their search query has no results
+returns: none
+
+source: https://stackoverflow.com/questions/3450593/how-do-i-clear-the-content-of-a-div-using-javascript */
 function clearBox(elementID, printEmptySearch, printNoResults)
 {
     document.getElementById(elementID).innerHTML = " ";
@@ -138,6 +207,12 @@ function clearBox(elementID, printEmptySearch, printNoResults)
 
 }
 
+/*
+function that clears main site content and replaces it with a string that tells
+the user that there are no articles that fall under the filters they have selected
+parameters: none
+returns: none
+*/
 function noFilterResults() {
 
   document.getElementById("mainRow").innerHTML = " ";
@@ -153,7 +228,11 @@ function noFilterResults() {
 
 }
 
-//function containing AJAX request
+/* function that triggers process of refreshing MySQL database tables
+from which user interface data is read
+parameters: none
+returns: none
+*/
 function databaseRefresh(){
 
   //Sets up the AJAX object
@@ -177,5 +256,3 @@ function databaseRefresh(){
   xhttp.send();
 
 }
-
-//var databaseUpdate = setInterval(databaseRefresh, 600000);
