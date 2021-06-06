@@ -14,6 +14,15 @@
 
 {% block body %}
 
+<!--clear form input upon refresh of page-->
+<!--source: https://stackoverflow.com/questions/6320113/how-to-prevent-form-resubmission-when-page-is-refreshed-f5-ctrlr/45656609#45656609?newreg=05334529cc45440ba4d26fd23c671889-->
+
+<script type="text/javascript">
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+
 <!--Featured Image-->
 
 <div id="instructionsDiv" class="container-fluid"><br><br>
@@ -35,13 +44,26 @@
   {% if spectrumImagePath != 'empty' and politicalAssignment != 'none' %}
 
     {% if inputValid == 'yes' %}
-    <p id="pasteArticle" class="instructionsText"> Your article is {{politicalAssignment}}-leaning! </p>
-    <img id="classifierResultsImage" alt="spectrum" src="static/spectrumIcons/{{spectrumImagePath}}.png" />
 
-    {% else %}
+      {% if spectrumImagePath != 'neutral' %}
 
-    <script>alert("Oops! Your input was invalid. Enter a new URL to try again :)")</script>
+        <p id="pasteArticle" class="instructionsText"> Your article is {{politicalAssignment}}-leaning! </p>
+        <img id="classifierResultsImage" alt="spectrum" src="static/spectrumIcons/{{spectrumImagePath}}.png" />
 
+      {% else %}
+
+        <p id="pasteArticle" class="instructionsText"> Your article is neutral! </p>
+        <img id="classifierResultsImage" alt="spectrum" src="static/spectrumIcons/{{spectrumImagePath}}.png" />
+
+      {% endif %}
+
+    {% endif %}
+
+  {% else %}
+
+    {% if userInputExists == 'yes' %}
+      <script> console.log("{{spectrumImagePath}}") </script>
+      <p id="pasteArticle" class="instructionsText"> Oops! Your input was invalid. Enter a new URL to try again :) </p>
     {% endif %}
 
   {% endif %}

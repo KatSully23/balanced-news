@@ -601,9 +601,12 @@ def classify(methods=["GET", "POST"]):
     articleURLInput = request.form.get('url')
     spectrumImagePath = "empty";
     politicalAssignment = "none";
+    userInputExists = "no";
     inputValid = "no";
 
     if articleURLInput is not None:
+
+        userInputExists = "yes";
 
         #check whether or not user input is a valid url
         #source: https://www.codespeedy.com/check-if-a-string-is-a-valid-url-or-not-in-python/#:~:text=To%20check%20whether%20the%20string,%E2%80%A6)%20if%20URL%20is%20invalid.
@@ -615,7 +618,7 @@ def classify(methods=["GET", "POST"]):
             spectrumImagePath = articleResults[1];
             politicalAssignment = articleResults[0];
 
-    return render_template('classify.html', inputValid=inputValid, spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
+    return render_template('classify.html', userInputExists=userInputExists, inputValid=inputValid, spectrumImagePath=spectrumImagePath, politicalAssignment=politicalAssignment);
 
 @app.route('/instructions', methods=["GET", "POST"])
 
