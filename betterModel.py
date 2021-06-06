@@ -35,7 +35,6 @@ def sentiment(text):
     score = mean(all_classes)*4-2
 
     if score <= -0.5:
-        print("less than -0.5: " + str(score))
         if score >= -0.55:
             scores = ['left', 0]
         elif score >= -0.7:
@@ -45,7 +44,6 @@ def sentiment(text):
         else:
             scores = ['left', 1]
     else:
-        print("more than -0.5: " + str(score))
         if score < -0.45:
             scores = ['right', 0]
         elif score <= -0.3:

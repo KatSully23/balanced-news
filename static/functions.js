@@ -244,7 +244,7 @@ function databaseRefresh(){
     //if we're actually done successfully
     if (this.readyState == 4 && this.status == 200) {
 
-      console.log("database has been updated!")
+      console.log("checking for new article data...")
 
     }
 

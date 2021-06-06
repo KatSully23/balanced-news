@@ -85,11 +85,7 @@ def sortArticle(articleURL):
 
     #get political assignment and confidence score
     demOrRep = articleResult[0];
-    print("dem or rep: " + demOrRep)
-
     confidenceScore = articleResult[1];
-    print("confidence score: " + str(confidenceScore))
-
     onSpectrum = getSpectrumString(demOrRep, confidenceScore);
 
     return [demOrRep, onSpectrum]
@@ -209,7 +205,6 @@ def get_sentiment(url):
 def getCategoryArticles(category):
 
     currentLetter = getCurrentLetter();
-    print("current letter: " + currentLetter);
     cursor = mysql.connection.cursor()
     query = 'SELECT * FROM katherinesullivan_articles' + currentLetter + ' WHERE category=%s';
     queryVars = (category,);
@@ -229,7 +224,6 @@ articlesList = [[],[],[],[],[],[]];
 def refreshDatabase():
 
     currentlyRefreshing = getCurrentlyRefreshing();
-    print("currently refreshing: " + currentlyRefreshing);
 
     now = getCurrentDateTime();
     month = now[0];
@@ -245,17 +239,13 @@ def refreshDatabase():
 
     if month != lastRefreshMonth or date != lastRefreshDate or hour != lastRefreshHour:
         refreshTime = True;
-        print("time to refresh the database!")
 
     # check if currentlyRefreshing value equals no
     if currentlyRefreshing == "No" and refreshTime == True:
 
         # if it does, set currentlyRefreshing value to yes
         setCurrentlyRefreshing("Yes")
-        print("set currently refreshing to yes");
-
         firstLetter = getCurrentLetter();
-        print("current letter: " + firstLetter);
         currentLetter = "";
 
         if firstLetter == "A":
@@ -275,7 +265,6 @@ def refreshDatabase():
                 query = 'DELETE FROM katherinesullivan_articles' + currentLetter + ' ORDER BY title LIMIT 1';
                 cursor.execute(query)
                 mysql.connection.commit()
-                print("article deleted")
 
         tempArray = [];
 
@@ -315,7 +304,6 @@ def refreshDatabase():
 
         switchLetter(firstLetter);
         setCurrentlyRefreshing("No")
-        print("set currently refreshing to no");
         setLastRefresh();
 
 # function that switches MySQL database table that user interface is reading data from
