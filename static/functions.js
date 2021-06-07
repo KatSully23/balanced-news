@@ -87,7 +87,7 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePat
                       "<h5 class='card-title'>" +
                       "<a href='linkToArticle'>nameOfArticle</a></h5>" +
                       "<div class='tooltip-content'>" +
-                        "<img class='spectrumImage' src='path' alt='spectrum' />" +
+                        "<img class='spectrumImage' src='kimagePath' alt='spectrum' />" +
                       "</div>" +
                     "</div>" +
 
@@ -101,7 +101,7 @@ function getCardCode(imageURL, newsArticleURL, newsArticleName, spectrumImagePat
   let cardCode1 = cardCode.replace("url", imageURL);
   let cardCode2 = cardCode1.replace("linkToArticle", newsArticleURL);
   let cardCode3 = cardCode2.replace("nameOfArticle", newsArticleName);
-  let cardCode4 = cardCode3.replace("path", spectrumImagePath);
+  let cardCode4 = cardCode3.replace("kimagePath", spectrumImagePath);
 
   return cardCode4;
 
